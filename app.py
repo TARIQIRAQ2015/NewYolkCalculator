@@ -13,9 +13,539 @@ st.set_page_config(
 # إخفاء أزرار التحكم بالمظهر
 st.markdown("""
     <style>
+        /* إخفاء العناصر غير الضرورية */
         #MainMenu {visibility: hidden;}
         footer {visibility: hidden;}
         header {visibility: hidden;}
+        [data-testid="stToolbar"] {visibility: hidden;}
+        
+        /* تحسين المظهر العام والخلفية */
+        .stApp {
+            background: linear-gradient(135deg, 
+                #1a1a2e,
+                #16213e,
+                #0f3460,
+                #162447
+            );
+            background-size: 400% 400%;
+            animation: gradient 15s ease infinite;
+            color: #e2e2e2;
+        }
+        
+        @keyframes gradient {
+            0% { background-position: 0% 50%; }
+            50% { background-position: 100% 50%; }
+            100% { background-position: 0% 50%; }
+        }
+        
+        /* تأثير الإيموجي */
+        .emoji-link {
+            text-decoration: none;
+            display: inline-block;
+            transition: all 0.3s ease;
+            cursor: pointer;
+            font-size: 32px;
+            margin-right: 10px;
+        }
+        .emoji-link:hover {
+            transform: scale(1.5);
+            text-shadow: 0 0 20px rgba(255,255,255,0.5);
+        }
+        
+        /* تحسين القوائم المنسدلة */
+        .stSelectbox > div > div,
+        .stNumberInput > div > div {
+            background: linear-gradient(135deg, #1e212b 0%, #161b25 100%) !important;
+            border: 1px solid rgba(255, 255, 255, 0.2) !important;
+            border-radius: 8px !important;
+            color: #ffffff !important;
+            backdrop-filter: blur(10px);
+            transition: all 0.3s ease;
+            padding: 12px !important;
+            box-shadow: 0 2px 6px rgba(0,0,0,0.1);
+            height: auto !important;
+            min-height: 48px !important;
+            font-size: 16px !important;
+            line-height: 1.5 !important;
+            position: relative;
+            overflow: hidden;
+        }
+        
+        /* تأثير الموجة عند التحويم */
+        .stSelectbox > div > div::before,
+        .stNumberInput > div > div::before,
+        div[data-baseweb="select"] ul li::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(
+                90deg,
+                transparent,
+                rgba(255, 255, 255, 0.05),
+                transparent
+            );
+            transition: all 0.5s ease;
+            z-index: 1;
+        }
+        
+        .stSelectbox > div > div:hover::before,
+        .stNumberInput > div > div:hover::before,
+        div[data-baseweb="select"] ul li:hover::before {
+            left: 100%;
+        }
+        
+        /* تأثير التحويم */
+        .stSelectbox > div > div:hover,
+        .stNumberInput > div > div:hover {
+            background: linear-gradient(135deg, #161b25 0%, #1e212b 100%) !important;
+            border-color: rgba(255, 255, 255, 0.3) !important;
+            transform: translateY(-1px);
+            box-shadow: 0 4px 12px rgba(0,0,0,0.2);
+        }
+        
+        /* تحسين قائمة الخيارات المنسدلة */
+        div[data-baseweb="select"] > div {
+            background: linear-gradient(135deg, #1e212b 0%, #161b25 100%) !important;
+            backdrop-filter: blur(10px) !important;
+            border-radius: 8px !important;
+            border: 1px solid rgba(255, 255, 255, 0.2) !important;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.2);
+            padding: 8px !important;
+            transition: all 0.3s ease;
+        }
+        
+        div[data-baseweb="select"] ul {
+            background: linear-gradient(135deg, #1e212b 0%, #161b25 100%) !important;
+            padding: 4px !important;
+            border-radius: 8px !important;
+            backdrop-filter: blur(10px);
+        }
+        
+        /* تحسين عناصر القائمة */
+        div[data-baseweb="select"] ul li {
+            background: transparent !important;
+            transition: all 0.3s ease;
+            border-radius: 6px;
+            margin: 2px 0;
+            padding: 10px 12px !important;
+            position: relative;
+            overflow: hidden;
+            cursor: pointer;
+            color: rgba(255, 255, 255, 0.8) !important;
+        }
+        
+        div[data-baseweb="select"] ul li:hover {
+            background: linear-gradient(135deg, #161b25 0%, #1e212b 100%) !important;
+            transform: translateX(4px);
+            color: #ffffff !important;
+        }
+        
+        /* تحسين الأيقونات في القوائم */
+        .stSelectbox svg,
+        div[data-baseweb="select"] svg {
+            transition: all 0.3s ease;
+            fill: rgba(255, 255, 255, 0.7) !important;
+        }
+        
+        .stSelectbox:hover svg,
+        div[data-baseweb="select"]:hover svg {
+            fill: rgba(255, 255, 255, 1) !important;
+            transform: translateY(1px);
+        }
+        
+        /* تحسين النص المحدد */
+        div[data-baseweb="select"] [aria-selected="true"] {
+            background: linear-gradient(135deg, #1e212b 0%, #161b25 100%) !important;
+            color: #ffffff !important;
+            font-weight: 500 !important;
+        }
+        
+        /* تحسين الخط والقراءة */
+        .stMarkdown {
+            font-size: 16px !important;
+            line-height: 1.6 !important;
+            color: #e2e2e2 !important;
+        }
+        
+        /* تحسين المسافات بين العناصر */
+        .element-container {
+            margin: 1.5rem 0 !important;
+        }
+        
+        /* تحسين النصوص والعناصر الأخرى */
+        .stMarkdown {
+            color: #e2e2e2;
+        }
+        
+        /* تحسين الروابط */
+        a {
+            color: #4f8fba !important;
+            text-decoration: none !important;
+            transition: all 0.3s ease;
+        }
+        a:hover {
+            color: #6ba5d1 !important;
+            text-decoration: none !important;
+        }
+        
+        /* تحسين تأثير الضغط على الدجاجة */
+        .emoji-link {
+            font-size: 24px;
+            text-decoration: none;
+            transition: all 0.3s ease;
+            display: inline-block;
+            margin-right: 8px;
+            filter: drop-shadow(0 0 8px rgba(255,255,255,0.2));
+        }
+        
+        .emoji-link:hover {
+            transform: scale(1.2) rotate(10deg);
+            filter: drop-shadow(0 0 12px rgba(255,255,255,0.4));
+        }
+        
+        .emoji-link:active {
+            transform: scale(0.95);
+        }
+        
+        /* تحسين العنوان */
+        .title {
+            font-size: 32px;
+            font-weight: bold;
+            margin-bottom: 12px;
+            text-align: center;
+            background: linear-gradient(120deg, #ffffff, #e2e2e2);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            text-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        }
+        
+        .title-text {
+            text-decoration: none;
+            color: inherit;
+            margin-left: 8px;
+        }
+        
+        /* تحسين القوائم المنسدلة */
+        .stSelectbox > div > div {
+            background: linear-gradient(135deg, #1e212b 0%, #161b25 100%) !important;
+            border: 1px solid rgba(255, 255, 255, 0.2) !important;
+            border-radius: 8px !important;
+            color: #ffffff !important;
+            backdrop-filter: blur(10px);
+            transition: all 0.3s ease;
+            padding: 12px !important;
+            box-shadow: 0 2px 6px rgba(0,0,0,0.1);
+            height: auto !important;
+            min-height: 48px !important;
+            font-size: 16px !important;
+            line-height: 1.5 !important;
+        }
+        
+        /* تحسين قائمة الخيارات المنسدلة */
+        div[data-baseweb="select"] > div {
+            background: linear-gradient(135deg, #1e212b 0%, #161b25 100%) !important;
+            backdrop-filter: blur(10px) !important;
+            border-radius: 8px !important;
+            border: 1px solid rgba(255, 255, 255, 0.2) !important;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.2);
+            padding: 8px !important;
+            min-width: 200px !important;
+        }
+        
+        div[data-baseweb="select"] ul {
+            background: linear-gradient(135deg, #1e212b 0%, #161b25 100%) !important;
+            padding: 4px !important;
+        }
+        
+        div[data-baseweb="select"] ul li {
+            color: #ffffff !important;
+            font-size: 16px !important;
+            padding: 12px !important;
+            margin: 4px 0 !important;
+            border-radius: 6px !important;
+            line-height: 1.5 !important;
+        }
+        
+        /* تحسين النصوص في القوائم */
+        .stSelectbox label {
+            color: #ffffff !important;
+            font-size: 18px !important;
+            font-weight: 500 !important;
+            margin-bottom: 12px !important;
+            text-shadow: 0 1px 2px rgba(0,0,0,0.1);
+            line-height: 1.5 !important;
+        }
+        
+        /* تحسين الأيقونة في القائمة المنسدلة */
+        .stSelectbox svg {
+            fill: #ffffff !important;
+            width: 24px !important;
+            height: 24px !important;
+        }
+        
+        /* تحسين العنوان */
+        .subtitle {
+            font-size: 18px;
+            color: #b8b8b8;
+            margin-bottom: 24px;
+            text-align: center;
+        }
+        
+        /* تحسين أزرار الحساب */
+        .stButton > button {
+            background: linear-gradient(135deg, rgba(255,255,255,0.1), rgba(255,255,255,0.05)) !important;
+            border: 1px solid rgba(255,255,255,0.2) !important;
+            color: #e2e2e2 !important;
+            border-radius: 8px !important;
+            padding: 8px 16px !important;
+            font-weight: 500 !important;
+            transition: all 0.3s ease !important;
+            backdrop-filter: blur(10px);
+            box-shadow: 0 2px 6px rgba(0,0,0,0.1);
+        }
+        
+        .stButton > button:hover {
+            background: linear-gradient(135deg, rgba(255,255,255,0.15), rgba(255,255,255,0.1)) !important;
+            border-color: rgba(255,255,255,0.3) !important;
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+        }
+        
+        .stButton > button:active {
+            transform: translateY(0);
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        }
+        
+        /* تحسين حقول الإدخال */
+        .stNumberInput > div > div > input {
+            background: linear-gradient(135deg, #1e212b 0%, #161b25 100%) !important;
+            border: 1px solid rgba(255, 255, 255, 0.15) !important;
+            border-radius: 8px !important;
+            color: #e2e2e2 !important;
+            padding: 8px 12px !important;
+            transition: all 0.3s ease;
+        }
+        
+        .stNumberInput > div > div > input:focus {
+            border-color: rgba(255, 255, 255, 0.3) !important;
+            box-shadow: 0 0 0 2px rgba(255,255,255,0.1) !important;
+        }
+        
+        /* تحسين حقوق النشر */
+        .copyright {
+            text-align: center;
+            color: rgba(255,255,255,0.5);
+            padding: 16px;
+            font-size: 14px;
+            margin-top: 32px;
+            border-top: 1px solid rgba(255,255,255,0.1);
+        }
+        
+        /* تحسين الشريط العلوي */
+        .stProgress > div > div {
+            background: rgba(30, 37, 48, 0.7) !important;
+            border: 1px solid rgba(255, 255, 255, 0.2) !important;
+            border-radius: 8px !important;
+            overflow: hidden;
+            position: relative;
+            height: 48px !important;
+            box-shadow: 0 2px 6px rgba(0,0,0,0.1);
+            backdrop-filter: blur(10px);
+        }
+        
+        .stProgress > div > div > div {
+            background: linear-gradient(90deg, 
+                rgba(255,255,255,0.1),
+                rgba(255,255,255,0.15),
+                rgba(255,255,255,0.1)
+            ) !important;
+            border-radius: 6px !important;
+            height: 100% !important;
+            transition: all 0.3s ease !important;
+            backdrop-filter: blur(5px);
+        }
+        
+        .stProgress > div > div::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(
+                90deg,
+                transparent,
+                rgba(255, 255, 255, 0.05),
+                transparent
+            );
+            transition: all 0.5s ease;
+            z-index: 1;
+        }
+        
+        .stProgress > div > div:hover::before {
+            left: 100%;
+        }
+        
+        .stProgress > div > div:hover {
+            background: rgba(22, 27, 37, 0.8) !important;
+            border-color: rgba(255, 255, 255, 0.3) !important;
+            transform: translateY(-1px);
+            box-shadow: 0 4px 12px rgba(0,0,0,0.2);
+        }
+        
+        /* تحديث شفافية القوائم المنسدلة */
+        .stSelectbox > div > div,
+        .stNumberInput > div > div {
+            background: rgba(30, 37, 48, 0.7) !important;
+            backdrop-filter: blur(10px);
+        }
+        
+        .stSelectbox > div > div:hover,
+        .stNumberInput > div > div:hover {
+            background: rgba(22, 27, 37, 0.8) !important;
+        }
+        
+        div[data-baseweb="select"] > div,
+        div[data-baseweb="popover"] > div {
+            background: rgba(30, 37, 48, 0.7) !important;
+            backdrop-filter: blur(10px) !important;
+        }
+        
+        div[data-baseweb="select"] ul,
+        div[data-baseweb="menu"] ul {
+            background: rgba(30, 37, 48, 0.7) !important;
+            backdrop-filter: blur(10px);
+        }
+        
+        div[data-baseweb="select"] ul li:hover,
+        div[data-baseweb="menu"] ul li:hover {
+            background: rgba(22, 27, 37, 0.8) !important;
+        }
+        
+        /* تحسين ملخص النتائج */
+        pre {
+            background: linear-gradient(45deg, 
+                #1a1a2e,
+                #16213e
+            ) !important;
+            border: 1px solid rgba(255, 255, 255, 0.1) !important;
+            border-radius: 15px !important;
+            padding: 20px !important;
+            color: #ffffff !important;
+            font-family: 'Courier New', monospace !important;
+            position: relative !important;
+            overflow: hidden !important;
+            transition: all 0.3s ease !important;
+            animation: gradientBG 15s ease infinite !important;
+            background-size: 200% 200% !important;
+        }
+
+        pre:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 20px rgba(0,0,0,0.3);
+            border-color: rgba(255, 255, 255, 0.2) !important;
+        }
+
+        /* تأثير الخلفية المتحركة */
+        @keyframes gradientBG {
+            0% {
+                background: linear-gradient(45deg, 
+                    #1a1a2e,
+                    #16213e,
+                    #0f3460
+                );
+                background-size: 200% 200%;
+                background-position: 0% 50%;
+            }
+            50% {
+                background: linear-gradient(45deg, 
+                    #16213e,
+                    #0f3460,
+                    #1a1a2e
+                );
+                background-size: 200% 200%;
+                background-position: 100% 50%;
+            }
+            100% {
+                background: linear-gradient(45deg, 
+                    #1a1a2e,
+                    #16213e,
+                    #0f3460
+                );
+                background-size: 200% 200%;
+                background-position: 0% 50%;
+            }
+        }
+
+        /* تنسيق النص داخل ملخص النتائج */
+        pre code {
+            color: #e2e2e2 !important;
+            font-size: 1.1em !important;
+            line-height: 1.5 !important;
+        }
+
+        /* تأثير الحدود المضيئة */
+        pre::before {
+            content: '';
+            position: absolute;
+            top: -2px;
+            left: -2px;
+            right: -2px;
+            bottom: -2px;
+            border-radius: 16px;
+            background: linear-gradient(45deg, 
+                #1a1a2e,
+                #0f3460,
+                #1a1a2e
+            );
+            z-index: -1;
+            animation: borderGlow 3s ease-in-out infinite;
+            opacity: 0.5;
+        }
+
+        @keyframes borderGlow {
+            0% {
+                opacity: 0.3;
+            }
+            50% {
+                opacity: 0.6;
+            }
+            100% {
+                opacity: 0.3;
+            }
+        }
+        
+        /* تنسيق العنوان الرئيسي */
+        .main-title {
+            font-size: 2.5em !important;
+            font-weight: bold !important;
+            text-align: center !important;
+            margin-bottom: 1em !important;
+            color: #ffffff !important;
+            text-shadow: 0 0 10px rgba(255,255,255,0.3);
+        }
+        
+        /* تأثير الإيموجي المتحرك */
+        .chicken-emoji {
+            display: inline-block;
+            font-size: 2em;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            animation: float 2s ease-in-out infinite;
+        }
+        
+        .chicken-emoji:hover {
+            transform: scale(1.3) rotate(15deg);
+        }
+        
+        @keyframes float {
+            0% { transform: translateY(0px); }
+            50% { transform: translateY(-10px); }
+            100% { transform: translateY(0px); }
+        }
     </style>
 """, unsafe_allow_html=True)
 
@@ -26,16 +556,16 @@ def format_decimal(number):
 # تعريف النصوص بجميع اللغات
 texts = {
     "العربية": {
-        "title": "🐔 حاسبة الدجاج - نيويولك",
+        "title": "حاسبة الدجاج - نيويولك",
         "subtitle": "حساب أرباح الدجاج والمكافآت اليومية",
         "language": "اللغة 🌍",
         "currency": "العملة 💵",
-        "egg_price": "قيمة البيض الكلية 🥚",
-        "feed_price": "قيمة العلف الكلية 🌽",
-        "save_prices": "حفظ الأسعار الجديدة 💾",
+        "egg_price": "سعر البيض الحالي 🥚",
+        "feed_price": "سعر العلف الحالي 🌽",
+        "save_prices": "حفظ الأسعار 💾",
         "calculation_type": "نوع الحساب 📊",
-        "chicken_profits": "أرباح الدجاج 🐔",
-        "daily_rewards": "المكافآت اليومية ✨",
+        "chicken_profits": "أرباح الدجاج",
+        "daily_rewards": "المكافآت اليومية",
         "eggs_input": "عدد البيض 🥚",
         "days_input": "عدد الأيام 📅",
         "food_input": "عدد الطعام المطلوب 🌽",
@@ -59,16 +589,16 @@ texts = {
         "copy_results": "نسخ النتائج"
     },
     "English": {
-        "title": "🐔 Chicken Calculator - Newyolk",
+        "title": "Chicken Calculator - NewYolk",
         "subtitle": "Calculate Chicken Profits and Daily Rewards",
         "language": "Language 🌍",
         "currency": "Currency 💵",
-        "egg_price": "Total Egg Value 🥚",
-        "feed_price": "Total Feed Value 🌽",
-        "save_prices": "Save New Prices 💾",
+        "egg_price": "Current Egg Price 🥚",
+        "feed_price": "Current Feed Price 🌽",
+        "save_prices": "Save Prices 💾",
         "calculation_type": "Calculation Type 📊",
-        "chicken_profits": "Chicken Profits 🐔",
-        "daily_rewards": "Daily Rewards ✨",
+        "chicken_profits": "Chicken Profits",
+        "daily_rewards": "Daily Rewards",
         "eggs_input": "Number of Eggs 🥚",
         "days_input": "Number of Days 📅",
         "food_input": "Amount of Food Needed 🌽",
@@ -92,21 +622,21 @@ texts = {
         "copy_results": "Copy Results"
     },
     "Română": {
-        "title": "🐔 Calculator de Găini - Newyolk",
-        "subtitle": "Calculează Profiturile și Recompensele Zilnice",
+        "title": "Calculator Găini - NewYolk",
+        "subtitle": "Calculați Profiturile din Găini și Recompensele Zilnice",
         "language": "Limbă 🌍",
         "currency": "Monedă 💵",
-        "egg_price": "Valoarea Totală a Ouălor 🥚",
-        "feed_price": "Valoarea Totală a Furajului 🌽",
-        "save_prices": "Salvează Noile Prețuri 💾",
+        "egg_price": "Preț Curent Ouă 🥚",
+        "feed_price": "Preț Curent Furaje 🌽",
+        "save_prices": "Salvează Prețurile 💾",
         "calculation_type": "Tipul Calculului 📊",
-        "chicken_profits": "Profituri din Găini 🐔",
-        "daily_rewards": "Recompense Zilnice ✨",
+        "chicken_profits": "Profituri din Găini",
+        "daily_rewards": "Recompensele Zilnice",
         "eggs_input": "Număr de Ouă 🥚",
         "days_input": "Număr de Zile 📅",
         "food_input": "Cantitate de Hrană Necesară 🌽",
-        "calculate_profits": "Calculează Profiturile 🧮",
-        "calculate_rewards": "Calculează Recompensele ✨",
+        "calculate_profits": "Calculați Profiturile 🧮",
+        "calculate_rewards": "Calculați Recompensele ✨",
         "reset": "Resetare 🔄",
         "value": "Valoare",
         "category": "Categorie",
@@ -127,7 +657,11 @@ texts = {
 }
 
 # اختيار اللغة
-language = st.selectbox("اللغة | Language | Limbă 🌍", ["العربية", "English", "Română"])
+language = st.selectbox(
+    "اللغة | Language | Limbă 🌍",
+    ["العربية", "English", "Română"],
+    key="language_selector"
+)
 
 # تحسين الواجهة
 st.markdown(
@@ -187,11 +721,38 @@ st.markdown(
             text-align: {'right' if language == 'العربية' else 'left'} !important;
         }}
     </style>
-    <div class="title">{texts[language]["title"]}</div>
-    <div class="subtitle">{texts[language]["subtitle"]}</div>
+    <div class="main-title">
+        {texts[language]["title"]}
+        <a href="https://newyolkcalculator.streamlit.app" target="_blank" class="chicken-emoji">🐔</a>
+        <div class="subtitle">
+            {texts[language]["subtitle"]}
+        </div>
+    </div>
     """,
     unsafe_allow_html=True
 )
+
+st.markdown("""
+    <style>
+        .main-title {
+            font-size: 2.5em !important;
+            font-weight: bold !important;
+            text-align: center !important;
+            margin-bottom: 0.2em !important;
+            color: #ffffff !important;
+            text-shadow: 0 0 10px rgba(255,255,255,0.3);
+        }
+        
+        .subtitle {
+            font-size: 0.7em;
+            text-align: center;
+            margin-top: 0.5em;
+            color: #e2e2e2;
+            opacity: 0.9;
+            font-weight: normal;
+        }
+    </style>
+""", unsafe_allow_html=True)
 
 # استخدام الأعمدة لتخطيط أفضل
 col1, col2 = st.columns(2)
@@ -221,10 +782,16 @@ st.subheader(texts[language]["save_prices"])
 col3, col4 = st.columns(2)
 
 with col3:
-    new_egg_price = st.text_input(texts[language]["egg_price"], value="0.1155")
+    new_egg_price = st.text_input(
+        texts[language]["egg_price"],
+        value="0.1155"
+    )
 
 with col4:
-    new_feed_price = st.text_input(texts[language]["feed_price"], value="0.0189")
+    new_feed_price = st.text_input(
+        texts[language]["feed_price"],
+        value="0.0189"
+    )
 
 if st.button(texts[language]["save_prices"], type="secondary"):
     if not is_number(new_egg_price) or not is_number(new_feed_price):
@@ -390,7 +957,7 @@ if calculation_type == texts[language]["chicken_profits"]:
                     ]
                 })
                 
-                # عرض الجدول النهائي أولاً
+                # تنسيق الجدول النهائي أولاً
                 df = df.round(2)
                 df[texts[language]["value"]] = df[texts[language]["value"]].apply(lambda x: f"{format_decimal(x)} {currency}")
                 st.table(df)
@@ -528,67 +1095,192 @@ if st.button(texts[language]["reset"], type="secondary"):
     st.success("تم إعادة التعيين بنجاح! ✅" if language == "العربية" else "Reset successful! ✅" if language == "English" else "")
 
 # إضافة الأيقونات والروابط
-st.markdown(
-    """
-    <div style="text-align: center; margin-top: 30px;">
-        <a href="https://farm.newyolk.io/" target="_blank" style="text-decoration: none; margin: 0 10px;">
-            <img src="https://i.ibb.co/YDKWBRf/internet.png" width="32" height="32" alt="Website">
-        </a>
-        <a href="https://discord.gg/RYDExGGWXh" target="_blank" style="text-decoration: none; margin: 0 10px;">
-            <img src="https://assets-global.website-files.com/6257adef93867e50d84d30e2/636e0a6a49cf127bf92de1e2_icon_clyde_blurple_RGB.png" width="32" height="32" alt="Discord">
-        </a>
-        <a href="https://t.me/newyolkfarm" target="_blank" style="text-decoration: none; margin: 0 10px;">
-            <img src="https://upload.wikimedia.org/wikipedia/commons/8/82/Telegram_logo.svg" width="32" height="32" alt="Telegram">
-        </a>
-        <a href="https://www.facebook.com/newyolkfarming" target="_blank" style="text-decoration: none; margin: 0 10px;">
-            <img src="https://upload.wikimedia.org/wikipedia/commons/5/51/Facebook_f_logo_%282019%29.svg" width="32" height="32" alt="Facebook">
-        </a>
-        <br>
-        <br>
-    </div>
+st.markdown("""
     <style>
-        a img {
-            transition: transform 0.3s ease;
-            filter: brightness(1);
+        .social-links {
+            display: flex;
+            justify-content: center;
+            gap: 25px;
+            margin: 30px 0 20px;
         }
-        a img:hover {
-            transform: scale(1.2);
+        
+        .social-links a {
+            display: inline-block;
+            transition: all 0.3s ease;
+        }
+        
+        .social-links img {
+            width: 36px;
+            height: 36px;
+            filter: brightness(1);
+            transition: all 0.3s ease;
+        }
+        
+        .social-links a:hover img {
+            transform: translateY(-3px);
             filter: brightness(1.2);
         }
     </style>
-    """,
-    unsafe_allow_html=True
-)
-
-# إضافة نص حقوق النشر والأيقونات
-st.markdown(
-    """
-        <br>
-        <br>
+    <div class="social-links">
+        <a href="https://farm.newyolk.io/" target="_blank">
+            <img src="https://i.ibb.co/YDKWBRf/internet.png" alt="Website">
+        </a>
+        <a href="https://discord.gg/RYDExGGWXh" target="_blank">
+            <img src="https://assets-global.website-files.com/6257adef93867e50d84d30e2/636e0a6a49cf127bf92de1e2_icon_clyde_blurple_RGB.png" alt="Discord">
+        </a>
+        <a href="https://t.me/newyolkfarm" target="_blank">
+            <img src="https://upload.wikimedia.org/wikipedia/commons/8/82/Telegram_logo.svg" alt="Telegram">
+        </a>
+        <a href="https://www.facebook.com/newyolkfarming" target="_blank">
+            <img src="https://upload.wikimedia.org/wikipedia/commons/5/51/Facebook_f_logo_%282019%29.svg" alt="Facebook">
+        </a>
     </div>
+    
     <style>
-        a img:hover {
-            transform: scale(1.2);
+        .copyright {
+            text-align: center;
+            color: rgba(255,255,255,0.9);
+            padding: 24px 0;
+            font-size: 22px !important;
+            margin-top: 30px;
+            border-top: 1px solid rgba(255,255,255,0.1);
+            font-weight: 600;
+            letter-spacing: 0.5px;
         }
     </style>
+    <div class="copyright">By Tariq Al-Yaseen &copy; 2025-2026</div>
     """,
     unsafe_allow_html=True
 )
 
-# إضافة نص حقوق النشر في نهاية الصفحة
-st.markdown(
-    """
+st.markdown("""
     <style>
-    .copyright {
-        text-align: center;
-        padding: 20px;
-        margin-top: 50px;
-        font-size: 18px;
-        font-weight: bold;
-        opacity: 0.9;
-    }
+        /* تحسين الإيموجي في العنوان */
+        .emoji-link {
+            text-decoration: none;
+            font-size: 24px !important;
+            display: inline-block;
+            transition: all 0.3s ease;
+            line-height: 1;
+            cursor: pointer;
+            margin-right: 8px;
+        }
+        
+        .emoji-link:hover {
+            transform: scale(1.2) rotate(10deg);
+        }
+        
+        .title {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin-bottom: 12px;
+        }
+        
+        .title-text {
+            background: linear-gradient(120deg, #ffffff, #e2e2e2);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            text-shadow: 0 2px 4px rgba(0,0,0,0.1);
+            font-size: 32px;
+            font-weight: bold;
+        }
     </style>
-    <div class="copyright">By Tariq Al-Yaseen © 2025-2026</div>
-    """,
-    unsafe_allow_html=True
-)
+""", unsafe_allow_html=True)
+
+st.markdown("""
+    <style>
+        /* تنسيق ملخص النتائج */
+        pre {
+            background: linear-gradient(45deg, 
+                #1a1a2e,
+                #16213e
+            ) !important;
+            border: 1px solid rgba(255, 255, 255, 0.1) !important;
+            border-radius: 15px !important;
+            padding: 20px !important;
+            color: #ffffff !important;
+            font-family: 'Courier New', monospace !important;
+            position: relative !important;
+            overflow: hidden !important;
+            transition: all 0.3s ease !important;
+            animation: gradientBG 15s ease infinite !important;
+            background-size: 200% 200% !important;
+        }
+
+        pre:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 20px rgba(0,0,0,0.3);
+            border-color: rgba(255, 255, 255, 0.2) !important;
+        }
+
+        /* تأثير الخلفية المتحركة */
+        @keyframes gradientBG {
+            0% {
+                background: linear-gradient(45deg, 
+                    #1a1a2e,
+                    #16213e,
+                    #0f3460
+                );
+                background-size: 200% 200%;
+                background-position: 0% 50%;
+            }
+            50% {
+                background: linear-gradient(45deg, 
+                    #16213e,
+                    #0f3460,
+                    #1a1a2e
+                );
+                background-size: 200% 200%;
+                background-position: 100% 50%;
+            }
+            100% {
+                background: linear-gradient(45deg, 
+                    #1a1a2e,
+                    #16213e,
+                    #0f3460
+                );
+                background-size: 200% 200%;
+                background-position: 0% 50%;
+            }
+        }
+
+        /* تنسيق النص داخل ملخص النتائج */
+        pre code {
+            color: #e2e2e2 !important;
+            font-size: 1.1em !important;
+            line-height: 1.5 !important;
+        }
+
+        /* تأثير الحدود المضيئة */
+        pre::before {
+            content: '';
+            position: absolute;
+            top: -2px;
+            left: -2px;
+            right: -2px;
+            bottom: -2px;
+            border-radius: 16px;
+            background: linear-gradient(45deg, 
+                #1a1a2e,
+                #0f3460,
+                #1a1a2e
+            );
+            z-index: -1;
+            animation: borderGlow 3s ease-in-out infinite;
+            opacity: 0.5;
+        }
+
+        @keyframes borderGlow {
+            0% {
+                opacity: 0.3;
+            }
+            50% {
+                opacity: 0.6;
+            }
+            100% {
+                opacity: 0.3;
+            }
+        }
+    </style>
+""", unsafe_allow_html=True)
