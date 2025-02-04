@@ -1126,7 +1126,7 @@ st.markdown("""
             <img src="https://cdn-icons-png.flaticon.com/512/3059/3059997.png" alt="Website">
         </a>
         <a href="https://discord.gg/RYDExGGWXh" target="_blank">
-            <img src="https://cdn-icons-png.flaticon.com/512/5968/5968756.png" alt="Discord">
+            <img src="https://assets-global.website-files.com/6257adef93867e50d84d30e2/636e0a6a49cf127bf92de1e2_icon_clyde_blurple_RGB.png" alt="Discord">
         </a>
         <a href="https://t.me/newyolkfarm" target="_blank">
             <img src="https://upload.wikimedia.org/wikipedia/commons/8/82/Telegram_logo.svg" alt="Telegram">
