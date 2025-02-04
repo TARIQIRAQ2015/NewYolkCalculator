@@ -6,7 +6,7 @@ from datetime import datetime, timedelta
 # تحسين الواجهة
 st.set_page_config(
     page_title="Chicken Calculator - Newyolk",
-    page_icon="🐔",
+    page_icon="static/favicon.ico",
     layout="wide"
 )
 
