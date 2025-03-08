@@ -784,13 +784,13 @@ col3, col4 = st.columns(2)
 with col3:
     new_egg_price = st.text_input(
         texts[language]["egg_price"],
-        value="0.1155"
+        value="0.1167"
     )
 
 with col4:
     new_feed_price = st.text_input(
         texts[language]["feed_price"],
-        value="0.0189"
+        value="0.0196"
     )
 
 if st.button(texts[language]["save_prices"], type="secondary"):
