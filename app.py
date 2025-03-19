@@ -784,7 +784,7 @@ col3, col4 = st.columns(2)
 with col3:
     new_egg_price = st.text_input(
         texts[language]["egg_price"],
-        value="0.1167"
+        value="0.1173"
     )
 
 with col4:
@@ -1196,3 +1196,12 @@ st.markdown("""
         <title>New Yolk Calculator</title>
     </head>
 """, unsafe_allow_html=True)
+
+# إضافة زر نسخ النتائج باستخدام JavaScript
+def add_copy_button(text, button_text):
+    st.markdown(f"""
+        <div style="position: relative;">
+            <textarea id="clipboard-text" style="position: absolute; left: -9999px;">{text}</textarea>
+            <button onclick="copyToClipboard('clipboard-text')">{button_text}</button>
+        </div>
+    """, unsafe_allow_html=True)
