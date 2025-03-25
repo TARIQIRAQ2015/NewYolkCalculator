@@ -784,7 +784,7 @@ col3, col4 = st.columns(2)
 with col3:
     new_egg_price = st.text_input(
         texts[language]["egg_price"],
-        value="0.1173"
+        value="0.1185"
     )
 
 with col4:
