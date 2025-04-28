@@ -1424,24 +1424,6 @@ elif calculation_type == texts[language]["group_calculation"]:
             
             st.subheader("📊 " + texts[language]["total_summary"])
             st.table(summary_df)
-            
-            # حساب النتائج بالعملة الأخرى
-            if currency == "IQD":
-                other_currency = "USD"
-                conversion_factor = 1/1480
-            else:
-                other_currency = "IQD"
-                conversion_factor = 1480
-                
-            other_results_text = f"""
-╔══════════════════════════════════════════════════════════════════╗
-║ {texts[language]['total_income']}: {format_decimal(total_income_display * conversion_factor)} {other_currency}
-║ {texts[language]['total_feed']}: {format_decimal(total_feed_cost_display * conversion_factor)} {other_currency}
-║ {texts[language]['total_rent']}: {format_decimal(total_rent_display * conversion_factor)} {other_currency}
-║ {texts[language]['total_net_profit']}: {format_decimal(total_net_profit_display * conversion_factor)} {other_currency}
-╚══════════════════════════════════════════════════════════════════╝"""
-            
-            st.code(other_results_text)
     else:
         st.warning(texts[language]["no_chicken_data"])
 
