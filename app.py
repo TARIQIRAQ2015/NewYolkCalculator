@@ -1294,6 +1294,9 @@ elif calculation_type == texts[language]["group_calculation"]:
                 ]
             })
             
+            # نعرض أولاً "📊 الملخص الإجمالي"
+            st.subheader("📊 " + texts[language]["total_summary"])
+            
             fig = px.pie(
                 chart_df,
                 values=texts[language]["value"],
@@ -1326,6 +1329,7 @@ elif calculation_type == texts[language]["group_calculation"]:
             
             st.plotly_chart(fig, use_container_width=True)
             
+            # ثم نعرض "✨ ملخص النتائج ✨"
             # تنسيق التاريخ والوقت حسب توقيت بغداد
             current_time = datetime.now() + timedelta(hours=3)  # تحويل التوقيت إلى توقيت بغداد
             date_str = current_time.strftime("%Y-%m-%d")
