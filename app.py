@@ -586,7 +586,27 @@ texts = {
         "daily_profit": "الربح اليومي 📈",
         "am": "صباحاً",
         "pm": "مساءً",
-        "copy_results": "نسخ النتائج"
+        "copy_results": "نسخ النتائج",
+        "group_calculation": "الحساب الجماعي",
+        "chicken_number": "رقم الدجاجة",
+        "add_chicken": "إضافة دجاجة",
+        "daily_egg_rate": "معدل إنتاج البيض اليومي",
+        "active_days": "عدد الأيام النشطة",
+        "chicken_details": "تفاصيل الدجاج",
+        "egg_count": "عدد البيض",
+        "income": "الدخل",
+        "feed_cost": "تكلفة العلف",
+        "rent": "الإيجار",
+        "net_profit_per_chicken": "الربح الصافي",
+        "total_summary": "الملخص الإجمالي",
+        "total_eggs": "إجمالي عدد البيض",
+        "total_income": "إجمالي الدخل",
+        "total_feed": "إجمالي تكلفة العلف",
+        "total_rent": "إجمالي الإيجار",
+        "total_net_profit": "إجمالي الربح الصافي",
+        "remove_chicken": "حذف الدجاجة",
+        "calculate_group": "حساب النتائج الجماعية",
+        "no_chicken_data": "لا توجد بيانات دجاج مدخلة حتى الآن!"
     },
     "English": {
         "title": "Chicken Calculator - NewYolk",
@@ -619,7 +639,27 @@ texts = {
         "daily_profit": "Daily Profit 📈",
         "am": "AM",
         "pm": "PM",
-        "copy_results": "Copy Results"
+        "copy_results": "Copy Results",
+        "group_calculation": "Group Calculation",
+        "chicken_number": "Chicken Number",
+        "add_chicken": "Add Chicken",
+        "daily_egg_rate": "Daily Egg Production Rate",
+        "active_days": "Active Days",
+        "chicken_details": "Chicken Details",
+        "egg_count": "Egg Count",
+        "income": "Income",
+        "feed_cost": "Feed Cost",
+        "rent": "Rent",
+        "net_profit_per_chicken": "Net Profit",
+        "total_summary": "Total Summary",
+        "total_eggs": "Total Eggs",
+        "total_income": "Total Income",
+        "total_feed": "Total Feed Cost",
+        "total_rent": "Total Rent",
+        "total_net_profit": "Total Net Profit",
+        "remove_chicken": "Remove Chicken",
+        "calculate_group": "Calculate Group Results",
+        "no_chicken_data": "No chicken data entered yet!"
     },
     "Română": {
         "title": "Calculator Găini - NewYolk",
@@ -652,7 +692,27 @@ texts = {
         "daily_profit": "Profit Zilnic 📈",
         "am": "AM",
         "pm": "PM",
-        "copy_results": "Copiază Rezultatele"
+        "copy_results": "Copiază Rezultatele",
+        "group_calculation": "Calcul de Grup",
+        "chicken_number": "Numărul Găinii",
+        "add_chicken": "Adaugă Găină",
+        "daily_egg_rate": "Rata Zilnică de Producție de Ouă",
+        "active_days": "Zile Active",
+        "chicken_details": "Detalii Găini",
+        "egg_count": "Număr Ouă",
+        "income": "Venit",
+        "feed_cost": "Cost Furaje",
+        "rent": "Chirie",
+        "net_profit_per_chicken": "Profit Net",
+        "total_summary": "Rezumat Total",
+        "total_eggs": "Total Ouă",
+        "total_income": "Venit Total",
+        "total_feed": "Cost Total Furaje",
+        "total_rent": "Chirie Totală",
+        "total_net_profit": "Profit Net Total",
+        "remove_chicken": "Elimină Găina",
+        "calculate_group": "Calculează Rezultatele de Grup",
+        "no_chicken_data": "Nu există date despre găini introduse încă!"
     }
 }
 
@@ -766,7 +826,7 @@ with col1:
 with col2:
     calculation_type = st.selectbox(
         texts[language]["calculation_type"],
-        [texts[language]["chicken_profits"], texts[language]["daily_rewards"]]
+        [texts[language]["chicken_profits"], texts[language]["daily_rewards"], texts[language]["group_calculation"]]
     )
 
 # دالة التحقق من المدخلات
@@ -967,7 +1027,7 @@ if calculation_type == texts[language]["chicken_profits"]:
                     texts[language]["category"]: [
                         f"🥚 {texts[language]['eggs_input']}",
                         f"🌽 {texts[language]['food_input']}",
-                        f"📈 {texts[language]['net_profit']}",
+                        f"�� {texts[language]['net_profit']}",
                         f"🏠 {texts[language]['first_year_rental']}",
                         f"💰 {texts[language]['final_profit']}"
                     ],
@@ -1090,6 +1150,251 @@ elif calculation_type == texts[language]["daily_rewards"]:
         except ValueError:
             st.error("يرجى إدخال أرقام صحيحة! ❗️" if language == "العربية" else "Please enter valid numbers! ❗️" if language == "English" else "")
 
+# إضافة قسم الحساب الجماعي
+elif calculation_type == texts[language]["group_calculation"]:
+    st.subheader(texts[language]["group_calculation"] + " 🐔")
+    
+    # إنشاء أو الوصول إلى جلسة لتخزين بيانات الدجاج
+    if 'chicken_data' not in st.session_state:
+        st.session_state.chicken_data = []
+    
+    # إضافة دجاجة جديدة
+    st.subheader("➕ " + texts[language]["add_chicken"])
+    col1, col2 = st.columns(2)
+    
+    with col1:
+        egg_rate = st.text_input(
+            texts[language]["daily_egg_rate"],
+            value="",
+            help="أدخل معدل إنتاج البيض اليومي" if language == "العربية" else "Enter daily egg production rate" if language == "English" else ""
+        )
+    
+    with col2:
+        active_days = st.text_input(
+            texts[language]["active_days"],
+            value="",
+            help="أدخل عدد الأيام النشطة (بحد أقصى 730)" if language == "العربية" else "Enter number of active days (max 730)" if language == "English" else ""
+        )
+    
+    if st.button(texts[language]["add_chicken"], type="primary"):
+        try:
+            egg_rate = float(egg_rate) if egg_rate else None
+            active_days = float(active_days) if active_days else None
+            
+            if egg_rate is None or active_days is None:
+                st.error("يرجى إدخال جميع القيم المطلوبة! ❗️" if language == "العربية" else "Please enter all required values! ❗️" if language == "English" else "")
+            elif active_days > 730:
+                st.error("عدد الأيام يجب ألا يتجاوز 730! ❗️" if language == "العربية" else "Number of days should not exceed 730! ❗️" if language == "English" else "")
+            else:
+                # حساب النتائج للدجاجة الحالية
+                eggs_count = egg_rate * active_days
+                egg_income = eggs_count * float(new_egg_price)
+                feed_cost = active_days * 2 * float(new_feed_price)
+                rent = 6 if eggs_count >= 260 else 0
+                net_profit = egg_income - feed_cost - rent
+                
+                # إضافة البيانات إلى قائمة الدجاج
+                chicken_id = len(st.session_state.chicken_data) + 1
+                st.session_state.chicken_data.append({
+                    "id": chicken_id,
+                    "rate": egg_rate,
+                    "days": active_days,
+                    "eggs": eggs_count,
+                    "income": egg_income,
+                    "feed_cost": feed_cost,
+                    "rent": rent,
+                    "net_profit": net_profit
+                })
+                
+                st.success(f"تمت إضافة الدجاجة رقم {chicken_id} بنجاح! ✅" if language == "العربية" else f"Chicken #{chicken_id} added successfully! ✅" if language == "English" else "")
+        except ValueError:
+            st.error("يرجى إدخال أرقام صحيحة! ❗️" if language == "العربية" else "Please enter valid numbers! ❗️" if language == "English" else "")
+    
+    # عرض الدجاج المضافة وإمكانية حذفها
+    if st.session_state.chicken_data:
+        st.subheader("🧮 " + texts[language]["chicken_details"])
+        
+        for i, chicken in enumerate(st.session_state.chicken_data):
+            col1, col2, col3 = st.columns([3, 1, 1])
+            
+            with col1:
+                st.write(f"🐔 {texts[language]['chicken_number']} {chicken['id']}: {texts[language]['daily_egg_rate']}: {format_decimal(chicken['rate'])}, {texts[language]['active_days']}: {format_decimal(chicken['days'])}")
+            
+            with col3:
+                if st.button(f"❌ {texts[language]['remove_chicken']}", key=f"remove_{i}"):
+                    st.session_state.chicken_data.pop(i)
+                    st.experimental_rerun()
+        
+        # زر حساب النتائج الجماعية
+        if st.button(texts[language]["calculate_group"], type="primary"):
+            # إعداد الجدول التفصيلي
+            detailed_df = pd.DataFrame([
+                {
+                    texts[language]["chicken_number"]: chicken["id"],
+                    texts[language]["daily_egg_rate"]: format_decimal(chicken["rate"]),
+                    texts[language]["active_days"]: format_decimal(chicken["days"]),
+                    texts[language]["egg_count"]: format_decimal(chicken["eggs"]),
+                    texts[language]["income"]: format_decimal(chicken["income"]),
+                    texts[language]["feed_cost"]: format_decimal(chicken["feed_cost"]),
+                    texts[language]["rent"]: format_decimal(chicken["rent"]),
+                    texts[language]["net_profit_per_chicken"]: format_decimal(chicken["net_profit"])
+                }
+                for chicken in st.session_state.chicken_data
+            ])
+            
+            # حساب الإجماليات
+            total_eggs = sum(chicken["eggs"] for chicken in st.session_state.chicken_data)
+            total_income = sum(chicken["income"] for chicken in st.session_state.chicken_data)
+            total_feed_cost = sum(chicken["feed_cost"] for chicken in st.session_state.chicken_data)
+            total_rent = sum(chicken["rent"] for chicken in st.session_state.chicken_data)
+            total_net_profit = sum(chicken["net_profit"] for chicken in st.session_state.chicken_data)
+            
+            # تحويل العملة إذا لزم الأمر
+            if currency == "IQD":
+                conversion_rate = 1480
+                detailed_df[texts[language]["income"]] = detailed_df[texts[language]["income"]].apply(lambda x: f"{format_decimal(float(x) * conversion_rate)} IQD")
+                detailed_df[texts[language]["feed_cost"]] = detailed_df[texts[language]["feed_cost"]].apply(lambda x: f"{format_decimal(float(x) * conversion_rate)} IQD")
+                detailed_df[texts[language]["rent"]] = detailed_df[texts[language]["rent"]].apply(lambda x: f"{format_decimal(float(x) * conversion_rate)} IQD")
+                detailed_df[texts[language]["net_profit_per_chicken"]] = detailed_df[texts[language]["net_profit_per_chicken"]].apply(lambda x: f"{format_decimal(float(x) * conversion_rate)} IQD")
+                
+                total_income_display = total_income * conversion_rate
+                total_feed_cost_display = total_feed_cost * conversion_rate
+                total_rent_display = total_rent * conversion_rate
+                total_net_profit_display = total_net_profit * conversion_rate
+                display_currency = "IQD"
+            else:
+                detailed_df[texts[language]["income"]] = detailed_df[texts[language]["income"]].apply(lambda x: f"{x} USD")
+                detailed_df[texts[language]["feed_cost"]] = detailed_df[texts[language]["feed_cost"]].apply(lambda x: f"{x} USD")
+                detailed_df[texts[language]["rent"]] = detailed_df[texts[language]["rent"]].apply(lambda x: f"{x} USD")
+                detailed_df[texts[language]["net_profit_per_chicken"]] = detailed_df[texts[language]["net_profit_per_chicken"]].apply(lambda x: f"{x} USD")
+                
+                total_income_display = total_income
+                total_feed_cost_display = total_feed_cost
+                total_rent_display = total_rent
+                total_net_profit_display = total_net_profit
+                display_currency = "USD"
+                
+            # عرض الجدول التفصيلي
+            st.subheader("📋 " + texts[language]["chicken_details"])
+            st.table(detailed_df)
+            
+            # إعداد وعرض جدول الإجماليات
+            summary_df = pd.DataFrame([
+                {
+                    texts[language]["category"]: texts[language]["total_eggs"],
+                    texts[language]["value"]: format_decimal(total_eggs)
+                },
+                {
+                    texts[language]["category"]: texts[language]["total_income"],
+                    texts[language]["value"]: f"{format_decimal(total_income_display)} {display_currency}"
+                },
+                {
+                    texts[language]["category"]: texts[language]["total_feed"],
+                    texts[language]["value"]: f"{format_decimal(total_feed_cost_display)} {display_currency}"
+                },
+                {
+                    texts[language]["category"]: texts[language]["total_rent"],
+                    texts[language]["value"]: f"{format_decimal(total_rent_display)} {display_currency}"
+                },
+                {
+                    texts[language]["category"]: texts[language]["total_net_profit"],
+                    texts[language]["value"]: f"{format_decimal(total_net_profit_display)} {display_currency}"
+                }
+            ])
+            
+            st.subheader("📊 " + texts[language]["total_summary"])
+            st.table(summary_df)
+            
+            # إنشاء الرسم البياني
+            chart_df = pd.DataFrame({
+                texts[language]["category"]: [
+                    f"💰 {texts[language]['total_income']}",
+                    f"🌽 {texts[language]['total_feed']}",
+                    f"🏠 {texts[language]['total_rent']}",
+                    f"📈 {texts[language]['total_net_profit']}"
+                ],
+                texts[language]["value"]: [
+                    total_income_display,
+                    total_feed_cost_display,
+                    total_rent_display,
+                    total_net_profit_display
+                ]
+            })
+            
+            fig = px.pie(
+                chart_df,
+                values=texts[language]["value"],
+                names=texts[language]["category"],
+                title=texts[language]["total_summary"],
+                color_discrete_sequence=['#4CAF50', '#FF9800', '#F44336', '#9C27B0']
+            )
+            
+            fig.update_traces(
+                textposition='outside',
+                textinfo='percent+label'
+            )
+            
+            fig.update_layout(
+                title_x=0.5,
+                title_font_size=24,
+                showlegend=True,
+                legend=dict(
+                    orientation="h",
+                    yanchor="bottom",
+                    y=-0.2,
+                    xanchor="center",
+                    x=0.5
+                ),
+                margin=dict(t=60, l=0, r=0, b=0),
+                height=500,
+                paper_bgcolor='rgba(0,0,0,0)',
+                plot_bgcolor='rgba(0,0,0,0)'
+            )
+            
+            st.plotly_chart(fig, use_container_width=True)
+            
+            # تنسيق التاريخ والوقت حسب توقيت بغداد
+            current_time = datetime.now() + timedelta(hours=3)  # تحويل التوقيت إلى توقيت بغداد
+            date_str = current_time.strftime("%Y-%m-%d")
+            time_str = current_time.strftime("%I:%M %p")
+            
+            # إنشاء نص النتائج
+            results_text = f"""
+╔══════════════════════════════════════════════════════════════════╗
+║                  {texts[language]['total_summary']}                 ║
+╠══════════════════════════════════════════════════════════════════╣
+║ {texts[language]['calculation_time']}: {date_str} {time_str}
+╟──────────────────────────────────────────────────────────────────╢
+║ {texts[language]['total_eggs']}: {format_decimal(total_eggs)}
+║ {texts[language]['total_income']}: {format_decimal(total_income_display)} {display_currency}
+║ {texts[language]['total_feed']}: {format_decimal(total_feed_cost_display)} {display_currency}
+║ {texts[language]['total_rent']}: {format_decimal(total_rent_display)} {display_currency}
+║ {texts[language]['total_net_profit']}: {format_decimal(total_net_profit_display)} {display_currency}
+╚══════════════════════════════════════════════════════════════════╝"""
+            
+            st.markdown(f"### ✨ {texts[language]['summary']}")
+            st.code(results_text)
+            
+            # حساب النتائج بالعملة الأخرى
+            if currency == "IQD":
+                other_currency = "USD"
+                conversion_factor = 1/1480
+            else:
+                other_currency = "IQD"
+                conversion_factor = 1480
+                
+            other_results_text = f"""
+╔══════════════════════════════════════════════════════════════════╗
+║ {texts[language]['total_income']}: {format_decimal(total_income_display * conversion_factor)} {other_currency}
+║ {texts[language]['total_feed']}: {format_decimal(total_feed_cost_display * conversion_factor)} {other_currency}
+║ {texts[language]['total_rent']}: {format_decimal(total_rent_display * conversion_factor)} {other_currency}
+║ {texts[language]['total_net_profit']}: {format_decimal(total_net_profit_display * conversion_factor)} {other_currency}
+╚══════════════════════════════════════════════════════════════════╝"""
+            
+            st.code(other_results_text)
+    else:
+        st.warning(texts[language]["no_chicken_data"])
+
 # زر إعادة التعيين
 if st.button(texts[language]["reset"], type="secondary"):
     st.success("تم إعادة التعيين بنجاح! ✅" if language == "العربية" else "Reset successful! ✅" if language == "English" else "")
@@ -1126,7 +1431,7 @@ st.markdown("""
             <img src="https://cdn-icons-png.flaticon.com/512/3059/3059997.png" alt="Website">
         </a>
         <a href="https://discord.gg/RYDExGGWXh" target="_blank">
-            <img src="https://assets-global.website-files.com/6257adef93867e50d84d30e2/636e0a6a49cf127bf92de1e2_icon_clyde_blurple_RGB.png" alt="Discord">
+            <img src="https://assets-global.website-files.com/6257adef93867e50d84d30e2_icon_clyde_blurple_RGB.png" alt="Discord">
         </a>
         <a href="https://t.me/newyolkfarm" target="_blank">
             <img src="https://upload.wikimedia.org/wikipedia/commons/8/82/Telegram_logo.svg" alt="Telegram">
