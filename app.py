@@ -1361,19 +1361,69 @@ elif calculation_type == texts[language]["group_calculation"]:
             # إنشاء نص النتائج
             results_text = f"""
 ╔══════════════════════════════════════════════════════════════════╗
-║                  {texts[language]['total_summary']}                 ║
+║                  {texts[language]['total_summary']}                    ║
 ╠══════════════════════════════════════════════════════════════════╣
 ║ {texts[language]['calculation_time']}: {date_str} {time_str}
 ╟──────────────────────────────────────────────────────────────────╢
+║ {texts[language]['usd_results']}:
 ║ {texts[language]['total_eggs']}: {format_decimal(total_eggs)}
-║ {texts[language]['total_income']}: {format_decimal(total_income_display)} {display_currency}
-║ {texts[language]['total_feed']}: {format_decimal(total_feed_cost_display)} {display_currency}
-║ {texts[language]['total_rent']}: {format_decimal(total_rent_display)} {display_currency}
-║ {texts[language]['total_net_profit']}: {format_decimal(total_net_profit_display)} {display_currency}
+║ {texts[language]['total_income']}: {format_decimal(total_income)} USD
+║ {texts[language]['total_feed']}: {format_decimal(total_feed_cost)} USD
+║ {texts[language]['total_rent']}: {format_decimal(total_rent)} USD
+║ {texts[language]['total_net_profit']}: {format_decimal(total_net_profit)} USD
+╟──────────────────────────────────────────────────────────────────╢
+║ {texts[language]['iqd_results']}:
+║ {texts[language]['total_eggs']}: {format_decimal(total_eggs)}
+║ {texts[language]['total_income']}: {format_decimal(total_income * 1480)} IQD
+║ {texts[language]['total_feed']}: {format_decimal(total_feed_cost * 1480)} IQD
+║ {texts[language]['total_rent']}: {format_decimal(total_rent * 1480)} IQD
+║ {texts[language]['total_net_profit']}: {format_decimal(total_net_profit * 1480)} IQD
 ╚══════════════════════════════════════════════════════════════════╝"""
             
             st.markdown(f"### ✨ {texts[language]['summary']}")
             st.code(results_text)
+            
+            # عرض النتائج بالعملة المختارة
+            if currency == "IQD":
+                conversion_rate = 1480
+                total_income_display = total_income * conversion_rate
+                total_feed_cost_display = total_feed_cost * conversion_rate
+                total_rent_display = total_rent * conversion_rate
+                total_net_profit_display = total_net_profit * conversion_rate
+                display_currency = "IQD"
+            else:
+                total_income_display = total_income
+                total_feed_cost_display = total_feed_cost
+                total_rent_display = total_rent
+                total_net_profit_display = total_net_profit
+                display_currency = "USD"
+                
+            # إعداد وعرض جدول الإجماليات
+            summary_df = pd.DataFrame([
+                {
+                    texts[language]["category"]: texts[language]["total_eggs"],
+                    texts[language]["value"]: format_decimal(total_eggs)
+                },
+                {
+                    texts[language]["category"]: texts[language]["total_income"],
+                    texts[language]["value"]: f"{format_decimal(total_income_display)} {display_currency}"
+                },
+                {
+                    texts[language]["category"]: texts[language]["total_feed"],
+                    texts[language]["value"]: f"{format_decimal(total_feed_cost_display)} {display_currency}"
+                },
+                {
+                    texts[language]["category"]: texts[language]["total_rent"],
+                    texts[language]["value"]: f"{format_decimal(total_rent_display)} {display_currency}"
+                },
+                {
+                    texts[language]["category"]: texts[language]["total_net_profit"],
+                    texts[language]["value"]: f"{format_decimal(total_net_profit_display)} {display_currency}"
+                }
+            ])
+            
+            st.subheader("📊 " + texts[language]["total_summary"])
+            st.table(summary_df)
             
             # حساب النتائج بالعملة الأخرى
             if currency == "IQD":
