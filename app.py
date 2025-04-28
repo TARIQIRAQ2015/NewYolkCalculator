@@ -1183,23 +1183,24 @@ elif calculation_type == texts[language]["group_calculation"]:
             
             if egg_rate is None or active_days is None:
                 st.error("يرجى إدخال جميع القيم المطلوبة! ❗️" if language == "العربية" else "Please enter all required values! ❗️" if language == "English" else "")
+            elif egg_rate > 580:
+                st.error("عدد البيض يجب ألا يتجاوز 580! ❗️" if language == "العربية" else "Number of eggs should not exceed 580! ❗️" if language == "English" else "")
             elif active_days > 730:
                 st.error("عدد الأيام يجب ألا يتجاوز 730! ❗️" if language == "العربية" else "Number of days should not exceed 730! ❗️" if language == "English" else "")
             else:
-                # حساب النتائج للدجاجة الحالية
-                eggs_count = egg_rate * active_days
-                egg_income = eggs_count * float(new_egg_price)
-                feed_cost = active_days * 2 * float(new_feed_price)
-                rent = 6 if eggs_count >= 260 else 0
-                net_profit = egg_income - feed_cost - rent
+                # حساب النتائج للدجاجة الحالية (مطابق لطريقة حساب أرباح الدجاج الاعتيادية)
+                eggs_count = egg_rate  # عدد البيض كما هو
+                egg_income = eggs_count * float(new_egg_price)  # ضرب عدد البيض في سعر البيض الحالي
+                feed_cost = active_days * 2 * float(new_feed_price)  # ضرب عدد الأيام في 2 ثم في سعر العلف الحالي
+                rent = 6 if eggs_count >= 260 else 0  # 6 دولارات فقط إذا كان عدد البيض 260 أو أكثر
+                net_profit = egg_income - feed_cost - rent  # الربح الصافي
                 
                 # إضافة البيانات إلى قائمة الدجاج
                 chicken_id = len(st.session_state.chicken_data) + 1
                 st.session_state.chicken_data.append({
                     "id": chicken_id,
-                    "rate": egg_rate,
-                    "days": active_days,
                     "eggs": eggs_count,
+                    "days": active_days,
                     "income": egg_income,
                     "feed_cost": feed_cost,
                     "rent": rent,
@@ -1210,7 +1211,7 @@ elif calculation_type == texts[language]["group_calculation"]:
         except ValueError:
             st.error("يرجى إدخال أرقام صحيحة! ❗️" if language == "العربية" else "Please enter valid numbers! ❗️" if language == "English" else "")
     
-    # عرض الدجاج المضافة وإمكانية حذفها
+    # عرض الدجاج المضافة 
     if st.session_state.chicken_data:
         st.subheader("🧮 " + texts[language]["chicken_details"])
         
@@ -1218,7 +1219,7 @@ elif calculation_type == texts[language]["group_calculation"]:
             col1, col2, col3 = st.columns([3, 1, 1])
             
             with col1:
-                st.write(f"🐔 {texts[language]['chicken_number']} {chicken['id']}: {texts[language]['daily_egg_rate']}: {format_decimal(chicken['rate'])}, {texts[language]['active_days']}: {format_decimal(chicken['days'])}")
+                st.write(f"🐔 {texts[language]['chicken_number']} {chicken['id']}: {texts[language]['eggs_input']}: {format_decimal(chicken['eggs'])}, {texts[language]['days_input']}: {format_decimal(chicken['days'])}")
             
             with col3:
                 if st.button(f"❌ {texts[language]['remove_chicken']}", key=f"remove_{i}"):
@@ -1231,9 +1232,8 @@ elif calculation_type == texts[language]["group_calculation"]:
             detailed_df = pd.DataFrame([
                 {
                     texts[language]["chicken_number"]: chicken["id"],
-                    texts[language]["daily_egg_rate"]: format_decimal(chicken["rate"]),
-                    texts[language]["active_days"]: format_decimal(chicken["days"]),
-                    texts[language]["egg_count"]: format_decimal(chicken["eggs"]),
+                    texts[language]["eggs_input"]: format_decimal(chicken["eggs"]),
+                    texts[language]["days_input"]: format_decimal(chicken["days"]),
                     texts[language]["income"]: format_decimal(chicken["income"]),
                     texts[language]["feed_cost"]: format_decimal(chicken["feed_cost"]),
                     texts[language]["rent"]: format_decimal(chicken["rent"]),
