@@ -1027,7 +1027,7 @@ if calculation_type == texts[language]["chicken_profits"]:
                     texts[language]["category"]: [
                         f"🥚 {texts[language]['eggs_input']}",
                         f"🌽 {texts[language]['food_input']}",
-                        f"�� {texts[language]['net_profit']}",
+                        f"📈 {texts[language]['net_profit']}",
                         f"🏠 {texts[language]['first_year_rental']}",
                         f"💰 {texts[language]['final_profit']}"
                     ],
@@ -1164,7 +1164,7 @@ elif calculation_type == texts[language]["group_calculation"]:
     
     with col1:
         egg_rate = st.text_input(
-            texts[language]["daily_egg_rate"],
+            texts[language]["current_egg_count"],
             value="",
             help="أدخل عدد البيض الحالي" if language == "العربية" else "Enter current egg count" if language == "English" else ""
         )
@@ -1277,33 +1277,6 @@ elif calculation_type == texts[language]["group_calculation"]:
             # عرض الجدول التفصيلي
             st.subheader("📋 " + texts[language]["chicken_details"])
             st.table(detailed_df)
-            
-            # إعداد وعرض جدول الإجماليات
-            summary_df = pd.DataFrame([
-                {
-                    texts[language]["category"]: texts[language]["total_eggs"],
-                    texts[language]["value"]: format_decimal(total_eggs)
-                },
-                {
-                    texts[language]["category"]: texts[language]["total_income"],
-                    texts[language]["value"]: f"{format_decimal(total_income_display)} {display_currency}"
-                },
-                {
-                    texts[language]["category"]: texts[language]["total_feed"],
-                    texts[language]["value"]: f"{format_decimal(total_feed_cost_display)} {display_currency}"
-                },
-                {
-                    texts[language]["category"]: texts[language]["total_rent"],
-                    texts[language]["value"]: f"{format_decimal(total_rent_display)} {display_currency}"
-                },
-                {
-                    texts[language]["category"]: texts[language]["total_net_profit"],
-                    texts[language]["value"]: f"{format_decimal(total_net_profit_display)} {display_currency}"
-                }
-            ])
-            
-            st.subheader("📊 " + texts[language]["total_summary"])
-            st.table(summary_df)
             
             # إنشاء الرسم البياني
             chart_df = pd.DataFrame({
