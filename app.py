@@ -590,7 +590,7 @@ texts = {
         "group_calculation": "الحساب الجماعي",
         "chicken_number": "رقم الدجاجة",
         "add_chicken": "إضافة دجاجة",
-        "daily_egg_rate": "معدل إنتاج البيض اليومي",
+        "daily_egg_rate": "عدد البيض الحالي",
         "active_days": "عدد الأيام النشطة",
         "chicken_details": "تفاصيل الدجاج",
         "egg_count": "عدد البيض",
@@ -643,7 +643,7 @@ texts = {
         "group_calculation": "Group Calculation",
         "chicken_number": "Chicken Number",
         "add_chicken": "Add Chicken",
-        "daily_egg_rate": "Daily Egg Production Rate",
+        "daily_egg_rate": "Current Egg Count",
         "active_days": "Active Days",
         "chicken_details": "Chicken Details",
         "egg_count": "Egg Count",
@@ -696,7 +696,7 @@ texts = {
         "group_calculation": "Calcul de Grup",
         "chicken_number": "Numărul Găinii",
         "add_chicken": "Adaugă Găină",
-        "daily_egg_rate": "Rata Zilnică de Producție de Ouă",
+        "daily_egg_rate": "Numărul Actual de Ouă",
         "active_days": "Zile Active",
         "chicken_details": "Detalii Găini",
         "egg_count": "Număr Ouă",
@@ -1166,7 +1166,7 @@ elif calculation_type == texts[language]["group_calculation"]:
         egg_rate = st.text_input(
             texts[language]["daily_egg_rate"],
             value="",
-            help="أدخل معدل إنتاج البيض اليومي" if language == "العربية" else "Enter daily egg production rate" if language == "English" else ""
+            help="أدخل عدد البيض الحالي" if language == "العربية" else "Enter current egg count" if language == "English" else ""
         )
     
     with col2:
