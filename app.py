@@ -1224,7 +1224,7 @@ elif calculation_type == texts[language]["group_calculation"]:
             with col3:
                 if st.button(f"❌ {texts[language]['remove_chicken']}", key=f"remove_{i}"):
                     st.session_state.chicken_data.pop(i)
-                    st.experimental_rerun()
+                    st.rerun()
         
         # زر حساب النتائج الجماعية
         if st.button(texts[language]["calculate_group"], type="primary"):
