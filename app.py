@@ -1397,7 +1397,11 @@ elif calculation_type == texts[language]["group_calculation"]:
 
 # زر إعادة التعيين
 if st.button(texts[language]["reset"], type="secondary"):
+    # مسح بيانات الدجاج المخزنة في session_state
+    if 'chicken_data' in st.session_state:
+        st.session_state.chicken_data = []
     st.success("تم إعادة التعيين بنجاح! ✅" if language == "العربية" else "Reset successful! ✅" if language == "English" else "")
+    st.rerun()
 
 # إضافة الأيقونات والروابط
 st.markdown("""
