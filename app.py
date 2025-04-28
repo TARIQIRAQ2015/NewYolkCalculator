@@ -1361,7 +1361,7 @@ elif calculation_type == texts[language]["group_calculation"]:
             # إنشاء نص النتائج
             results_text = f"""
 ╔══════════════════════════════════════════════════════════════════╗
-║                  {texts[language]['total_summary']}                    ║
+║                  {texts[language]['summary']}                    ║
 ╠══════════════════════════════════════════════════════════════════╣
 ║ {texts[language]['calculation_time']}: {date_str} {time_str}
 ╟──────────────────────────────────────────────────────────────────╢
