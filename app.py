@@ -1302,7 +1302,8 @@ elif calculation_type == texts[language]["group_calculation"]:
                 }
             ])
             
-            st.subheader("📊 " + texts[language]["total_summary"])
+            # إزالة العنوان المكرر
+            # st.subheader("📊 " + texts[language]["total_summary"])
             st.table(summary_df)
             
             # إنشاء الرسم البياني
@@ -1422,7 +1423,8 @@ elif calculation_type == texts[language]["group_calculation"]:
                 }
             ])
             
-            st.subheader("📊 " + texts[language]["total_summary"])
+            # إزالة العنوان المكرر
+            # st.subheader("📊 " + texts[language]["total_summary"])
             st.table(summary_df)
     else:
         st.warning(texts[language]["no_chicken_data"])
