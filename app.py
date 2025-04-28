@@ -1252,22 +1252,12 @@ elif calculation_type == texts[language]["group_calculation"]:
             # تحويل العملة إذا لزم الأمر
             if currency == "IQD":
                 conversion_rate = 1480
-                detailed_df[texts[language]["income"]] = detailed_df[texts[language]["income"]].apply(lambda x: f"{format_decimal(float(x) * conversion_rate)} IQD")
-                detailed_df[texts[language]["feed_cost"]] = detailed_df[texts[language]["feed_cost"]].apply(lambda x: f"{format_decimal(float(x) * conversion_rate)} IQD")
-                detailed_df[texts[language]["rent"]] = detailed_df[texts[language]["rent"]].apply(lambda x: f"{format_decimal(float(x) * conversion_rate)} IQD")
-                detailed_df[texts[language]["net_profit_per_chicken"]] = detailed_df[texts[language]["net_profit_per_chicken"]].apply(lambda x: f"{format_decimal(float(x) * conversion_rate)} IQD")
-                
                 total_income_display = total_income * conversion_rate
                 total_feed_cost_display = total_feed_cost * conversion_rate
                 total_rent_display = total_rent * conversion_rate
                 total_net_profit_display = total_net_profit * conversion_rate
                 display_currency = "IQD"
             else:
-                detailed_df[texts[language]["income"]] = detailed_df[texts[language]["income"]].apply(lambda x: f"{x} USD")
-                detailed_df[texts[language]["feed_cost"]] = detailed_df[texts[language]["feed_cost"]].apply(lambda x: f"{x} USD")
-                detailed_df[texts[language]["rent"]] = detailed_df[texts[language]["rent"]].apply(lambda x: f"{x} USD")
-                detailed_df[texts[language]["net_profit_per_chicken"]] = detailed_df[texts[language]["net_profit_per_chicken"]].apply(lambda x: f"{x} USD")
-                
                 total_income_display = total_income
                 total_feed_cost_display = total_feed_cost
                 total_rent_display = total_rent
@@ -1278,7 +1268,66 @@ elif calculation_type == texts[language]["group_calculation"]:
             st.subheader("📋 " + texts[language]["chicken_details"])
             st.table(detailed_df)
             
-            # إنشاء الرسم البياني
+            # أولاً: عرض جدول الملخص الإجمالي
+            summary_df = pd.DataFrame([
+                {
+                    texts[language]["category"]: texts[language]["total_eggs"],
+                    texts[language]["value"]: format_decimal(total_eggs)
+                },
+                {
+                    texts[language]["category"]: texts[language]["total_income"],
+                    texts[language]["value"]: f"{format_decimal(total_income_display)} {display_currency}"
+                },
+                {
+                    texts[language]["category"]: texts[language]["total_feed"],
+                    texts[language]["value"]: f"{format_decimal(total_feed_cost_display)} {display_currency}"
+                },
+                {
+                    texts[language]["category"]: texts[language]["total_rent"],
+                    texts[language]["value"]: f"{format_decimal(total_rent_display)} {display_currency}"
+                },
+                {
+                    texts[language]["category"]: texts[language]["total_net_profit"],
+                    texts[language]["value"]: f"{format_decimal(total_net_profit_display)} {display_currency}"
+                }
+            ])
+            
+            st.subheader("📊 " + texts[language]["total_summary"])
+            st.table(summary_df)
+            
+            # ثانياً: عرض ملخص النتائج النصي
+            # تنسيق التاريخ والوقت حسب توقيت بغداد
+            current_time = datetime.now() + timedelta(hours=3)  # تحويل التوقيت إلى توقيت بغداد
+            date_str = current_time.strftime("%Y-%m-%d")
+            time_str = current_time.strftime("%I:%M %p")
+            
+            # إنشاء نص النتائج
+            results_text = f"""
+╔══════════════════════════════════════════════════════════════════╗
+║                  {texts[language]['summary']}                    ║
+╠══════════════════════════════════════════════════════════════════╣
+║ {texts[language]['calculation_time']}: {date_str} {time_str}
+╟──────────────────────────────────────────────────────────────────╢
+║ {texts[language]['usd_results']}:
+║ {texts[language]['total_eggs']}: {format_decimal(total_eggs)}
+║ {texts[language]['total_income']}: {format_decimal(total_income)} USD
+║ {texts[language]['total_feed']}: {format_decimal(total_feed_cost)} USD
+║ {texts[language]['total_rent']}: {format_decimal(total_rent)} USD
+║ {texts[language]['total_net_profit']}: {format_decimal(total_net_profit)} USD
+╟──────────────────────────────────────────────────────────────────╢
+║ {texts[language]['iqd_results']}:
+║ {texts[language]['total_eggs']}: {format_decimal(total_eggs)}
+║ {texts[language]['total_income']}: {format_decimal(total_income * 1480)} IQD
+║ {texts[language]['total_feed']}: {format_decimal(total_feed_cost * 1480)} IQD
+║ {texts[language]['total_rent']}: {format_decimal(total_rent * 1480)} IQD
+║ {texts[language]['total_net_profit']}: {format_decimal(total_net_profit * 1480)} IQD
+╚══════════════════════════════════════════════════════════════════╝"""
+            
+            st.markdown(f"### ✨ {texts[language]['summary']}")
+            st.code(results_text)
+            
+            # ثالثاً (اختياري): عرض الرسم البياني 
+            # إذا كان غير مطلوب يمكن إزالة هذا الجزء
             chart_df = pd.DataFrame({
                 texts[language]["category"]: [
                     f"💰 {texts[language]['total_income']}",
@@ -1293,9 +1342,6 @@ elif calculation_type == texts[language]["group_calculation"]:
                     total_net_profit_display
                 ]
             })
-            
-            # نعرض أولاً "📊 الملخص الإجمالي"
-            st.subheader("📊 " + texts[language]["total_summary"])
             
             fig = px.pie(
                 chart_df,
@@ -1328,79 +1374,6 @@ elif calculation_type == texts[language]["group_calculation"]:
             )
             
             st.plotly_chart(fig, use_container_width=True)
-            
-            # ثم نعرض "✨ ملخص النتائج ✨"
-            # تنسيق التاريخ والوقت حسب توقيت بغداد
-            current_time = datetime.now() + timedelta(hours=3)  # تحويل التوقيت إلى توقيت بغداد
-            date_str = current_time.strftime("%Y-%m-%d")
-            time_str = current_time.strftime("%I:%M %p")
-            
-            # إنشاء نص النتائج
-            results_text = f"""
-╔══════════════════════════════════════════════════════════════════╗
-║                  {texts[language]['summary']}                    ║
-╠══════════════════════════════════════════════════════════════════╣
-║ {texts[language]['calculation_time']}: {date_str} {time_str}
-╟──────────────────────────────────────────────────────────────────╢
-║ {texts[language]['usd_results']}:
-║ {texts[language]['total_eggs']}: {format_decimal(total_eggs)}
-║ {texts[language]['total_income']}: {format_decimal(total_income)} USD
-║ {texts[language]['total_feed']}: {format_decimal(total_feed_cost)} USD
-║ {texts[language]['total_rent']}: {format_decimal(total_rent)} USD
-║ {texts[language]['total_net_profit']}: {format_decimal(total_net_profit)} USD
-╟──────────────────────────────────────────────────────────────────╢
-║ {texts[language]['iqd_results']}:
-║ {texts[language]['total_eggs']}: {format_decimal(total_eggs)}
-║ {texts[language]['total_income']}: {format_decimal(total_income * 1480)} IQD
-║ {texts[language]['total_feed']}: {format_decimal(total_feed_cost * 1480)} IQD
-║ {texts[language]['total_rent']}: {format_decimal(total_rent * 1480)} IQD
-║ {texts[language]['total_net_profit']}: {format_decimal(total_net_profit * 1480)} IQD
-╚══════════════════════════════════════════════════════════════════╝"""
-            
-            st.markdown(f"### ✨ {texts[language]['summary']}")
-            st.code(results_text)
-            
-            # عرض النتائج بالعملة المختارة
-            if currency == "IQD":
-                conversion_rate = 1480
-                total_income_display = total_income * conversion_rate
-                total_feed_cost_display = total_feed_cost * conversion_rate
-                total_rent_display = total_rent * conversion_rate
-                total_net_profit_display = total_net_profit * conversion_rate
-                display_currency = "IQD"
-            else:
-                total_income_display = total_income
-                total_feed_cost_display = total_feed_cost
-                total_rent_display = total_rent
-                total_net_profit_display = total_net_profit
-                display_currency = "USD"
-                
-            # إعداد وعرض جدول الإجماليات
-            summary_df = pd.DataFrame([
-                {
-                    texts[language]["category"]: texts[language]["total_eggs"],
-                    texts[language]["value"]: format_decimal(total_eggs)
-                },
-                {
-                    texts[language]["category"]: texts[language]["total_income"],
-                    texts[language]["value"]: f"{format_decimal(total_income_display)} {display_currency}"
-                },
-                {
-                    texts[language]["category"]: texts[language]["total_feed"],
-                    texts[language]["value"]: f"{format_decimal(total_feed_cost_display)} {display_currency}"
-                },
-                {
-                    texts[language]["category"]: texts[language]["total_rent"],
-                    texts[language]["value"]: f"{format_decimal(total_rent_display)} {display_currency}"
-                },
-                {
-                    texts[language]["category"]: texts[language]["total_net_profit"],
-                    texts[language]["value"]: f"{format_decimal(total_net_profit_display)} {display_currency}"
-                }
-            ])
-            
-            st.subheader("📊 " + texts[language]["total_summary"])
-            st.table(summary_df)
     else:
         st.warning(texts[language]["no_chicken_data"])
 
