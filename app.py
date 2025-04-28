@@ -1164,7 +1164,7 @@ elif calculation_type == texts[language]["group_calculation"]:
     
     with col1:
         egg_rate = st.text_input(
-            texts[language]["current_egg_count"],
+            texts[language]["daily_egg_rate"],
             value="",
             help="أدخل عدد البيض الحالي" if language == "العربية" else "Enter current egg count" if language == "English" else ""
         )
