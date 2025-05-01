@@ -636,7 +636,7 @@ texts = {
         "total_feed": "إجمالي تكلفة العلف",
         "total_rent": "إجمالي الإيجار",
         "total_net_profit": "إجمالي الربح الصافي",
-        "total_profit_with_sale": "إجمالي الربح الصافي مع بيع الدجاج 🐔",
+        "total_profit_with_sale": "إجمالي الربح الصافي مع بيع الدجاج خلال السنة الاولى 🐔",
         "remove_chicken": "حذف الدجاجة",
         "calculate_group": "حساب النتائج الجماعية",
         "no_chicken_data": "لا توجد بيانات دجاج مدخلة حتى الآن!"
@@ -693,7 +693,7 @@ texts = {
         "total_feed": "Total Feed Cost",
         "total_rent": "Total Rent",
         "total_net_profit": "Total Net Profit",
-        "total_profit_with_sale": "Total Net Profit With Chicken Sale 🐔",
+        "total_profit_with_sale": "Total Net Profit With Chicken Sale During First Year 🐔",
         "remove_chicken": "Remove Chicken",
         "calculate_group": "Calculate Group Results",
         "no_chicken_data": "No chicken data entered yet!"
@@ -750,7 +750,7 @@ texts = {
         "total_feed": "Cost Total Furaje",
         "total_rent": "Chirie Totală",
         "total_net_profit": "Profit Net Total",
-        "total_profit_with_sale": "Profit Net Total Cu Vânzarea Găinilor 🐔",
+        "total_profit_with_sale": "Profit Net Total Cu Vânzarea Găinilor În Primul An 🐔",
         "remove_chicken": "Elimină Găina",
         "calculate_group": "Calculează Rezultatele de Grup",
         "no_chicken_data": "Nu există date despre găini introduse încă!"
