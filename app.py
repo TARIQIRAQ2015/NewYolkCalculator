@@ -1147,19 +1147,19 @@ elif calculation_type == texts[language]["daily_rewards"]:
 
                 # إنشاء نص النتائج
                 results_text = f"""
-╔══════════════════════════════════════════════════════════════════╗
+╔═════════════════════════════════════════════════════════════╗
 ║ {texts[language]['calculation_time']}: {date_str} {time_str}
-╟──────────────────────────────────────────────────────────────────╢
+╟┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┑
 ║ {texts[language]['usd_results']}:
-║ {texts[language]['egg_price']}: {format_decimal(rewards * float(new_egg_price))} USD
-║ {texts[language]['feed_price']}: {format_decimal(food * float(new_feed_price))} USD
+║ {texts[language]['egg_price']}: {format_decimal(rewards_value * float(new_egg_price))} USD
+║ {texts[language]['feed_price']}: {format_decimal(food_value * float(new_feed_price))} USD
 ║ {texts[language]['daily_profit']}: {format_decimal(daily_profit)} USD
-╟──────────────────────────────────────────────────────────────────╢
+╟┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┑
 ║ {texts[language]['iqd_results']}:
-║ {texts[language]['egg_price']}: {format_decimal(rewards * float(new_egg_price) * 1480)} IQD
-║ {texts[language]['feed_price']}: {format_decimal(food * float(new_feed_price) * 1480)} IQD
+║ {texts[language]['egg_price']}: {format_decimal(rewards_value * float(new_egg_price) * 1480)} IQD
+║ {texts[language]['feed_price']}: {format_decimal(food_value * float(new_feed_price) * 1480)} IQD
 ║ {texts[language]['daily_profit']}: {format_decimal(daily_profit * 1480)} IQD
-╚══════════════════════════════════════════════════════════════════╝"""
+╚═════════════════════════════════════════════════════════════╝"""
 
                 # عرض النتائج
                 # st.code(results_text, language="text")
