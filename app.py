@@ -1208,16 +1208,18 @@ elif calculation_type == texts[language]["group_calculation"]:
     with col1:
         egg_rate = st.number_input(
             texts[language]["daily_egg_rate"],
-            min_value=0, 
-            value=300
+            min_value=0.0, 
+            value=300.0,
+            format="%.3f"
             # إزالة ميزة الزيادة والنقصان اليدوية
         )
         
     with col2:
         active_days = st.number_input(
             texts[language]["active_days"],
-            min_value=0, 
-            value=180
+            min_value=0.0, 
+            value=180.0,
+            format="%.3f"
             # إزالة ميزة الزيادة والنقصان اليدوية
         )
         
