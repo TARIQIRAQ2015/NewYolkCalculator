@@ -639,7 +639,8 @@ texts = {
         "total_profit_with_sale": "إجمالي الربح الصافي مع بيع الدجاج خلال السنة الاولى 🐔",
         "remove_chicken": "حذف الدجاجة",
         "calculate_group": "حساب النتائج الجماعية",
-        "no_chicken_data": "لا توجد بيانات دجاج مدخلة حتى الآن!"
+        "no_chicken_data": "لا توجد بيانات دجاج مدخلة حتى الآن!",
+        "not_first_year_chicken": "لا يمكن بيع الدجاجة لأنها ليست في السنة الأولى (عدد البيض أقل من 260)"
     },
     "English": {
         "title": "Chicken Calculator - NewYolk",
@@ -696,7 +697,8 @@ texts = {
         "total_profit_with_sale": "Total Net Profit With Chicken Sale During First Year 🐔",
         "remove_chicken": "Remove Chicken",
         "calculate_group": "Calculate Group Results",
-        "no_chicken_data": "No chicken data entered yet!"
+        "no_chicken_data": "No chicken data entered yet!",
+        "not_first_year_chicken": "Chicken cannot be sold as it's not in the first year (egg count less than 260)"
     },
     "Română": {
         "title": "Calculator Găini - NewYolk",
@@ -753,7 +755,8 @@ texts = {
         "total_profit_with_sale": "Profit Net Total Cu Vânzarea Găinilor În Primul An 🐔",
         "remove_chicken": "Elimină Găina",
         "calculate_group": "Calculează Rezultatele de Grup",
-        "no_chicken_data": "Nu există date despre găini introduse încă!"
+        "no_chicken_data": "Nu există date despre găini introduse încă!",
+        "not_first_year_chicken": "Găina nu poate fi vândută deoarece nu este în primul an (numărul de ouă mai mic de 260)"
     }
 }
 
@@ -1222,13 +1225,17 @@ elif calculation_type == texts[language]["group_calculation"]:
             # إزالة ميزة الزيادة والنقصان اليدوية
         )
         
-    # حقل سعر بيع الدجاجة الاختياري
-    chicken_sale_price = st.number_input(
-        texts[language]["chicken_sale_price"],
-        min_value=0.0,
-        value=0.0
-        # إزالة ميزة الزيادة والنقصان اليدوية
-    )
+    # حقل سعر بيع الدجاجة الاختياري - يظهر شرطياً إذا كان عدد البيض أكبر من 260
+    if egg_rate >= 260:  # لا يظهر في حالة كان عدد البيض أقل من 260
+        chicken_sale_price = st.number_input(
+            texts[language]["chicken_sale_price"],
+            min_value=0.0,
+            value=0.0
+            # إزالة ميزة الزيادة والنقصان اليدوية
+        )
+    else:
+        st.info(texts[language]["not_first_year_chicken"] if "not_first_year_chicken" in texts[language] else "لا يمكن بيع الدجاجة لأنها ليست في السنة الأولى (عدد البيض أقل من 260)")
+        chicken_sale_price = 0.0  # لا يمكن بيع الدجاجة لأنها ليست في السنة الأولى
         
     if st.button(texts[language]["add_chicken"], type="primary"):
         try:
@@ -1252,10 +1259,11 @@ elif calculation_type == texts[language]["group_calculation"]:
                 
                 # حساب الربح مع بيع الدجاجة - فقط للدجاج التي عدد بيضها 260 أو أكثر
                 # الربح مع بيع الدجاجة = الربح قبل دفع الايجار + سعر بيع الدجاجة
-                if eggs_count >= 260 and chicken_sale_price > 0:
+                if eggs_count >= 260 and chicken_sale_price > 0:  # فقط إذا كانت الدجاجة في السنة الأولى (عدد البيض أكبر من أو يساوي 260)
                     profit_with_sale = net_profit_before_rent + chicken_sale_price  # الربح مع بيع الدجاجة = الربح قبل دفع الايجار + سعر بيع الدجاجة
                 else:
                     profit_with_sale = 0  # لا يتم احتساب الربح مع البيع للدجاج التي عدد بيضها أقل من 260
+                    chicken_sale_price = 0.0  # تأكيد على تصفير سعر بيع الدجاجة للدجاج التي ليست في السنة الأولى
                 
                 # إضافة البيانات إلى قائمة الدجاج
                 chicken_id = len(st.session_state.chicken_data) + 1
