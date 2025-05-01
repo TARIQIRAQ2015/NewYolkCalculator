@@ -3,6 +3,9 @@ import pandas as pd
 import plotly.express as px
 from datetime import datetime, timedelta
 
+# استيراد رسائل الخطأ المترجمة
+from error_messages_fix import get_error_message
+
 # تحسين الواجهة
 st.set_page_config(
     page_title="New Yolk Calculator",
