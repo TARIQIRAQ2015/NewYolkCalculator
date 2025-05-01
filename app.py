@@ -1191,9 +1191,9 @@ elif calculation_type == texts[language]["daily_rewards"]:
                         f"💰 {texts[language]['daily_profit']}"
                     ],
                     texts[language]["value"]: [
-                        float(str(rewards * float(new_egg_price)).replace(currency, "").strip()),
-                        float(str(food * float(new_feed_price)).replace(currency, "").strip()),
-                        float(str(daily_profit).replace(currency, "").strip())
+                        rewards_value * float(new_egg_price),
+                        food_value * float(new_feed_price),
+                        daily_profit
                     ]
                 })
                 fig = create_profit_chart(chart_df, language)
