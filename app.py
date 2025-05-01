@@ -186,6 +186,24 @@ st.markdown("""
             -moz-appearance: textfield;
         }
         
+        /* إخفاء رسالة "Press Enter to apply" وجميع رسائل المساعدة */
+        .stNumberInput [data-testid="InputHelpText"],
+        .stTextInput [data-testid="InputHelpText"],
+        [data-testid="stForm"] [data-testid="InputHelpText"] {
+            display: none !important;
+        }
+        
+        /* إضافة تنسيق لتوافق أفضل مع جميع اللغات */
+        [dir="rtl"] .stNumberInput input,
+        [dir="rtl"] .stTextInput input {
+            text-align: right !important;
+        }
+        
+        [dir="ltr"] .stNumberInput input,
+        [dir="ltr"] .stTextInput input {
+            text-align: left !important;
+        }
+        
         /* تحسين النصوص والعناصر الأخرى */
         .stMarkdown {
             color: #e2e2e2;
@@ -898,11 +916,11 @@ if is_number(new_egg_price) and is_number(new_feed_price):
 def create_profit_chart(df, language):
     # تخصيص الألوان
     colors = {
-        'عدد البيض 🥚': '#4CAF50',
-        'عدد الطعام المطلوب 🌽': '#FF9800',
-        'الربح في السنة الاولى 📈': '#2196F3',
-        'دفع الإيجار 🏠': '#F44336',
-        'صافي الربح 💰': '#9C27B0'
+        texts[language]["total_eggs"]: '#4CAF50',
+        texts[language]["total_feed"]: '#FF9800',
+        texts[language]["total_first_year_profit"]: '#2196F3',
+        texts[language]["total_rent"]: '#F44336',
+        texts[language]["total_net_profit"]: '#9C27B0'
     }
     
     # إنشاء الرسم البياني
