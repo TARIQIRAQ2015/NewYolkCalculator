@@ -1217,9 +1217,8 @@ elif calculation_type == texts[language]["group_calculation"]:
     with col2:
         active_days = st.number_input(
             texts[language]["active_days"],
-            min_value=0.0, 
-            value=180.0,
-            format="%.3f"
+            min_value=0, 
+            value=180
             # إزالة ميزة الزيادة والنقصان اليدوية
         )
         
