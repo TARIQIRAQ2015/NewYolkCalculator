@@ -1416,7 +1416,9 @@ elif calculation_type == texts[language]["group_calculation"]:
                 
                 # إضافة إجمالي الربح الصافي مع بيع الدجاج إلى الجدول بعد الربح في السنة الاولى وقبل إجمالي الإيجار
             
-            summary_df = pd.DataFrame(summary_data)
+            # إزالة القيم None من قائمة البيانات قبل إنشاء DataFrame
+            filtered_summary_data = [item for item in summary_data if item is not None]
+            summary_df = pd.DataFrame(filtered_summary_data)
             
             # عرض جدول الملخص الإجمالي
             st.subheader("📊 " + texts[language]["total_summary"])
