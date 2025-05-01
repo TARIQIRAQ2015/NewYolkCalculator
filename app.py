@@ -175,6 +175,17 @@ st.markdown("""
             margin: 1.5rem 0 !important;
         }
         
+        /* إخفاء أزرار الزيادة والنقصان في حقول الإدخال العددية */
+        input[type="number"]::-webkit-inner-spin-button, 
+        input[type="number"]::-webkit-outer-spin-button { 
+            -webkit-appearance: none; 
+            margin: 0; 
+        }
+        
+        input[type="number"] {
+            -moz-appearance: textfield;
+        }
+        
         /* تحسين النصوص والعناصر الأخرى */
         .stMarkdown {
             color: #e2e2e2;
