@@ -1214,20 +1214,18 @@ elif calculation_type == texts[language]["group_calculation"]:
         )
         
     with col2:
-        active_days = st.number_input(
+        active_days = st.text_input(
             texts[language]["active_days"],
-            min_value=0, 
-            value=180
-            # إزالة ميزة الزيادة والنقصان اليدوية
+            value=""
+            # تم تغييرها لتكون بدون قيمة افتراضية وبدون أزرار الزيادة والنقصان
         )
         
     # حقل سعر بيع الدجاجة الاختياري - يظهر شرطياً إذا كان عدد البيض أكبر من 260
     if egg_rate >= 260:  # لا يظهر في حالة كان عدد البيض أقل من 260
-        chicken_sale_price = st.number_input(
+        chicken_sale_price = st.text_input(
             texts[language]["chicken_sale_price"],
-            min_value=0.0,
-            value=0.0
-            # إزالة ميزة الزيادة والنقصان اليدوية
+            value=""
+            # تم تغييرها لتكون بدون قيمة افتراضية وبدون أزرار الزيادة والنقصان
         )
     else:
         st.info(texts[language]["not_first_year_chicken"] if "not_first_year_chicken" in texts[language] else "لا يمكن بيع الدجاجة لأنها ليست في السنة الأولى (عدد البيض أقل من 260)")
