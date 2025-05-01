@@ -1376,6 +1376,13 @@ elif calculation_type == texts[language]["group_calculation"]:
             st.subheader("📋 " + texts[language]["chicken_details"])
             st.table(detailed_df)
             
+            # حساب إجمالي الربح الصافي مع بيع الدجاج للعرض النصي والجدول الإجمالي
+            total_final_with_sale = 0  # قيمة افتراضية
+            if has_sales_prices:
+                # حساب إجمالي الربح الصافي مع بيع الدجاج للعرض في الجدول والنص
+                total_chicken_sale_prices = sum(chicken["chicken_sale_price"] for chicken in st.session_state.chicken_data if chicken["eggs"] >= 260 and chicken["chicken_sale_price"] > 0)
+                total_final_with_sale = total_net_profit_before_rent_display + (total_chicken_sale_prices if currency == "USD" else total_chicken_sale_prices * 1480)
+            
             # إنشاء بيانات ملخص للرسم البياني
             summary_data = [
                 {
@@ -1407,14 +1414,6 @@ elif calculation_type == texts[language]["group_calculation"]:
                     texts[language]["value"]: f"{format_decimal(total_net_profit_display)} {display_currency}"
                 }
             ]
-            
-            # حساب إجمالي الربح الصافي مع بيع الدجاج للعرض النصي والجدول الإجمالي
-            if has_sales_prices:
-                # حساب إجمالي الربح الصافي مع بيع الدجاج للعرض في الجدول والنص
-                total_chicken_sale_prices = sum(chicken["chicken_sale_price"] for chicken in st.session_state.chicken_data if chicken["eggs"] >= 260 and chicken["chicken_sale_price"] > 0)
-                total_final_with_sale = total_net_profit_before_rent_display + (total_chicken_sale_prices if currency == "USD" else total_chicken_sale_prices * 1480)
-                
-                # إضافة إجمالي الربح الصافي مع بيع الدجاج إلى الجدول بعد الربح في السنة الاولى وقبل إجمالي الإيجار
             
             # إزالة القيم None من قائمة البيانات قبل إنشاء DataFrame
             filtered_summary_data = [item for item in summary_data if item is not None]
