@@ -1175,24 +1175,24 @@ elif calculation_type == texts[language]["group_calculation"]:
         egg_rate = st.number_input(
             texts[language]["daily_egg_rate"],
             min_value=0, 
-            value=300,
-            step=1
+            value=300
+            # إزالة ميزة الزيادة والنقصان اليدوية
         )
         
     with col2:
         active_days = st.number_input(
             texts[language]["active_days"],
             min_value=0, 
-            value=180,
-            step=1
+            value=180
+            # إزالة ميزة الزيادة والنقصان اليدوية
         )
         
     # حقل سعر بيع الدجاجة الاختياري
     chicken_sale_price = st.number_input(
         texts[language]["chicken_sale_price"],
         min_value=0.0,
-        value=0.0,
-        step=0.1
+        value=0.0
+        # إزالة ميزة الزيادة والنقصان اليدوية
     )
         
     if st.button(texts[language]["add_chicken"], type="primary"):
@@ -1216,8 +1216,9 @@ elif calculation_type == texts[language]["group_calculation"]:
                 net_profit = egg_income - feed_cost - rent  # الربح الصافي بدون بيع
                 
                 # حساب الربح مع بيع الدجاجة - فقط للدجاج التي عدد بيضها 260 أو أكثر
+                # الربح مع بيع الدجاجة = الربح قبل دفع الايجار + سعر بيع الدجاجة
                 if eggs_count >= 260 and chicken_sale_price > 0:
-                    profit_with_sale = net_profit_before_rent + chicken_sale_price  # الربح مع بيع الدجاجة (بدون خصم الإيجار)
+                    profit_with_sale = net_profit_before_rent + chicken_sale_price  # الربح مع بيع الدجاجة = الربح قبل دفع الايجار + سعر بيع الدجاجة
                 else:
                     profit_with_sale = 0  # لا يتم احتساب الربح مع البيع للدجاج التي عدد بيضها أقل من 260
                 
@@ -1368,25 +1369,27 @@ elif calculation_type == texts[language]["group_calculation"]:
             
             # إنشاء نص النتائج
             results_text = f"""
-╔══════════════════════════════════════════════════════════════════╗
+╔══════════════════════════════════════════════════════════════╗
 ║                  {texts[language]['summary']}                    ║
-╠══════════════════════════════════════════════════════════════════╣
+╠══════════════════════════════════════════════════════════════╣
 ║ {texts[language]['calculation_time']}: {date_str} {time_str}
-╟──────────────────────────────────────────────────────────────────╢
+╠──────────────────────────────────────────────────────────────╤
 ║ {texts[language]['usd_results']}:
 ║ {texts[language]['total_eggs']}: {format_decimal(total_eggs)}
 ║ {texts[language]['total_income']}: {format_decimal(total_income)} USD
 ║ {texts[language]['total_feed']}: {format_decimal(total_feed_cost)} USD
 ║ {texts[language]['total_rent']}: {format_decimal(total_rent)} USD
-║ {texts[language]['total_net_profit']}: {format_decimal(total_net_profit)} USD
-╟──────────────────────────────────────────────────────────────────╢
+║ {texts[language]['total_net_profit']}: {format_decimal(total_net_profit)} USD{f'''
+║ {texts[language]['total_profit_with_sale']}: {format_decimal(total_net_profit + total_profit_with_sale)} USD''' if has_sales_prices else ''}
+╠──────────────────────────────────────────────────────────────╤
 ║ {texts[language]['iqd_results']}:
 ║ {texts[language]['total_eggs']}: {format_decimal(total_eggs)}
 ║ {texts[language]['total_income']}: {format_decimal(total_income * 1480)} IQD
 ║ {texts[language]['total_feed']}: {format_decimal(total_feed_cost * 1480)} IQD
 ║ {texts[language]['total_rent']}: {format_decimal(total_rent * 1480)} IQD
-║ {texts[language]['total_net_profit']}: {format_decimal(total_net_profit * 1480)} IQD
-╚══════════════════════════════════════════════════════════════════╝"""
+║ {texts[language]['total_net_profit']}: {format_decimal(total_net_profit * 1480)} IQD{f'''
+║ {texts[language]['total_profit_with_sale']}: {format_decimal((total_net_profit + total_profit_with_sale) * 1480)} IQD''' if has_sales_prices else ''}
+╚══════════════════════════════════════════════════════════════╝"""
             
             st.markdown(f"### ✨ {texts[language]['summary']}")
             st.code(results_text)
