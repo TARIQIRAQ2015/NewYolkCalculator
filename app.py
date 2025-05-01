@@ -1211,7 +1211,12 @@ elif calculation_type == texts[language]["group_calculation"]:
                 rent = 6 if eggs_count >= 260 else 0  # 6 دولارات فقط إذا كان عدد البيض 260 أو أكثر
                 net_profit_before_rent = egg_income - feed_cost  # الربح قبل دفع الايجار
                 net_profit = egg_income - feed_cost - rent  # الربح الصافي بدون بيع
-                profit_with_sale = net_profit_before_rent + chicken_sale_price if chicken_sale_price > 0 else net_profit_before_rent  # الربح مع بيع الدجاجة (إذا كان مدخلاً) - بدون احتساب الإيجار
+                
+                # حساب الربح مع بيع الدجاجة - فقط للدجاج التي عدد بيضها 260 أو أكثر
+                if eggs_count >= 260 and chicken_sale_price > 0:
+                    profit_with_sale = net_profit_before_rent + chicken_sale_price  # الربح مع بيع الدجاجة (بدون خصم الإيجار)
+                else:
+                    profit_with_sale = 0  # لا يتم احتساب الربح مع البيع للدجاج التي عدد بيضها أقل من 260
                 
                 # إضافة البيانات إلى قائمة الدجاج
                 chicken_id = len(st.session_state.chicken_data) + 1
@@ -1260,7 +1265,7 @@ elif calculation_type == texts[language]["group_calculation"]:
                     texts[language]["rent"]: format_decimal(chicken["rent"]),
                     texts[language]["net_profit"]: format_decimal(chicken["net_profit_before_rent"]),
                     texts[language]["net_profit_per_chicken"]: format_decimal(chicken["net_profit"]),
-                    texts[language]["profit_with_sale"]: format_decimal(chicken["profit_with_sale"]) if chicken["chicken_sale_price"] > 0 else ""
+                    texts[language]["profit_with_sale"]: format_decimal(chicken["profit_with_sale"]) if chicken["eggs"] >= 260 and chicken["profit_with_sale"] > 0 else ""
                 }
                 for chicken in st.session_state.chicken_data
             ])
@@ -1272,8 +1277,12 @@ elif calculation_type == texts[language]["group_calculation"]:
             total_rent = sum(chicken["rent"] for chicken in st.session_state.chicken_data)
             total_net_profit_before_rent = sum(chicken["net_profit_before_rent"] for chicken in st.session_state.chicken_data)
             total_net_profit = sum(chicken["net_profit"] for chicken in st.session_state.chicken_data)
-            total_profit_with_sale = sum(chicken["profit_with_sale"] for chicken in st.session_state.chicken_data)
-            has_sales_prices = any(chicken["chicken_sale_price"] > 0 for chicken in st.session_state.chicken_data)
+            
+            # حساب إجمالي الربح مع البيع - فقط للدجاج التي عدد بيضها 260 أو أكثر
+            total_profit_with_sale = sum(chicken["profit_with_sale"] for chicken in st.session_state.chicken_data if chicken["eggs"] >= 260 and chicken["profit_with_sale"] > 0)
+            
+            # التحقق مما إذا كان هناك دجاج مؤهلة للحساب مع البيع (عدد بيضها 260 أو أكثر وتم تحديد سعر البيع)
+            has_sales_prices = any(chicken["eggs"] >= 260 and chicken["chicken_sale_price"] > 0 for chicken in st.session_state.chicken_data)
             
             # تحويل العملة إذا لزم الأمر
             if currency == "IQD":
