@@ -962,9 +962,11 @@ if calculation_type == texts[language]["chicken_profits"]:
     col5, col6 = st.columns(2)
 
     with col5:
-        eggs = st.text_input(
+        eggs = st.number_input(
             texts[language]["eggs_input"],
-            value="",
+            min_value=1.0,
+            value=500.0,
+            format="%.3f",
             help="أدخل عدد البيض (بحد أقصى 580)" if language == "العربية" else "Enter the number of eggs (max 580)" if language == "English" else ""
         )
 
