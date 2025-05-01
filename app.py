@@ -606,6 +606,7 @@ texts = {
         "total_feed": "إجمالي تكلفة العلف",
         "total_rent": "إجمالي الإيجار",
         "total_net_profit": "إجمالي الربح الصافي",
+        "total_profit_with_sale": "إجمالي الربح الصافي مع بيع الدجاج 🐔",
         "remove_chicken": "حذف الدجاجة",
         "calculate_group": "حساب النتائج الجماعية",
         "no_chicken_data": "لا توجد بيانات دجاج مدخلة حتى الآن!"
@@ -661,6 +662,7 @@ texts = {
         "total_feed": "Total Feed Cost",
         "total_rent": "Total Rent",
         "total_net_profit": "Total Net Profit",
+        "total_profit_with_sale": "Total Net Profit With Chicken Sale 🐔",
         "remove_chicken": "Remove Chicken",
         "calculate_group": "Calculate Group Results",
         "no_chicken_data": "No chicken data entered yet!"
@@ -716,6 +718,7 @@ texts = {
         "total_feed": "Cost Total Furaje",
         "total_rent": "Chirie Totală",
         "total_net_profit": "Profit Net Total",
+        "total_profit_with_sale": "Profit Net Total Cu Vânzarea Găinilor 🐔",
         "remove_chicken": "Elimină Găina",
         "calculate_group": "Calculează Rezultatele de Grup",
         "no_chicken_data": "Nu există date despre găini introduse încă!"
@@ -1262,8 +1265,8 @@ elif calculation_type == texts[language]["group_calculation"]:
                     texts[language]["days_input"]: format_decimal(chicken["days"]),
                     texts[language]["income"]: format_decimal(chicken["income"]),
                     texts[language]["feed_cost"]: format_decimal(chicken["feed_cost"]),
-                    texts[language]["rent"]: format_decimal(chicken["rent"]),
                     texts[language]["net_profit"]: format_decimal(chicken["net_profit_before_rent"]),
+                    texts[language]["rent"]: format_decimal(chicken["rent"]),
                     texts[language]["net_profit_per_chicken"]: format_decimal(chicken["net_profit"]),
                     texts[language]["profit_with_sale"]: format_decimal(chicken["profit_with_sale"]) if chicken["eggs"] >= 260 and chicken["profit_with_sale"] > 0 else ""
                 }
@@ -1337,9 +1340,18 @@ elif calculation_type == texts[language]["group_calculation"]:
             
             # Add profit with sale only if at least one chicken has a sale price
             if has_sales_prices:
+                # إضافة الربح مع بيع الدجاجة للأفراد
                 summary_data.append({
                     texts[language]["category"]: texts[language]["profit_with_sale"],
                     texts[language]["value"]: f"{format_decimal(total_profit_with_sale_display)} {display_currency}"
+                })
+                
+                # إضافة إجمالي الربح الصافي مع بيع الدجاج
+                # حساب = إجمالي الربح الصافي (بدون بيع) + إجمالي الربح من البيع
+                total_final_with_sale = total_net_profit_display + total_profit_with_sale_display
+                summary_data.append({
+                    texts[language]["category"]: texts[language]["total_profit_with_sale"],
+                    texts[language]["value"]: f"{format_decimal(total_final_with_sale)} {display_currency}"
                 })
             
             summary_df = pd.DataFrame(summary_data)
