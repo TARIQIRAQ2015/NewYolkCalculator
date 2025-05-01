@@ -1211,7 +1211,7 @@ elif calculation_type == texts[language]["group_calculation"]:
                 rent = 6 if eggs_count >= 260 else 0  # 6 دولارات فقط إذا كان عدد البيض 260 أو أكثر
                 net_profit_before_rent = egg_income - feed_cost  # الربح قبل دفع الايجار
                 net_profit = egg_income - feed_cost - rent  # الربح الصافي بدون بيع
-                profit_with_sale = net_profit + chicken_sale_price if chicken_sale_price > 0 else net_profit  # الربح مع بيع الدجاجة (إذا كان مدخلاً)
+                profit_with_sale = net_profit_before_rent + chicken_sale_price if chicken_sale_price > 0 else net_profit_before_rent  # الربح مع بيع الدجاجة (إذا كان مدخلاً) - بدون احتساب الإيجار
                 
                 # إضافة البيانات إلى قائمة الدجاج
                 chicken_id = len(st.session_state.chicken_data) + 1
