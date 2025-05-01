@@ -1172,8 +1172,8 @@ elif calculation_type == texts[language]["daily_rewards"]:
                         f"💰 {texts[language]['daily_profit']}"
                     ],
                     texts[language]["value"]: [
-                        rewards * float(new_egg_price),
-                        food * float(new_feed_price),
+                        rewards_value * float(new_egg_price),
+                        food_value * float(new_feed_price),
                         daily_profit
                     ]
                 })
