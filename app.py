@@ -1347,15 +1347,10 @@ elif calculation_type == texts[language]["group_calculation"]:
                     texts[language]["value"]: f"{format_decimal(total_profit_with_sale_display)} {display_currency}"
                 })
                 
-                # إضافة إجمالي الربح الصافي مع بيع الدجاج
-                # حساب = الربح قبل دفع الايجار + مجموع أسعار بيع الدجاج
-                # وليس الربح الصافي بعد خصم الإيجار + سعر البيع
+                # حساب إجمالي الربح الصافي مع بيع الدجاج - فقط للعرض النصي وليس في الجدول
                 total_chicken_sale_prices = sum(chicken["chicken_sale_price"] for chicken in st.session_state.chicken_data if chicken["eggs"] >= 260 and chicken["chicken_sale_price"] > 0)
                 total_final_with_sale = total_net_profit_before_rent_display + (total_chicken_sale_prices if currency == "USD" else total_chicken_sale_prices * 1480)
-                summary_data.append({
-                    texts[language]["category"]: texts[language]["total_profit_with_sale"],
-                    texts[language]["value"]: f"{format_decimal(total_final_with_sale)} {display_currency}"
-                })
+                # تم حذف العرض من الجدول بناءً على طلب المستخدم
             
             summary_df = pd.DataFrame(summary_data)
             
