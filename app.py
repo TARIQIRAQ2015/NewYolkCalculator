@@ -965,11 +965,9 @@ if calculation_type == texts[language]["chicken_profits"]:
     col5, col6 = st.columns(2)
 
     with col5:
-        eggs = st.number_input(
+        eggs = st.text_input(
             texts[language]["eggs_input"],
-            min_value=1.0,
-            value=500.0,
-            format="%.3f",
+            value="",
             help="أدخل عدد البيض (بحد أقصى 580)" if language == "العربية" else "Enter the number of eggs (max 580)" if language == "English" else ""
         )
 
@@ -1209,12 +1207,10 @@ elif calculation_type == texts[language]["group_calculation"]:
     col1, col2 = st.columns(2)
     
     with col1:
-        egg_rate = st.number_input(
+        egg_rate = st.text_input(
             texts[language]["daily_egg_rate"],
-            min_value=0.0, 
-            value=300.0,
-            format="%.3f"
-            # إزالة ميزة الزيادة والنقصان اليدوية
+            value=""
+            # تم تغييرها لتكون مثل حقل أيام النشاط بدون قيمة افتراضية
         )
         
     with col2:
