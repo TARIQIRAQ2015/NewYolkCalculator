@@ -574,7 +574,8 @@ texts = {
         "reset": "إعادة تعيين 🔄",
         "value": "القيمة",
         "category": "الفئة",
-        "net_profit": "الربح قبل دفع الايجار 📈",
+        "net_profit": "الربح في السنة الاولى 📈",
+        "total_first_year_profit": "إجمالي الربح في السنة الاولى 📈",
         "total_rewards": "إجمالي المكافآت ⭐",
         "total_food_cost": "اجمالي العلف 🌽",
         "first_year_rental": "الإيجار 🏠",
@@ -630,7 +631,8 @@ texts = {
         "reset": "Reset 🔄",
         "value": "Value",
         "category": "Category",
-        "net_profit": "Profit Before Rent 📈",
+        "net_profit": "First Year Profit 📈",
+        "total_first_year_profit": "Total First Year Profit 📈",
         "total_rewards": "Total Rewards ⭐",
         "total_food_cost": "Total Feed 🌽",
         "first_year_rental": "Rental 🏠",
@@ -686,7 +688,8 @@ texts = {
         "reset": "Resetare 🔄",
         "value": "Valoare",
         "category": "Categorie",
-        "net_profit": "Profit Înainte de Chirie 📈",
+        "net_profit": "Profit În Primul An 📈",
+        "total_first_year_profit": "Profit Total În Primul An 📈",
         "total_rewards": "Total Recompense ⭐",
         "total_food_cost": "Total Furaje 🌽",
         "first_year_rental": "Chirie 🏠",
@@ -886,7 +889,7 @@ def create_profit_chart(df, language):
     colors = {
         'عدد البيض 🥚': '#4CAF50',
         'عدد الطعام المطلوب 🌽': '#FF9800',
-        'الربح قبل الإيجار 📊': '#2196F3',
+        'الربح في السنة الاولى 📈': '#2196F3',
         'دفع الإيجار 🏠': '#F44336',
         'صافي الربح 💰': '#9C27B0'
     }
@@ -1375,6 +1378,7 @@ elif calculation_type == texts[language]["group_calculation"]:
 ║ {texts[language]['total_eggs']}: {format_decimal(total_eggs)}
 ║ {texts[language]['total_income']}: {format_decimal(total_income)} USD
 ║ {texts[language]['total_feed']}: {format_decimal(total_feed_cost)} USD
+║ {texts[language]['total_first_year_profit']}: {format_decimal(total_net_profit_before_rent)} USD
 ║ {texts[language]['total_rent']}: {format_decimal(total_rent)} USD
 ║ {texts[language]['total_net_profit']}: {format_decimal(total_net_profit)} USD{f'''
 ║ {texts[language]['total_profit_with_sale']}: {format_decimal(total_net_profit_before_rent + total_chicken_sale_prices)} USD''' if has_sales_prices else ''}
@@ -1383,6 +1387,7 @@ elif calculation_type == texts[language]["group_calculation"]:
 ║ {texts[language]['total_eggs']}: {format_decimal(total_eggs)}
 ║ {texts[language]['total_income']}: {format_decimal(total_income * 1480)} IQD
 ║ {texts[language]['total_feed']}: {format_decimal(total_feed_cost * 1480)} IQD
+║ {texts[language]['total_first_year_profit']}: {format_decimal(total_net_profit_before_rent * 1480)} IQD
 ║ {texts[language]['total_rent']}: {format_decimal(total_rent * 1480)} IQD
 ║ {texts[language]['total_net_profit']}: {format_decimal(total_net_profit * 1480)} IQD{f'''
 ║ {texts[language]['total_profit_with_sale']}: {format_decimal((total_net_profit_before_rent * 1480) + (total_chicken_sale_prices * 1480))} IQD''' if has_sales_prices else ''}
@@ -1397,12 +1402,14 @@ elif calculation_type == texts[language]["group_calculation"]:
                 texts[language]["category"]: [
                     f"💰 {texts[language]['total_income']}",
                     f"🌽 {texts[language]['total_feed']}",
+                    f"📈 {texts[language]['total_first_year_profit']}",
                     f"🏠 {texts[language]['total_rent']}",
-                    f"📈 {texts[language]['total_net_profit']}"
+                    f"💰 {texts[language]['total_net_profit']}"
                 ],
                 texts[language]["value"]: [
                     total_income_display,
                     total_feed_cost_display,
+                    total_net_profit_before_rent_display,
                     total_rent_display,
                     total_net_profit_display
                 ]
