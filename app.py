@@ -1348,7 +1348,10 @@ elif calculation_type == texts[language]["group_calculation"]:
             total_net_profit = sum(chicken["net_profit"] for chicken in st.session_state.chicken_data)
             
             # حساب إجمالي الربح مع البيع - فقط للدجاج التي عدد بيضها 260 أو أكثر
-            total_profit_with_sale = sum(chicken["profit_with_sale"] for chicken in st.session_state.chicken_data if chicken["eggs"] >= 260 and chicken["profit_with_sale"] > 0)
+            # حساب مجموع أسعار بيع الدجاج المؤهلة (عدد بيضها 260 أو أكثر)
+            total_chicken_sale_prices = sum(chicken["chicken_sale_price"] for chicken in st.session_state.chicken_data if chicken["eggs"] >= 260 and chicken["chicken_sale_price"] > 0)
+            # الربح الكلي مع البيع = إجمالي الربح قبل الإيجار + مجموع أسعار بيع الدجاج
+            total_profit_with_sale = total_net_profit_before_rent + total_chicken_sale_prices
             
             # التحقق مما إذا كان هناك دجاج مؤهلة للحساب مع البيع (عدد بيضها 260 أو أكثر وتم تحديد سعر البيع)
             has_sales_prices = any(chicken["eggs"] >= 260 and chicken["chicken_sale_price"] > 0 for chicken in st.session_state.chicken_data)
