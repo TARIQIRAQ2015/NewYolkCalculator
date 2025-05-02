@@ -4,7 +4,7 @@ import plotly.express as px
 from datetime import datetime, timedelta
 
 # استيراد رسائل الخطأ المترجمة
-from error_messages_fix import get_error_message
+from error_messages_fix import get_error_message, get_help_message
 
 # تحسين الواجهة
 st.set_page_config(
@@ -902,9 +902,9 @@ with col4:
 
 if st.button(texts[language]["save_prices"], type="secondary"):
     if not is_number(new_egg_price) or not is_number(new_feed_price):
-        st.error("يرجى إدخال أرقام صحيحة ❗️" if language == "العربية" else "Please enter valid numbers! ❗️" if language == "English" else "Vă rugăm să introduceți numere valide! ❗️")
+        st.error(get_error_message("invalid_number", language))
     else:
-        st.success("تم حفظ الأسعار الجديدة بنجاح! ✅" if language == "العربية" else "New prices saved successfully! ✅" if language == "English" else "Prețurile noi au fost salvate cu succes! ✅")
+        st.success(get_error_message("save_success", language))
 
 # تحديث الأسعار بناءً على العملة
 if is_number(new_egg_price) and is_number(new_feed_price):
@@ -971,14 +971,14 @@ if calculation_type == texts[language]["chicken_profits"]:
         eggs = st.text_input(
             texts[language]["eggs_input"],
             value="",
-            help="أدخل عدد البيض (بحد أقصى 580)" if language == "العربية" else "Enter the number of eggs (max 580)" if language == "English" else ""
+            help=get_help_message("eggs_input", language)
         )
 
     with col6:
         days = st.text_input(
             texts[language]["days_input"],
             value="",
-            help="أدخل عدد الأيام (بحد أقصى 730)" if language == "العربية" else "Enter the number of days (max 730)" if language == "English" else ""
+            help=get_help_message("days_input", language)
         )
 
     if st.button(texts[language]["calculate_profits"], type="primary"):
@@ -988,16 +988,16 @@ if calculation_type == texts[language]["chicken_profits"]:
                 eggs_value = float(eggs) if eggs else None
                 days_value = float(days) if days else None
             except ValueError:
-                st.error("يرجى إدخال أرقام صحيحة! ❗️" if language == "العربية" else "Please enter valid numbers! ❗️" if language == "English" else "")
+                st.error(get_error_message("invalid_number", language))
                 eggs_value = None
                 days_value = None
 
             if eggs_value is None or days_value is None:
-                st.error("يرجى إدخال جميع القيم المطلوبة! ❗️" if language == "العربية" else "Please enter all required values! ❗️" if language == "English" else "")
+                st.error(get_error_message("missing_values", language))
             elif eggs_value > 580:
-                st.error("عدد البيض يجب ألا يتجاوز 580! ❗️" if language == "العربية" else "Number of eggs should not exceed 580! ❗️" if language == "English" else "")
+                st.error(get_error_message("eggs_exceed", language))
             elif days_value > 730:
-                st.error("عدد الأيام يجب ألا يتجاوز 730! ❗️" if language == "العربية" else "Number of days should not exceed 730! ❗️" if language == "English" else "")
+                st.error(get_error_message("days_exceed", language))
             else:
                 # حساب الأرباح
                 total_egg_price = eggs_value * float(new_egg_price)  # ضرب عدد البيض في سعر البيض الحالي
@@ -1100,7 +1100,7 @@ if calculation_type == texts[language]["chicken_profits"]:
                 st.code(results_text)
                 
         except ValueError:
-            st.error("يرجى إدخال أرقام صحيحة! ❗️" if language == "العربية" else "Please enter valid numbers! ❗️" if language == "English" else "")
+            st.error(get_error_message("invalid_number", language))
 
 elif calculation_type == texts[language]["daily_rewards"]:
     st.subheader(texts[language]["daily_rewards"] + " 📈")
@@ -1110,14 +1110,14 @@ elif calculation_type == texts[language]["daily_rewards"]:
         rewards = st.text_input(
             texts[language]["total_rewards"],
             value="",
-            help="أدخل عدد المكافآت" if language == "العربية" else "Enter the number of rewards" if language == "English" else ""
+            help=get_help_message("rewards_input", language)
         )
 
     with col8:
         food = st.text_input(
             texts[language]["total_food_cost"],
             value="",
-            help="أدخل عدد الطعام المطلوب" if language == "العربية" else "Enter the amount of food needed" if language == "English" else ""
+            help=get_help_message("food_input", language)
         )
 
     if st.button(texts[language]["calculate_rewards"], type="primary"):
@@ -1127,12 +1127,12 @@ elif calculation_type == texts[language]["daily_rewards"]:
                 rewards_value = float(rewards) if rewards else None
                 food_value = float(food) if food else None
             except ValueError:
-                st.error("يرجى إدخال أرقام صحيحة! ❗️" if language == "العربية" else "Please enter valid numbers! ❗️" if language == "English" else "")
+                st.error(get_error_message("invalid_number", language))
                 rewards_value = None
                 food_value = None
 
             if rewards_value is None or food_value is None:
-                st.error("يرجى إدخال جميع القيم المطلوبة! ❗️" if language == "العربية" else "Please enter all required values! ❗️" if language == "English" else "")
+                st.error(get_error_message("missing_values", language))
             else:
                 # حساب الربح اليومي
                 daily_profit = rewards_value * float(new_egg_price) - food_value * float(new_feed_price)
@@ -1207,7 +1207,7 @@ elif calculation_type == texts[language]["daily_rewards"]:
                 st.code(results_text)
                 
         except ValueError:
-            st.error("يرجى إدخال أرقام صحيحة! ❗️" if language == "العربية" else "Please enter valid numbers! ❗️" if language == "English" else "")
+            st.error(get_error_message("invalid_number", language))
 
 # إضافة قسم الحساب الجماعي
 elif calculation_type == texts[language]["group_calculation"]:
@@ -1268,11 +1268,11 @@ elif calculation_type == texts[language]["group_calculation"]:
                 chicken_sale_price_value = 0
             
             if egg_rate is None or active_days is None:
-                st.error("يرجى إدخال جميع القيم المطلوبة! ❗️" if language == "العربية" else "Please enter all required values! ❗️" if language == "English" else "")
+                st.error(get_error_message("missing_values", language))
             elif egg_rate > 580:
-                st.error("عدد البيض يجب ألا يتجاوز 580! ❗️" if language == "العربية" else "Number of eggs should not exceed 580! ❗️" if language == "English" else "")
+                st.error(get_error_message("eggs_exceed", language))
             elif active_days > 730:
-                st.error("عدد الأيام يجب ألا يتجاوز 730! ❗️" if language == "العربية" else "Number of days should not exceed 730! ❗️" if language == "English" else "")
+                st.error(get_error_message("days_exceed", language))
             else:
                 # حساب النتائج للدجاجة الحالية (مطابق لطريقة حساب أرباح الدجاج الاعتيادية)
                 eggs_count = egg_rate  # عدد البيض كما هو
@@ -1305,9 +1305,9 @@ elif calculation_type == texts[language]["group_calculation"]:
                     "profit_with_sale": profit_with_sale  # الربح مع بيع الدجاجة
                 })
                 
-                st.success(f"تمت إضافة الدجاجة رقم {chicken_id} بنجاح! ✅" if language == "العربية" else f"Chicken #{chicken_id} added successfully! ✅" if language == "English" else "")
+                st.success(get_error_message("chicken_added", language, chicken_id=chicken_id))
         except ValueError:
-            st.error("يرجى إدخال أرقام صحيحة! ❗️" if language == "العربية" else "Please enter valid numbers! ❗️" if language == "English" else "")
+            st.error(get_error_message("invalid_number", language))
     
     # عرض الدجاج المضافة 
     if st.session_state.chicken_data:
@@ -1511,14 +1511,14 @@ elif calculation_type == texts[language]["group_calculation"]:
             
             st.plotly_chart(fig, use_container_width=True)
     else:
-        st.warning(texts[language]["no_chicken_data"])
+        st.warning(get_error_message("no_chicken_data", language))
 
 # زر إعادة التعيين
 if st.button(texts[language]["reset"], type="secondary"):
     # مسح بيانات الدجاج المخزنة في session_state
     if 'chicken_data' in st.session_state:
         st.session_state.chicken_data = []
-    st.success("تم إعادة التعيين بنجاح! ✅" if language == "العربية" else "Reset successful! ✅" if language == "English" else "")
+    st.success(get_error_message("reset_success", language))
     st.rerun()
 
 # إضافة الأيقونات والروابط
