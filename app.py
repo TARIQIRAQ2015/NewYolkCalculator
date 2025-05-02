@@ -2,9 +2,17 @@ import streamlit as st
 import pandas as pd
 import plotly.express as px
 from datetime import datetime, timedelta
+import os
 
 # استيراد رسائل الخطأ المترجمة
 from error_messages_fix import get_error_message, get_help_message
+
+# قراءة ملف CSS الخاص بالتحسينات المحمولة
+def load_css(css_file):
+    if os.path.exists(css_file):
+        with open(css_file, "r", encoding="utf-8") as f:
+            return f.read()
+    return ""
 
 # تحسين الواجهة
 st.set_page_config(
@@ -12,6 +20,11 @@ st.set_page_config(
     page_icon="🐔",
     layout="wide"
 )
+
+# تطبيق تحسينات CSS للهواتف المحمولة
+mobile_css = load_css("mobile_fixes.css")
+if mobile_css:
+    st.markdown(f"<style>{mobile_css}</style>", unsafe_allow_html=True)
 
 # إخفاء أزرار التحكم بالمظهر
 st.markdown("""
@@ -578,6 +591,120 @@ st.markdown("""
             50% { transform: translateY(-10px); }
             100% { transform: translateY(0px); }
         }
+        
+        /* تحسينات للأجهزة المحمولة */
+        @media (max-width: 768px) {
+            /* تصغير حجم العناوين */
+            .main-title {
+                font-size: 1.8em !important;
+            }
+            
+            .subtitle {
+                font-size: 0.8em !important;
+            }
+            
+            /* تحسين حجم الأزرار */
+            .stButton button {
+                font-size: 16px !important;
+                padding: 8px 16px !important;
+            }
+            
+            /* تصغير حجم الجداول */
+            table {
+                font-size: 0.8em !important;
+            }
+            
+            /* توسيع العناصر لتناسب عرض الشاشة */
+            .element-container {
+                width: 100% !important;
+            }
+            
+            /* تعديل الهوامش */
+            .stMarkdown {
+                margin: 0.5rem 0 !important;
+            }
+            
+            /* تعديل حجم المخططات */
+            .js-plotly-plot, .plotly, .plot-container {
+                width: 100% !important;
+                max-width: 100% !important;
+                min-width: 100% !important;
+            }
+            
+            /* جعل الأيقونات والروابط متناسبة مع شاشة الهاتف */
+            .social-links {
+                gap: 15px !important;
+            }
+            
+            .social-links img {
+                width: 28px !important;
+                height: 28px !important;
+            }
+            
+            /* تعديل الملخص */
+            pre {
+                font-size: 0.7em !important;
+                padding: 10px !important;
+                width: 100% !important;
+                overflow-x: auto !important;
+            }
+            
+            /* جعل الجداول قابلة للتمرير أفقيًا */
+            .stTable {
+                overflow-x: auto !important;
+                display: block !important;
+                width: 100% !important;
+            }
+            
+            /* تحسين العرض في الجداول */
+            th, td {
+                min-width: 80px !important;
+                white-space: nowrap !important;
+            }
+            
+            /* تصغير النص داخل رسائل الخطأ */
+            .stAlert p {
+                font-size: 14px !important;
+            }
+            
+            /* جعل تفاصيل الدجاج أفضل في الأجهزة المحمولة */
+            [data-testid="column"] {
+                width: 100% !important;
+                min-width: 100% !important;
+                flex: 1 1 100% !important;
+            }
+            
+            /* تحسين عرض الرسائل */
+            .stAlert {
+                padding: 10px !important;
+                margin: 5px 0 !important;
+            }
+            
+            /* تحسين الفاصل بين الحقول */
+            .stTextInput, .stSelectbox, .stNumberInput {
+                margin-bottom: 10px !important;
+            }
+        }
+        
+        /* جعل النص قابل للتكيف مع العرض */
+        pre {
+            white-space: pre-wrap !important;
+            word-wrap: break-word !important;
+        }
+        
+        /* تخطيط أفضل للصفوف في الشاشات الصغيرة */
+        @media (max-width: 640px) {
+            [data-testid="column"] {
+                width: 100% !important;
+                min-width: 100% !important;
+                margin-right: 0 !important;
+                margin-left: 0 !important;
+            }
+            
+            [data-testid="stHorizontalBlock"] {
+                flex-direction: column !important;
+            }
+        }
     </style>
 """, unsafe_allow_html=True)
 
@@ -929,11 +1056,39 @@ def create_profit_chart(df, language):
         texts[language]["total_net_profit"]: '#9C27B0'
     }
     
+    # اختصار أسماء الفئات للأجهزة المحمولة
+    mobile_names = []
+    for name in df[texts[language]["category"]]:
+        # استخراج الإيموجي والجزء الأول من النص فقط
+        parts = name.split(' ', 1)
+        emoji = parts[0] if parts and len(parts) > 0 else ''
+        # إذا كان هناك نص بعد الإيموجي
+        name_text = parts[1] if parts and len(parts) > 1 else name
+        # أخذ أول كلمة فقط من النص
+        first_word = name_text.split()[0] if ' ' in name_text else name_text
+        mobile_names.append(f"{emoji} {first_word}")
+    
+    # إضافة العمود الجديد للأسماء المختصرة
+    df = df.copy()  # لتجنب التحذير
+    df["mobile_names"] = mobile_names
+    
+    # الكشف عن حجم الشاشة باستخدام تقنية CSS
+    is_mobile = """
+        var is_mobile = window.innerWidth < 768;
+        if (is_mobile) {
+            document.documentElement.style.setProperty('--chart-height', '300px');
+            return true;
+        } else {
+            document.documentElement.style.setProperty('--chart-height', '500px');
+            return false;
+        }
+    """
+    
     # إنشاء الرسم البياني
     fig = px.pie(
         df,
         values=texts[language]["value"],
-        names=texts[language]["category"],
+        names="mobile_names" if len(df) > 3 else texts[language]["category"],
         title=texts[language]["summary"],
         color_discrete_sequence=['#4CAF50', '#FF9800', '#2196F3', '#F44336', '#9C27B0']
     )
@@ -941,9 +1096,12 @@ def create_profit_chart(df, language):
     # تحديث تصميم الرسم البياني
     fig.update_traces(
         textposition='outside',
-        textinfo='percent+label'
+        textinfo='percent',
+        hoverinfo='label+percent+value',
+        hovertemplate='%{label}<br>%{value:.2f}<br>%{percent}'
     )
     
+    # تعديل التصميم ليكون متجاوباً مع الأجهزة المحمولة
     fig.update_layout(
         title_x=0.5,
         title_font_size=24,
@@ -951,14 +1109,19 @@ def create_profit_chart(df, language):
         legend=dict(
             orientation="h",
             yanchor="bottom",
-            y=-0.2,
+            y=-0.3,  # زيادة المسافة للأجهزة المحمولة
             xanchor="center",
-            x=0.5
+            x=0.5,
+            font=dict(size=10)  # تصغير حجم خط الأسطورة للأجهزة المحمولة
         ),
-        margin=dict(t=60, l=0, r=0, b=0),
-        height=500,
+        margin=dict(t=60, l=10, r=10, b=80),  # تعديل الهوامش لتناسب الأجهزة المحمولة
+        height=400,  # تقليل الارتفاع في الشاشات الصغيرة
         paper_bgcolor='rgba(0,0,0,0)',
-        plot_bgcolor='rgba(0,0,0,0)'
+        plot_bgcolor='rgba(0,0,0,0)',
+        autosize=True,  # تفعيل التغيير التلقائي للحجم
+        font=dict(
+            size=12,  # تصغير حجم الخط العام
+        )
     )
     
     return fig
@@ -1073,7 +1236,7 @@ if calculation_type == texts[language]["chicken_profits"]:
                 # تنسيق الجدول النهائي أولاً
                 df = df.round(2)
                 df[texts[language]["value"]] = df[texts[language]["value"]].apply(lambda x: f"{format_decimal(x)} {currency}")
-                st.table(df)
+                display_responsive_table(df, language)
 
                 # عرض الرسم البياني
                 chart_df = pd.DataFrame({
@@ -1096,11 +1259,7 @@ if calculation_type == texts[language]["chicken_profits"]:
                 st.plotly_chart(fig, use_container_width=True)
 
                 # عرض ملخص النتائج في النهاية
-                st.markdown(f"### ✨ {texts[language]['summary']}")
-                st.code(results_text)
-                
-        except ValueError:
-            st.error(get_error_message("invalid_number", language))
+                display_code_result(results_text, language)
 
 elif calculation_type == texts[language]["daily_rewards"]:
     st.subheader(texts[language]["daily_rewards"] + " 📈")
@@ -1184,7 +1343,7 @@ elif calculation_type == texts[language]["daily_rewards"]:
                 # تنسيق القيم في الجدول
                 df = df.round(2)
                 df[texts[language]["value"]] = df[texts[language]["value"]].apply(lambda x: f"{format_decimal(x)} {currency}")
-                st.table(df)
+                display_responsive_table(df, language)
 
                 # عرض الرسم البياني
                 chart_df = pd.DataFrame({
@@ -1203,11 +1362,7 @@ elif calculation_type == texts[language]["daily_rewards"]:
                 st.plotly_chart(fig, use_container_width=True)
 
                 # عرض ملخص النتائج في النهاية
-                st.markdown(f"### ✨ {texts[language]['summary']}")
-                st.code(results_text)
-                
-        except ValueError:
-            st.error(get_error_message("invalid_number", language))
+                display_code_result(results_text, language)
 
 # إضافة قسم الحساب الجماعي
 elif calculation_type == texts[language]["group_calculation"]:
@@ -1313,17 +1468,85 @@ elif calculation_type == texts[language]["group_calculation"]:
     if st.session_state.chicken_data:
         st.subheader("🧮 " + texts[language]["chicken_details"])
         
+        # تحسين عرض تفاصيل الدجاج للأجهزة المحمولة
+        st.markdown('<div class="chicken-list">', unsafe_allow_html=True)
         for i, chicken in enumerate(st.session_state.chicken_data):
-            col1, col2, col3 = st.columns([3, 1, 1])
+            # إنشاء صف لكل دجاجة بتنسيق أفضل
+            st.markdown(
+                f"""
+                <div class="chicken-row">
+                    <div class="chicken-number">
+                        🐔 {texts[language]["chicken_number"]} {chicken['id']}: 
+                        {texts[language]["eggs_input"]}: {format_decimal(chicken['eggs'])}, 
+                        {texts[language]["days_input"]}: {format_decimal(chicken['days'])}
+                    </div>
+                    <div class="chicken-actions">
+                        <button class="remove-chicken-btn" id="remove-chicken-{i}">❌</button>
+                    </div>
+                </div>
+                """,
+                unsafe_allow_html=True
+            )
             
-            with col1:
-                st.write(f"🐔 {texts[language]['chicken_number']} {chicken['id']}: {texts[language]['eggs_input']}: {format_decimal(chicken['eggs'])}, {texts[language]['days_input']}: {format_decimal(chicken['days'])}")
-            
-            with col3:
-                if st.button(f"❌ {texts[language]['remove_chicken']}", key=f"remove_{i}"):
-                    st.session_state.chicken_data.pop(i)
-                    st.rerun()
-        
+            # زر حذف الدجاجة
+            if st.button(f"❌ {texts[language]['remove_chicken']}", key=f"remove_{i}", help=f"حذف الدجاجة رقم {chicken['id']}"):
+                st.session_state.chicken_data.pop(i)
+                st.rerun()
+        st.markdown('</div>', unsafe_allow_html=True)
+
+        # إضافة CSS خاص بصفحة تفاصيل الدجاج
+        st.markdown("""
+            <style>
+                /* تحسين شكل قائمة الدجاج */
+                .chicken-list {
+                    max-height: 300px;
+                    overflow-y: auto;
+                    padding: 5px;
+                    margin-bottom: 20px;
+                    background: rgba(30, 37, 48, 0.3);
+                    border-radius: 10px;
+                }
+                
+                /* تنسيق صف الدجاجة */
+                .chicken-row {
+                    display: flex;
+                    justify-content: space-between;
+                    align-items: center;
+                    padding: 8px 12px;
+                    margin-bottom: 8px;
+                    background: rgba(30, 37, 48, 0.5);
+                    border-radius: 8px;
+                    border: 1px solid rgba(255,255,255,0.1);
+                    transition: all 0.3s ease;
+                }
+                
+                .chicken-row:hover {
+                    background: rgba(30, 37, 48, 0.7);
+                    border-color: rgba(255,255,255,0.2);
+                }
+                
+                /* تنسيق رقم الدجاجة */
+                .chicken-number {
+                    flex: 1;
+                    overflow: hidden;
+                    text-overflow: ellipsis;
+                    white-space: nowrap;
+                }
+                
+                /* تنسيق للأجهزة المحمولة */
+                @media (max-width: 768px) {
+                    .chicken-row {
+                        padding: 5px 8px;
+                        font-size: 12px;
+                    }
+                    
+                    .chicken-list {
+                        max-height: 200px;
+                    }
+                }
+            </style>
+        """, unsafe_allow_html=True)
+
         # زر حساب النتائج الجماعية
         if st.button(texts[language]["calculate_group"], type="primary"):
             # إعداد الجدول التفصيلي
@@ -1380,7 +1603,7 @@ elif calculation_type == texts[language]["group_calculation"]:
                 
             # عرض الجدول التفصيلي
             st.subheader("📋 " + texts[language]["chicken_details"])
-            st.table(detailed_df)
+            display_responsive_table(detailed_df, language)
             
             # قيمة افتراضية للمتغيرات قبل استخدامها
             total_final_with_sale = total_profit_with_sale_display
@@ -1423,7 +1646,7 @@ elif calculation_type == texts[language]["group_calculation"]:
             
             # عرض جدول الملخص الإجمالي
             st.subheader("📊 " + texts[language]["total_summary"])
-            st.table(summary_df)
+            display_responsive_table(summary_df, language)
             
             # ثانياً: عرض ملخص النتائج النصي
             # تنسيق التاريخ والوقت حسب توقيت بغداد
@@ -1457,8 +1680,7 @@ elif calculation_type == texts[language]["group_calculation"]:
 ║ {texts[language]['total_profit_with_sale']}: {format_decimal(total_profit_with_sale * 1480)} IQD
 ╚══════════════════════════════════════════════════════════════╝"""
             
-            st.markdown(f"### ✨ {texts[language]['summary']}")
-            st.code(results_text)
+            display_code_result(results_text, language)
             
             # ثالثاً (اختياري): عرض الرسم البياني 
             # إذا كان غير مطلوب يمكن إزالة هذا الجزء
@@ -1489,7 +1711,7 @@ elif calculation_type == texts[language]["group_calculation"]:
             
             fig.update_traces(
                 textposition='outside',
-                textinfo='percent+label'
+                textinfo='percent'
             )
             
             fig.update_layout(
@@ -1499,17 +1721,22 @@ elif calculation_type == texts[language]["group_calculation"]:
                 legend=dict(
                     orientation="h",
                     yanchor="bottom",
-                    y=-0.2,
+                    y=-0.3,
                     xanchor="center",
-                    x=0.5
+                    x=0.5,
+                    font=dict(size=10)
                 ),
-                margin=dict(t=60, l=0, r=0, b=0),
-                height=500,
+                margin=dict(t=60, l=10, r=10, b=60),
+                height=400,
                 paper_bgcolor='rgba(0,0,0,0)',
-                plot_bgcolor='rgba(0,0,0,0)'
+                plot_bgcolor='rgba(0,0,0,0)',
+                autosize=True
             )
             
             st.plotly_chart(fig, use_container_width=True)
+            
+            # عرض ملخص النتائج في النهاية
+            display_code_result(results_text, language)
     else:
         st.warning(get_error_message("no_chicken_data", language))
 
@@ -1632,3 +1859,85 @@ def add_copy_button(text, button_text):
             <button onclick="copyToClipboard('clipboard-text')">{button_text}</button>
         </div>
     """, unsafe_allow_html=True)
+
+# إضافة التعديلات اللازمة لجدول تفاصيل الدجاج
+st.markdown("""
+    <style>
+        /* تحسين جدول تفاصيل الدجاج */
+        @media (max-width: 768px) {
+            /* جعل جدول تفاصيل الدجاج أكثر قابلية للقراءة */
+            .chicken-details-table {
+                font-size: 0.75em !important;
+                border-collapse: collapse !important;
+                width: 100% !important;
+            }
+            
+            .chicken-details-table th, .chicken-details-table td {
+                padding: 4px !important;
+                border: 1px solid rgba(255,255,255,0.1) !important;
+            }
+            
+            /* جعل الرقم وزر الحذف في صف واحد */
+            .chicken-row {
+                display: flex !important;
+                align-items: center !important;
+                justify-content: space-between !important;
+                margin-bottom: 5px !important;
+                padding: 5px !important;
+                background: rgba(30, 37, 48, 0.7) !important;
+                border-radius: 5px !important;
+                border: 1px solid rgba(255,255,255,0.1) !important;
+            }
+            
+            .chicken-number {
+                font-size: 14px !important;
+                white-space: nowrap !important;
+                overflow: hidden !important;
+                text-overflow: ellipsis !important;
+                max-width: 80% !important;
+            }
+            
+            /* تحسين ملخص النتائج الإجمالي */
+            .summary-box {
+                padding: 8px !important;
+                border-radius: 5px !important;
+                background: rgba(30, 37, 48, 0.7) !important;
+                margin-bottom: 10px !important;
+                border: 1px solid rgba(255,255,255,0.1) !important;
+            }
+            
+            .summary-item {
+                display: flex !important;
+                justify-content: space-between !important;
+                padding: 4px 0 !important;
+                border-bottom: 1px solid rgba(255,255,255,0.05) !important;
+            }
+            
+            .summary-value {
+                font-weight: bold !important;
+            }
+            
+            /* تعديل ملخص النتائج */
+            .code-container {
+                font-size: 12px !important;
+                max-height: 300px !important;
+                overflow-y: auto !important;
+            }
+        }
+    </style>
+""", unsafe_allow_html=True)
+
+# تعديل طريقة عرض كود النتائج
+def display_code_result(results_text, language):
+    # إضافة كلاس للكود لتحسين العرض على الأجهزة المحمولة
+    st.markdown(f"### ✨ {texts[language]['summary']}")
+    st.markdown('<div class="code-container">', unsafe_allow_html=True)
+    st.code(results_text)
+    st.markdown('</div>', unsafe_allow_html=True)
+
+# تحسين طريقة عرض الجداول
+def display_responsive_table(df, language):
+    # استخدام CSS لجعل الجداول متجاوبة
+    st.markdown('<div class="responsive-table-container">', unsafe_allow_html=True)
+    st.table(df)
+    st.markdown('</div>', unsafe_allow_html=True)
