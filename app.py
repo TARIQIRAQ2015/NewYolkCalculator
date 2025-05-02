@@ -1260,6 +1260,8 @@ if calculation_type == texts[language]["chicken_profits"]:
 
                 # عرض ملخص النتائج في النهاية
                 display_code_result(results_text, language)
+        except ValueError:
+            st.error(get_error_message("invalid_number", language))
 
 elif calculation_type == texts[language]["daily_rewards"]:
     st.subheader(texts[language]["daily_rewards"] + " 📈")
@@ -1363,6 +1365,8 @@ elif calculation_type == texts[language]["daily_rewards"]:
 
                 # عرض ملخص النتائج في النهاية
                 display_code_result(results_text, language)
+        except ValueError:
+            st.error(get_error_message("invalid_number", language))
 
 # إضافة قسم الحساب الجماعي
 elif calculation_type == texts[language]["group_calculation"]:
