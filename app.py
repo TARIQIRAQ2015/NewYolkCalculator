@@ -643,7 +643,9 @@ texts = {
         "remove_chicken": "حذف الدجاجة",
         "calculate_group": "حساب النتائج الجماعية",
         "no_chicken_data": "لا توجد بيانات دجاج مدخلة حتى الآن!",
-        "not_first_year_chicken": "لا يمكن بيع الدجاجة لأنها ليست في السنة الأولى (عدد البيض أقل من 260)"
+        "not_first_year_chicken": "لا يمكن بيع الدجاجة لأنها ليست في السنة الأولى (عدد البيض أقل من 260)",
+        "summary_egg_price": "مجموع سعر البيض 🥚",
+        "summary_feed_price": "مجموع سعر العلف 🌽"
     },
     "English": {
         "title": "Chicken Calculator - NewYolk",
@@ -701,7 +703,9 @@ texts = {
         "remove_chicken": "Remove Chicken",
         "calculate_group": "Calculate Group Results",
         "no_chicken_data": "No chicken data entered yet!",
-        "not_first_year_chicken": "Chicken cannot be sold as it's not in the first year (egg count less than 260)"
+        "not_first_year_chicken": "Chicken cannot be sold as it's not in the first year (egg count less than 260)",
+        "summary_egg_price": "Total Egg Price 🥚",
+        "summary_feed_price": "Total Feed Price 🌽"
     },
     "Română": {
         "title": "Calculator Găini - NewYolk",
@@ -759,7 +763,9 @@ texts = {
         "remove_chicken": "Elimină Găina",
         "calculate_group": "Calculează Rezultatele de Grup",
         "no_chicken_data": "Nu există date despre găini introduse încă!",
-        "not_first_year_chicken": "Găina nu poate fi vândută deoarece nu este în primul an (numărul de ouă mai mic de 260)"
+        "not_first_year_chicken": "Găina nu poate fi vândută deoarece nu este în primul an (numărul de ouă mai mic de 260)",
+        "summary_egg_price": "Preț Total Ouă 🥚",
+        "summary_feed_price": "Preț Total Furaje 🌽"
     }
 }
 
@@ -1062,8 +1068,8 @@ if calculation_type == texts[language]["chicken_profits"]:
 ║ {texts[language]['calculation_time']}: {date_str} {time_str}
 ╟──────────────────────────────────────────────────────────────────╢
 ║ {texts[language]['usd_results']}:
-║ {texts[language]['egg_price']}: {format_decimal(total_egg_price)} USD
-║ {texts[language]['feed_price']}: {format_decimal(total_feed_cost)} USD
+║ {texts[language]['summary_egg_price']}: {format_decimal(total_egg_price)} USD
+║ {texts[language]['summary_feed_price']}: {format_decimal(total_feed_cost)} USD
 ║ {texts[language]['net_profit']}: {format_decimal(net_profit_before_rent)} USD"""
 
                 # إضافة سعر البيع والربح مع البيع إذا كانت الدجاجة في السنة الأولى وتم إدخال سعر البيع
@@ -1081,8 +1087,8 @@ if calculation_type == texts[language]["chicken_profits"]:
                 results_text += f"""
 ╟──────────────────────────────────────────────────────────────────╢
 ║ {texts[language]['iqd_results']}:
-║ {texts[language]['egg_price']}: {format_decimal(total_egg_price * 1480)} IQD
-║ {texts[language]['feed_price']}: {format_decimal(total_feed_cost * 1480)} IQD
+║ {texts[language]['summary_egg_price']}: {format_decimal(total_egg_price * 1480)} IQD
+║ {texts[language]['summary_feed_price']}: {format_decimal(total_feed_cost * 1480)} IQD
 ║ {texts[language]['net_profit']}: {format_decimal(net_profit_before_rent * 1480)} IQD"""
 
                 # إضافة سعر البيع والربح مع البيع بالدينار العراقي
@@ -1203,13 +1209,13 @@ elif calculation_type == texts[language]["daily_rewards"]:
 ║ {texts[language]['calculation_time']}: {date_str} {time_str}
 ╟┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┑
 ║ {texts[language]['usd_results']}:
-║ {texts[language]['egg_price']}: {format_decimal(rewards_value * float(new_egg_price))} USD
-║ {texts[language]['feed_price']}: {format_decimal(food_value * float(new_feed_price))} USD
+║ {texts[language]['summary_egg_price']}: {format_decimal(rewards_value * float(new_egg_price))} USD
+║ {texts[language]['summary_feed_price']}: {format_decimal(food_value * float(new_feed_price))} USD
 ║ {texts[language]['daily_profit']}: {format_decimal(daily_profit)} USD
 ╟┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┑
 ║ {texts[language]['iqd_results']}:
-║ {texts[language]['egg_price']}: {format_decimal(rewards_value * float(new_egg_price) * 1480)} IQD
-║ {texts[language]['feed_price']}: {format_decimal(food_value * float(new_feed_price) * 1480)} IQD
+║ {texts[language]['summary_egg_price']}: {format_decimal(rewards_value * float(new_egg_price) * 1480)} IQD
+║ {texts[language]['summary_feed_price']}: {format_decimal(food_value * float(new_feed_price) * 1480)} IQD
 ║ {texts[language]['daily_profit']}: {format_decimal(daily_profit * 1480)} IQD
 ╚═════════════════════════════════════════════════════════════╝"""
 
