@@ -596,7 +596,7 @@ texts = {
         "feed_price": "سعر العلف الحالي 🌽",
         "save_prices": "حفظ الأسعار 💾",
         "calculation_type": "نوع الحساب 📊",
-        "chicken_profits": "أرباح الدجاج",
+        "chicken_profits": "أرباح الدجاجة",
         "daily_rewards": "المكافآت اليومية",
         "eggs_input": "عدد البيض 🥚",
         "days_input": "عدد الأيام 📅",
@@ -654,7 +654,7 @@ texts = {
         "feed_price": "Current Feed Price 🌽",
         "save_prices": "Save Prices 💾",
         "calculation_type": "Calculation Type 📊",
-        "chicken_profits": "Chicken Profits",
+        "chicken_profits": "Chicken Profit",
         "daily_rewards": "Daily Rewards",
         "eggs_input": "Number of Eggs 🥚",
         "days_input": "Number of Days 📅",
@@ -712,7 +712,7 @@ texts = {
         "feed_price": "Preț Curent Furaje 🌽",
         "save_prices": "Salvează Prețurile 💾",
         "calculation_type": "Tipul Calculului 📊",
-        "chicken_profits": "Profituri din Găini",
+        "chicken_profits": "Profit Găină",
         "daily_rewards": "Recompensele Zilnice",
         "eggs_input": "Număr de Ouă 🥚",
         "days_input": "Număr de Zile 📅",
@@ -981,16 +981,35 @@ if calculation_type == texts[language]["chicken_profits"]:
             help=get_help_message("days_input", language)
         )
 
+    # إضافة حقل سعر بيع الدجاجة
+    try:
+        eggs_value = float(eggs) if eggs else 0
+        is_first_year = eggs_value >= 260
+    except ValueError:
+        is_first_year = False  # إذا لم يكن رقماً صحيحاً
+        
+    if is_first_year:
+        chicken_sale_price = st.text_input(
+            texts[language]["chicken_sale_price"],
+            value=""
+        )
+    else:
+        if eggs: # نظهر الرسالة فقط إذا أدخل المستخدم قيمة للبيض
+            st.info(texts[language]["not_first_year_chicken"])
+        chicken_sale_price = "0"
+
     if st.button(texts[language]["calculate_profits"], type="primary"):
         try:
             # التحويل من نص إلى رقم بشكل صحيح
             try:
                 eggs_value = float(eggs) if eggs else None
                 days_value = float(days) if days else None
+                chicken_sale_price_value = float(chicken_sale_price) if chicken_sale_price else 0
             except ValueError:
                 st.error(get_error_message("invalid_number", language))
                 eggs_value = None
                 days_value = None
+                chicken_sale_price_value = 0
 
             if eggs_value is None or days_value is None:
                 st.error(get_error_message("missing_values", language))
@@ -1009,6 +1028,11 @@ if calculation_type == texts[language]["chicken_profits"]:
                 # حساب النتائج
                 net_profit_before_rent = total_egg_price - total_feed_cost
                 net_profit = net_profit_before_rent - total_rent
+                
+                # حساب الربح مع بيع الدجاجة - فقط للدجاج التي عدد بيضها 260 أو أكثر
+                profit_with_sale = 0
+                if eggs_value >= 260 and chicken_sale_price_value > 0:
+                    profit_with_sale = net_profit_before_rent + chicken_sale_price_value
 
                 # تحويل العملة
                 if currency == "IQD":
@@ -1017,6 +1041,9 @@ if calculation_type == texts[language]["chicken_profits"]:
                     net_profit_before_rent = net_profit_before_rent * 1480
                     total_rent = total_rent * 1480
                     net_profit = net_profit * 1480
+                    if profit_with_sale > 0:
+                        profit_with_sale = profit_with_sale * 1480
+                    chicken_sale_price_value = chicken_sale_price_value * 1480 if chicken_sale_price_value > 0 else 0
                 else:
                     total_egg_price, total_feed_cost, net_profit_before_rent, total_rent, net_profit = (
                         total_egg_price, total_feed_cost, net_profit_before_rent, total_rent, net_profit
@@ -1027,7 +1054,7 @@ if calculation_type == texts[language]["chicken_profits"]:
                 date_str = current_time.strftime("%Y-%m-%d")
                 time_str = current_time.strftime("%I:%M %p")
 
-                # إنشاء نص النتائج
+                # إنشاء نص النتائج مع إضافة الربح مع البيع
                 results_text = f"""
 ╔══════════════════════════════════════════════════════════════════╗
 ║                  {texts[language]['summary']}                    ║
@@ -1039,35 +1066,61 @@ if calculation_type == texts[language]["chicken_profits"]:
 ║ {texts[language]['feed_price']}: {format_decimal(total_feed_cost)} USD
 ║ {texts[language]['net_profit']}: {format_decimal(net_profit_before_rent)} USD
 ║ {texts[language]['first_year_rental']}: {format_decimal(total_rent)} USD
-║ {texts[language]['final_profit']}: {format_decimal(net_profit)} USD
+║ {texts[language]['final_profit']}: {format_decimal(net_profit)} USD"""
+
+                # إضافة سعر البيع والربح مع البيع إذا كانت الدجاجة في السنة الأولى وتم إدخال سعر البيع
+                if eggs_value >= 260 and chicken_sale_price_value > 0:
+                    results_text += f"""
+║ {texts[language]['chicken_sale_price']}: {format_decimal(chicken_sale_price_value)} USD
+║ {texts[language]['profit_with_sale']}: {format_decimal(profit_with_sale)} USD"""
+
+                # استكمال النص
+                results_text += f"""
 ╟──────────────────────────────────────────────────────────────────╢
 ║ {texts[language]['iqd_results']}:
 ║ {texts[language]['egg_price']}: {format_decimal(total_egg_price * 1480)} IQD
 ║ {texts[language]['feed_price']}: {format_decimal(total_feed_cost * 1480)} IQD
 ║ {texts[language]['net_profit']}: {format_decimal(net_profit_before_rent * 1480)} IQD
 ║ {texts[language]['first_year_rental']}: {format_decimal(total_rent * 1480)} IQD
-║ {texts[language]['final_profit']}: {format_decimal(net_profit * 1480)} IQD
+║ {texts[language]['final_profit']}: {format_decimal(net_profit * 1480)} IQD"""
+
+                # إضافة سعر البيع والربح مع البيع بالدينار العراقي
+                if eggs_value >= 260 and chicken_sale_price_value > 0:
+                    results_text += f"""
+║ {texts[language]['chicken_sale_price']}: {format_decimal(chicken_sale_price_value * 1480)} IQD
+║ {texts[language]['profit_with_sale']}: {format_decimal(profit_with_sale * 1480)} IQD"""
+
+                # إغلاق المربع
+                results_text += """
 ╚══════════════════════════════════════════════════════════════════╝"""
 
-                # عرض النتائج
-                # st.code(results_text, language="text")
-
                 # إنشاء DataFrame للرسم البياني
+                chart_categories = [
+                    f"🥚 {texts[language]['eggs_input']}",
+                    f"🌽 {texts[language]['food_input']}",
+                    f"📈 {texts[language]['net_profit']}",
+                    f"🏠 {texts[language]['first_year_rental']}",
+                    f"💰 {texts[language]['final_profit']}"
+                ]
+                
+                chart_values = [
+                    total_egg_price,
+                    total_feed_cost,
+                    net_profit_before_rent,
+                    total_rent,
+                    net_profit
+                ]
+                
+                # إضافة سعر البيع والربح مع البيع إلى الرسم البياني
+                if eggs_value >= 260 and chicken_sale_price_value > 0:
+                    chart_categories.append(f"💸 {texts[language]['chicken_sale_price']}")
+                    chart_categories.append(f"🔄 {texts[language]['profit_with_sale']}")
+                    chart_values.append(chicken_sale_price_value)
+                    chart_values.append(profit_with_sale)
+                
                 df = pd.DataFrame({
-                    texts[language]["category"]: [
-                        f"🥚 {texts[language]['eggs_input']}",
-                        f"🌽 {texts[language]['food_input']}",
-                        f"📈 {texts[language]['net_profit']}",
-                        f"🏠 {texts[language]['first_year_rental']}",
-                        f"💰 {texts[language]['final_profit']}"
-                    ],
-                    texts[language]["value"]: [
-                        total_egg_price,
-                        total_feed_cost,
-                        net_profit_before_rent,
-                        total_rent,
-                        net_profit
-                    ]
+                    texts[language]["category"]: chart_categories,
+                    texts[language]["value"]: chart_values
                 })
                 
                 # تنسيق الجدول النهائي أولاً
@@ -1077,20 +1130,8 @@ if calculation_type == texts[language]["chicken_profits"]:
 
                 # عرض الرسم البياني
                 chart_df = pd.DataFrame({
-                    texts[language]["category"]: [
-                        f"🥚 {texts[language]['eggs_input']}",
-                        f"🌽 {texts[language]['food_input']}",
-                        f"📈 {texts[language]['net_profit']}",
-                        f"🏠 {texts[language]['first_year_rental']}",
-                        f"💰 {texts[language]['final_profit']}"
-                    ],
-                    texts[language]["value"]: [
-                        float(str(total_egg_price).replace(currency, "").strip()),
-                        float(str(total_feed_cost).replace(currency, "").strip()),
-                        float(str(net_profit_before_rent).replace(currency, "").strip()),
-                        float(str(total_rent).replace(currency, "").strip()),
-                        float(str(net_profit).replace(currency, "").strip())
-                    ]
+                    texts[language]["category"]: chart_categories,
+                    texts[language]["value"]: chart_values
                 })
                 fig = create_profit_chart(chart_df, language)
                 st.plotly_chart(fig, use_container_width=True)
