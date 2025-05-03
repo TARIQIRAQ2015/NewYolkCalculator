@@ -631,7 +631,7 @@ texts = {
         "feed_cost": "تكلفة العلف",
         "rent": "الإيجار",
         "net_profit_per_chicken": "الربح الصافي بدون بيع",
-        "profit_with_sale": "الربح مع بيع الدجاجة 🔄",
+        "profit_with_sale": "الربح مع بيع الدجاجة 💹",
         "chicken_sale_price": "سعر بيع الدجاجة (اختياري) 💰",
         "total_summary": "الملخص الإجمالي",
         "total_eggs": "إجمالي عدد البيض",
@@ -689,7 +689,7 @@ texts = {
         "feed_cost": "Feed Cost",
         "rent": "Rent",
         "net_profit_per_chicken": "Net Profit Without Sale",
-        "profit_with_sale": "Profit With Chicken Sale 🔄",
+        "profit_with_sale": "Profit With Chicken Sale 💹",
         "chicken_sale_price": "Chicken Sale Price (Optional) 💰",
         "total_summary": "Total Summary",
         "total_eggs": "Total Eggs",
@@ -747,7 +747,7 @@ texts = {
         "feed_cost": "Cost Furaje",
         "rent": "Chirie",
         "net_profit_per_chicken": "Profit Net Fără Vânzare",
-        "profit_with_sale": "Profit Cu Vânzarea Găinii 🔄",
+        "profit_with_sale": "Profit Cu Vânzarea Găinii 💹",
         "chicken_sale_price": "Preț Vânzare Găină (Opțional) 💰",
         "total_summary": "Rezumat Total",
         "total_eggs": "Total Ouă",
@@ -1064,9 +1064,7 @@ if calculation_type == texts[language]["chicken_profits"]:
 ║ {texts[language]['usd_results']}:
 ║ {texts[language]['egg_price']}: {format_decimal(total_egg_price)} USD
 ║ {texts[language]['feed_price']}: {format_decimal(total_feed_cost)} USD
-║ {texts[language]['net_profit']}: {format_decimal(net_profit_before_rent)} USD
-║ {texts[language]['first_year_rental']}: {format_decimal(total_rent)} USD
-║ {texts[language]['final_profit']}: {format_decimal(net_profit)} USD"""
+║ {texts[language]['net_profit']}: {format_decimal(net_profit_before_rent)} USD"""
 
                 # إضافة سعر البيع والربح مع البيع إذا كانت الدجاجة في السنة الأولى وتم إدخال سعر البيع
                 if eggs_value >= 260 and chicken_sale_price_value > 0:
@@ -1074,21 +1072,29 @@ if calculation_type == texts[language]["chicken_profits"]:
 ║ {texts[language]['chicken_sale_price']}: {format_decimal(chicken_sale_price_value)} USD
 ║ {texts[language]['profit_with_sale']}: {format_decimal(profit_with_sale)} USD"""
 
+                # إضافة الإيجار والربح الصافي
+                results_text += f"""
+║ {texts[language]['first_year_rental']}: {format_decimal(total_rent)} USD
+║ {texts[language]['final_profit']}: {format_decimal(net_profit)} USD"""
+
                 # استكمال النص
                 results_text += f"""
 ╟──────────────────────────────────────────────────────────────────╢
 ║ {texts[language]['iqd_results']}:
 ║ {texts[language]['egg_price']}: {format_decimal(total_egg_price * 1480)} IQD
 ║ {texts[language]['feed_price']}: {format_decimal(total_feed_cost * 1480)} IQD
-║ {texts[language]['net_profit']}: {format_decimal(net_profit_before_rent * 1480)} IQD
-║ {texts[language]['first_year_rental']}: {format_decimal(total_rent * 1480)} IQD
-║ {texts[language]['final_profit']}: {format_decimal(net_profit * 1480)} IQD"""
+║ {texts[language]['net_profit']}: {format_decimal(net_profit_before_rent * 1480)} IQD"""
 
                 # إضافة سعر البيع والربح مع البيع بالدينار العراقي
                 if eggs_value >= 260 and chicken_sale_price_value > 0:
                     results_text += f"""
 ║ {texts[language]['chicken_sale_price']}: {format_decimal(chicken_sale_price_value * 1480)} IQD
 ║ {texts[language]['profit_with_sale']}: {format_decimal(profit_with_sale * 1480)} IQD"""
+
+                # إضافة الإيجار والربح الصافي بالدينار العراقي
+                results_text += f"""
+║ {texts[language]['first_year_rental']}: {format_decimal(total_rent * 1480)} IQD
+║ {texts[language]['final_profit']}: {format_decimal(net_profit * 1480)} IQD"""
 
                 # إغلاق المربع
                 results_text += """
@@ -1099,24 +1105,26 @@ if calculation_type == texts[language]["chicken_profits"]:
                     f"🥚 {texts[language]['eggs_input']}",
                     f"🌽 {texts[language]['food_input']}",
                     f"📈 {texts[language]['net_profit']}",
-                    f"🏠 {texts[language]['first_year_rental']}",
-                    f"💰 {texts[language]['final_profit']}"
                 ]
                 
                 chart_values = [
                     total_egg_price,
                     total_feed_cost,
                     net_profit_before_rent,
-                    total_rent,
-                    net_profit
                 ]
                 
                 # إضافة سعر البيع والربح مع البيع إلى الرسم البياني
                 if eggs_value >= 260 and chicken_sale_price_value > 0:
-                    chart_categories.append(f"💸 {texts[language]['chicken_sale_price']}")
-                    chart_categories.append(f"🔄 {texts[language]['profit_with_sale']}")
+                    chart_categories.append(f"💰 {texts[language]['chicken_sale_price']}")
+                    chart_categories.append(f"💹 {texts[language]['profit_with_sale']}")
                     chart_values.append(chicken_sale_price_value)
                     chart_values.append(profit_with_sale)
+                
+                # إضافة الإيجار والربح الصافي في النهاية
+                chart_categories.append(f"🏠 {texts[language]['first_year_rental']}")
+                chart_categories.append(f"💰 {texts[language]['final_profit']}")
+                chart_values.append(total_rent)
+                chart_values.append(net_profit)
                 
                 df = pd.DataFrame({
                     texts[language]["category"]: chart_categories,
