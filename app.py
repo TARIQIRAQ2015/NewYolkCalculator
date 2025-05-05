@@ -1108,15 +1108,15 @@ if calculation_type == texts[language]["chicken_profits"]:
 
                 # إنشاء DataFrame للرسم البياني
                 chart_categories = [
-                    f"🥚 {texts[language]['eggs_input']}",
-                    f"🌽 {texts[language]['food_input']}",
-                    f"📈 {texts[language]['net_profit']}",
+                        f"🥚 {texts[language]['eggs_input']}",
+                        f"🌽 {texts[language]['food_input']}",
+                        f"📈 {texts[language]['net_profit']}",
                 ]
                 
                 chart_values = [
-                    total_egg_price,
-                    total_feed_cost,
-                    net_profit_before_rent,
+                        total_egg_price,
+                        total_feed_cost,
+                        net_profit_before_rent,
                 ]
                 
                 # إضافة سعر البيع والربح مع البيع إلى الرسم البياني
