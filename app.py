@@ -1056,6 +1056,9 @@ if calculation_type == texts[language]["chicken_profits"]:
                 max_profit_before_rent = max_egg_price - max_feed_cost
                 max_potential_profit = max_profit_before_rent - max_rent
                 
+                # حساب الربح المستلم من الدجاجة (من البيض فقط)
+                egg_income_only = eggs_value * float(new_egg_price)
+                
                 # حساب نسبة الإنجاز
                 achievement_percentage = (net_profit / max_potential_profit) * 100 if max_potential_profit > 0 else 0
                 achievement_percentage = min(100, max(0, achievement_percentage))  # التأكد من أن النسبة بين 0 و100
@@ -1127,7 +1130,7 @@ if calculation_type == texts[language]["chicken_profits"]:
                 results_text += f"""
 ╟──────────────────────────────────────────────────────────────────╢
 ║ {texts[language]['chicken_profit_achievement']}:
-║ {texts[language]['maximum_potential_profit']} {format_decimal(egg_income_only)} {currency}
+║ {texts[language]['maximum_potential_profit']} {format_decimal(total_egg_price)} {currency}
 ║ {texts[language]['achievement_percentage']} {format_decimal(achievement_percentage)}% ({format_decimal(net_profit)} {currency})"""
 
                 # إغلاق المربع
