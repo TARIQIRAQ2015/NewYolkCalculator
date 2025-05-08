@@ -648,7 +648,7 @@ texts = {
         "summary_feed_price": "مجموع سعر العلف 🌽",
         "chicken_profit_achievement": "📊 كم ربحت من الدجاجة 📊",
         "achievement_percentage": "نسبة الإنجاز:",
-        "maximum_potential_profit": "الربح المحتمل عند اكتمال دورة الدجاجة:"
+        "maximum_potential_profit": "الربح المستلم من الدجاجة:"
     },
     "English": {
         "title": "Chicken Calculator - NewYolk",
@@ -1127,7 +1127,7 @@ if calculation_type == texts[language]["chicken_profits"]:
                 results_text += f"""
 ╟──────────────────────────────────────────────────────────────────╢
 ║ {texts[language]['chicken_profit_achievement']}:
-║ {texts[language]['maximum_potential_profit']} {format_decimal(max_potential_profit)} {currency}
+║ {texts[language]['maximum_potential_profit']} {format_decimal(net_profit)} {currency}
 ║ {texts[language]['achievement_percentage']} {format_decimal(achievement_percentage)}% ({format_decimal(net_profit)} {currency})"""
 
                 # إغلاق المربع
@@ -1181,11 +1181,11 @@ if calculation_type == texts[language]["chicken_profits"]:
                 # عرض قسم "كم ربحت من الدجاجة" مع نسبة الإنجاز وشريط التقدم
                 st.subheader(texts[language]["chicken_profit_achievement"])
                 
-                # عرض الربح المحتمل ونسبة الإنجاز
+                # عرض الربح المستلم ونسبة الإنجاز
                 col_achieve1, col_achieve2 = st.columns(2)
                 
                 with col_achieve1:
-                    st.markdown(f"**{texts[language]['maximum_potential_profit']}** {format_decimal(max_potential_profit)} {currency}")
+                    st.markdown(f"**{texts[language]['maximum_potential_profit']}** {format_decimal(net_profit)} {currency}")
                 
                 with col_achieve2:
                     st.markdown(f"**{texts[language]['achievement_percentage']}** {format_decimal(achievement_percentage)}% ({format_decimal(net_profit)} {currency})")
@@ -1567,7 +1567,7 @@ elif calculation_type == texts[language]["group_calculation"]:
 ║ {texts[language]['total_profit_with_sale']}: {format_decimal(total_profit_with_sale * 1480)} IQD
 ╠──────────────────────────────────────────────────────────────╤
 ║ {texts[language]['chicken_profit_achievement']}:
-║ {texts[language]['maximum_potential_profit']} {format_decimal(total_max_potential_profit_display)} {display_currency}
+║ {texts[language]['maximum_potential_profit']} {format_decimal(total_net_profit_display)} {display_currency}
 ║ {texts[language]['achievement_percentage']} {format_decimal(group_achievement_percentage)}% ({format_decimal(total_net_profit_display)} {display_currency})
 ╚══════════════════════════════════════════════════════════════╝"""
             
@@ -1649,11 +1649,11 @@ elif calculation_type == texts[language]["group_calculation"]:
             # عرض قسم "كم ربحت من الدجاجة" مع نسبة الإنجاز وشريط التقدم
             st.subheader(texts[language]["chicken_profit_achievement"])
             
-            # عرض الربح المحتمل ونسبة الإنجاز
+            # عرض الربح المستلم ونسبة الإنجاز
             col_achieve1, col_achieve2 = st.columns(2)
             
             with col_achieve1:
-                st.markdown(f"**{texts[language]['maximum_potential_profit']}** {format_decimal(total_max_potential_profit_display)} {display_currency}")
+                st.markdown(f"**{texts[language]['maximum_potential_profit']}** {format_decimal(total_net_profit_display)} {display_currency}")
             
             with col_achieve2:
                 st.markdown(f"**{texts[language]['achievement_percentage']}** {format_decimal(group_achievement_percentage)}% ({format_decimal(total_net_profit_display)} {display_currency})")
@@ -1705,7 +1705,7 @@ elif calculation_type == texts[language]["group_calculation"]:
 ║ {texts[language]['total_profit_with_sale']}: {format_decimal(total_profit_with_sale * 1480)} IQD
 ╠──────────────────────────────────────────────────────────────╤
 ║ {texts[language]['chicken_profit_achievement']}:
-║ {texts[language]['maximum_potential_profit']} {format_decimal(total_max_potential_profit_display)} {display_currency}
+║ {texts[language]['maximum_potential_profit']} {format_decimal(total_net_profit_display)} {display_currency}
 ║ {texts[language]['achievement_percentage']} {format_decimal(group_achievement_percentage)}% ({format_decimal(total_net_profit_display)} {display_currency})
 ╚══════════════════════════════════════════════════════════════╝"""
             
