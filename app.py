@@ -481,6 +481,74 @@ st.markdown("""
             border-color: rgba(255, 255, 255, 0.2) !important;
         }
 
+        /* تنسيق قسم كم ربحت من الدجاجة */
+        .progress-section {
+            background: linear-gradient(135deg, rgba(30, 37, 48, 0.7), rgba(20, 27, 38, 0.7));
+            border-radius: 15px;
+            padding: 15px;
+            margin-top: 20px;
+            margin-bottom: 20px;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
+            backdrop-filter: blur(10px);
+            transition: all 0.3s ease;
+        }
+        
+        .progress-section:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 25px rgba(0, 0, 0, 0.3);
+            border-color: rgba(255, 255, 255, 0.2);
+        }
+        
+        /* تحسين شريط التقدم */
+        .stProgress > div > div {
+            position: relative;
+            height: 20px !important;
+            background: rgba(20, 27, 38, 0.7) !important;
+            border-radius: 10px !important;
+            overflow: hidden;
+            box-shadow: inset 0 2px 8px rgba(0, 0, 0, 0.3) !important;
+            border: 1px solid rgba(255, 255, 255, 0.1) !important;
+            margin: 10px 0 !important;
+        }
+        
+        .stProgress > div > div > div {
+            background: linear-gradient(90deg, 
+                #1a9c5b,
+                #28a745,
+                #2db957
+            ) !important;
+            box-shadow: 0 0 10px rgba(40, 167, 69, 0.5) !important;
+            border-radius: 10px !important;
+            height: 100% !important;
+            transition: all 0.5s ease !important;
+        }
+        
+        /* إضافة تأثير التوهج لشريط التقدم */
+        .stProgress > div > div > div::after {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, 
+                transparent,
+                rgba(255, 255, 255, 0.2),
+                transparent
+            );
+            animation: progressShine 1.5s linear infinite;
+        }
+        
+        @keyframes progressShine {
+            0% {
+                transform: translateX(-100%);
+            }
+            100% {
+                transform: translateX(100%);
+            }
+        }
+
         /* تأثير الخلفية المتحركة */
         @keyframes gradientBG {
             0% {
@@ -581,6 +649,15 @@ st.markdown("""
     </style>
 """, unsafe_allow_html=True)
 
+# دالة لتحديد لون شريط التقدم حسب النسبة
+def get_progress_color(percentage):
+    if percentage < 33:
+        return "#FF5252"  # أحمر
+    elif percentage < 66:
+        return "#FFA726"  # برتقالي
+    else:
+        return "#66BB6A"  # أخضر
+
 # تنسيق الأرقام العشرية
 def format_decimal(number):
     return f"{number:.10f}".rstrip('0').rstrip('.') if '.' in f"{number}" else f"{number}"
@@ -645,7 +722,11 @@ texts = {
         "no_chicken_data": "لا توجد بيانات دجاج مدخلة حتى الآن!",
         "not_first_year_chicken": "لا يمكن بيع الدجاجة لأنها ليست في السنة الأولى (عدد البيض أقل من 260)",
         "summary_egg_price": "مجموع سعر البيض 🥚",
-        "summary_feed_price": "مجموع سعر العلف 🌽"
+        "summary_feed_price": "مجموع سعر العلف 🌽",
+        "progress_title": "كم ربحت من الدجاجة 📊",
+        "progress_percentage": "نسبة الإنجاز:",
+        "max_potential_profit": "الربح المحتمل عند اكتمال دورة الدجاجة:",
+        "current_vs_max": "ربحك الحالي مقارنة بالحد الأقصى:"
     },
     "English": {
         "title": "Chicken Calculator - NewYolk",
@@ -705,7 +786,11 @@ texts = {
         "no_chicken_data": "No chicken data entered yet!",
         "not_first_year_chicken": "Chicken cannot be sold as it's not in the first year (egg count less than 260)",
         "summary_egg_price": "Total Egg Price 🥚",
-        "summary_feed_price": "Total Feed Price 🌽"
+        "summary_feed_price": "Total Feed Price 🌽",
+        "progress_title": "How Much You've Earned From The Chicken 📊",
+        "progress_percentage": "Achievement Percentage:",
+        "max_potential_profit": "Maximum Potential Profit:",
+        "current_vs_max": "Your Current Profit Compared to Maximum:"
     },
     "Română": {
         "title": "Calculator Găini - NewYolk",
@@ -765,7 +850,11 @@ texts = {
         "no_chicken_data": "Nu există date despre găini introduse încă!",
         "not_first_year_chicken": "Găina nu poate fi vândută deoarece nu este în primul an (numărul de ouă mai mic de 260)",
         "summary_egg_price": "Preț Total Ouă 🥚",
-        "summary_feed_price": "Preț Total Furaje 🌽"
+        "summary_feed_price": "Preț Total Furaje 🌽",
+        "progress_title": "Cât Ați Câștigat Din Găină 📊",
+        "progress_percentage": "Procentajul de Realizare:",
+        "max_potential_profit": "Profitul Maxim Potențial:",
+        "current_vs_max": "Profitul Dvs. Actual Comparativ cu Maximul:"
     }
 }
 
@@ -1039,7 +1128,27 @@ if calculation_type == texts[language]["chicken_profits"]:
                 profit_with_sale = 0
                 if eggs_value >= 260 and chicken_sale_price_value > 0:
                     profit_with_sale = net_profit_before_rent + chicken_sale_price_value
-
+                
+                # حساب الربح الأقصى المحتمل (عند 580 بيضة و730 يوم)
+                max_eggs = 580
+                max_days = 730
+                max_total_egg_price = max_eggs * float(new_egg_price)
+                max_total_feed_cost = (max_days * 2) * float(new_feed_price)
+                max_total_rent = 6  # الإيجار للسنة الثانية
+                max_net_profit_before_rent = max_total_egg_price - max_total_feed_cost
+                max_net_profit = max_net_profit_before_rent - max_total_rent
+                
+                # حساب نسبة الإنجاز (الربح الحالي مقارنة بالربح الأقصى)
+                progress_percentage = (net_profit / max_net_profit * 100) if max_net_profit > 0 else 0
+                
+                # تحديد لون شريط التقدم بناءً على النسبة
+                if progress_percentage < 33:
+                    progress_color = 'red'
+                elif progress_percentage < 66:
+                    progress_color = 'orange'
+                else:
+                    progress_color = 'green'
+                
                 # تحويل العملة
                 if currency == "IQD":
                     total_egg_price = total_egg_price * 1480
@@ -1047,6 +1156,11 @@ if calculation_type == texts[language]["chicken_profits"]:
                     net_profit_before_rent = net_profit_before_rent * 1480
                     total_rent = total_rent * 1480
                     net_profit = net_profit * 1480
+                    max_net_profit = max_net_profit * 1480  # تحويل الربح الأقصى المحتمل
+                    max_total_egg_price = max_total_egg_price * 1480
+                    max_total_feed_cost = max_total_feed_cost * 1480
+                    max_total_rent = max_total_rent * 1480
+                    
                     if profit_with_sale > 0:
                         profit_with_sale = profit_with_sale * 1480
                     chicken_sale_price_value = chicken_sale_price_value * 1480 if chicken_sale_price_value > 0 else 0
@@ -1153,6 +1267,121 @@ if calculation_type == texts[language]["chicken_profits"]:
                 # عرض ملخص النتائج في النهاية
                 st.markdown(f"### ✨ {texts[language]['summary']}")
                 st.code(results_text)
+                
+                # إضافة قسم كم ربحت من الدجاجة
+                st.markdown(f"### {texts[language]['progress_title']}")
+                
+                # إضافة div مخصص لقسم التقدم
+                st.markdown("""
+                <div class="progress-section">
+                """, unsafe_allow_html=True)
+                
+                # إضافة توضيح بسيط للميزة
+                if language == "العربية":
+                    st.info("هذا القسم يوضح نسبة ما حققته من الربح المحتمل مقارنة بالحد الأقصى للربح عند اكتمال دورة حياة الدجاجة (580 بيضة و730 يوم).")
+                elif language == "English":
+                    st.info("This section shows the percentage of your achieved profit compared to the maximum potential profit at the end of the chicken's lifecycle (580 eggs and 730 days).")
+                else:
+                    st.info("Această secțiune arată procentajul profitului realizat în comparație cu profitul maxim potențial la sfârșitul ciclului de viață al găinii (580 de ouă și 730 de zile).")
+                
+                # عرض نسبة الإنجاز كشريط تقدم
+                st.progress(min(progress_percentage/100, 1.0))
+                
+                # تحديد لون شريط التقدم باستخدام الدالة الجديدة
+                progress_color = get_progress_color(progress_percentage)
+                
+                # إضافة CSS لتغيير لون شريط التقدم حسب النسبة
+                st.markdown(f"""
+                <style>
+                    .stProgress > div > div > div {{
+                        background: linear-gradient(90deg, 
+                            {progress_color},
+                            {progress_color},
+                            {progress_color}
+                        ) !important;
+                        box-shadow: 0 0 10px {progress_color}88 !important;
+                    }}
+                </style>
+                """, unsafe_allow_html=True)
+                
+                # عرض تفاصيل نسبة الإنجاز والربح الأقصى المحتمل
+                col_progress1, col_progress2 = st.columns(2)
+                
+                with col_progress1:
+                    st.markdown(f"""
+                    <div class="progress-info">
+                        <span class="progress-label">{texts[language]['progress_percentage']}</span>
+                        <span class="progress-value" style="color: {progress_color};">{format_decimal(progress_percentage)}%</span>
+                    </div>
+                    """, unsafe_allow_html=True)
+                    
+                    st.markdown(f"""
+                    <div class="progress-info">
+                        <span class="progress-label">{texts[language]['current_vs_max']}</span>
+                        <span class="progress-value">{format_decimal(net_profit)} / {format_decimal(max_net_profit)} {currency}</span>
+                    </div>
+                    """, unsafe_allow_html=True)
+                
+                with col_progress2:
+                    st.markdown(f"""
+                    <div class="progress-info">
+                        <span class="progress-label">{texts[language]['max_potential_profit']}</span>
+                        <span class="progress-value">{format_decimal(max_net_profit)} {currency}</span>
+                    </div>
+                    """, unsafe_allow_html=True)
+                    
+                    # عرض معلومات إضافية عن الربح الأقصى
+                    st.markdown(f"""
+                    <div class="progress-info">
+                        <span class="progress-extras">({format_decimal(max_eggs)} 🥚, {format_decimal(max_days)} 📅)</span>
+                    </div>
+                    """, unsafe_allow_html=True)
+                
+                # إضافة CSS لتحسين مظهر معلومات التقدم
+                st.markdown("""
+                <style>
+                    .progress-info {
+                        background: rgba(30, 37, 48, 0.5);
+                        border-radius: 8px;
+                        padding: 10px 15px;
+                        margin-bottom: 10px;
+                        border: 1px solid rgba(255, 255, 255, 0.1);
+                        transition: all 0.3s ease;
+                    }
+                    
+                    .progress-info:hover {
+                        background: rgba(30, 37, 48, 0.7);
+                        border-color: rgba(255, 255, 255, 0.2);
+                        transform: translateY(-2px);
+                        box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+                    }
+                    
+                    .progress-label {
+                        display: block;
+                        font-size: 0.9em;
+                        color: rgba(255, 255, 255, 0.7);
+                        margin-bottom: 5px;
+                    }
+                    
+                    .progress-value {
+                        display: block;
+                        font-size: 1.2em;
+                        font-weight: bold;
+                        color: white;
+                    }
+                    
+                    .progress-extras {
+                        font-size: 0.9em;
+                        color: rgba(255, 255, 255, 0.8);
+                        font-style: italic;
+                    }
+                </style>
+                """, unsafe_allow_html=True)
+                
+                # إغلاق div المخصص لقسم التقدم
+                st.markdown("""
+                </div>
+                """, unsafe_allow_html=True)
                 
         except ValueError:
             st.error(get_error_message("invalid_number", language))
