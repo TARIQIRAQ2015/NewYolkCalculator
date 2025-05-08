@@ -1227,7 +1227,7 @@ if calculation_type == texts[language]["chicken_profits"]:
                 st.error(get_error_message("invalid_number", language))
 
     with col10:
-        if st.button(texts[language]["reset"]):
+        if st.button(texts[language]["reset"], key="reset_chicken_profit"):
             st.rerun()
 
 elif calculation_type == texts[language]["daily_rewards"]:
@@ -1642,7 +1642,7 @@ elif calculation_type == texts[language]["group_calculation"]:
         st.warning(get_error_message("no_chicken_data", language))
 
 # زر إعادة التعيين
-if st.button(texts[language]["reset"], type="secondary"):
+if st.button(texts[language]["reset"], key="reset_main", type="secondary"):
     # مسح بيانات الدجاج المخزنة في session_state
     if 'chicken_data' in st.session_state:
         st.session_state.chicken_data = []
