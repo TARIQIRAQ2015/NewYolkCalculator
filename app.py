@@ -1060,6 +1060,11 @@ if calculation_type == texts[language]["chicken_profits"]:
                 remaining_eggs = max(0, 580 - eggs_value)
                 remaining_days = max(0, 730 - days_value)
                 
+                # حساب قيمة البيض المتبقي وتكلفة العلف المتبقية
+                remaining_egg_income = remaining_eggs * float(new_egg_price)
+                remaining_feed_cost = (remaining_days * 2) * float(new_feed_price)
+                remaining_profit = remaining_egg_income - remaining_feed_cost
+                
                 # حساب الربح المستلم من الدجاجة (من البيض فقط)
                 egg_income_only = eggs_value * float(new_egg_price)
                 
@@ -1140,90 +1145,15 @@ if calculation_type == texts[language]["chicken_profits"]:
                 # إضافة معلومات المتبقي من البيض والأيام
                 if remaining_eggs > 0 or remaining_days > 0:
                     results_text += f"""
-║ المتبقي لإكمال الإنتاج: {format_decimal(remaining_eggs)} بيضة، {format_decimal(remaining_days)} يوم"""
+║ المتبقي لإكمال الإنتاج: {format_decimal(remaining_eggs)} بيضة، {format_decimal(remaining_days)} يوم
+║ قيمة البيض المتبقي: {format_decimal(remaining_egg_income)} {currency}
+║ تكلفة العلف المتبقية: {format_decimal(remaining_feed_cost)} {currency}
+║ الربح المتوقع من المتبقي: {format_decimal(remaining_profit)} {currency}"""
 
                 # إغلاق المربع
                 results_text += """
 ╚══════════════════════════════════════════════════════════════════╝"""
 
-                # إنشاء DataFrame للرسم البياني
-                chart_categories = [
-                        f"🥚 {texts[language]['eggs_input']}",
-                        f"🌽 {texts[language]['food_input']}",
-                        f"📈 {texts[language]['net_profit']}",
-                ]
-                
-                chart_values = [
-                        total_egg_price,
-                        total_feed_cost,
-                        net_profit_before_rent,
-                ]
-                
-                # إضافة سعر البيع والربح مع البيع إلى الرسم البياني
-                if eggs_value >= 260 and chicken_sale_price_value > 0:
-                    chart_categories.append(f"💰 {texts[language]['chicken_sale_price']}")
-                    chart_categories.append(f"📊 {texts[language]['profit_with_sale']}")
-                    chart_values.append(chicken_sale_price_value)
-                    chart_values.append(profit_with_sale)
-                
-                # إضافة الإيجار والربح الصافي في النهاية
-                chart_categories.append(f"🏠 {texts[language]['first_year_rental']}")
-                chart_categories.append(f"💰 {texts[language]['final_profit']}")
-                chart_values.append(total_rent)
-                chart_values.append(net_profit)
-                
-                df = pd.DataFrame({
-                    texts[language]["category"]: chart_categories,
-                    texts[language]["value"]: chart_values
-                })
-                
-                # تنسيق الجدول النهائي أولاً
-                df = df.round(2)
-                df[texts[language]["value"]] = df[texts[language]["value"]].apply(lambda x: f"{format_decimal(x)} {currency}")
-                st.table(df)
-
-                # عرض الرسم البياني
-                chart_df = pd.DataFrame({
-                    texts[language]["category"]: chart_categories,
-                    texts[language]["value"]: chart_values
-                })
-                fig = create_profit_chart(chart_df, language)
-                st.plotly_chart(fig, use_container_width=True)
-                
-                # عرض قسم "كم ربحت من الدجاجة" مع نسبة الإنجاز وشريط التقدم
-                st.subheader(texts[language]["chicken_profit_achievement"])
-                
-                # حساب الربح المستلم من الدجاجة (من البيض فقط)
-                egg_income_only = eggs_value * float(new_egg_price)
-                
-                # عرض الربح المستلم ونسبة الإنجاز
-                col_achieve1, col_achieve2 = st.columns(2)
-                
-                with col_achieve1:
-                    st.markdown(f"**{texts[language]['maximum_potential_profit']}** {format_decimal(egg_income_only)} {currency}")
-                
-                with col_achieve2:
-                    st.markdown(f"**{texts[language]['achievement_percentage']}** {format_decimal(achievement_percentage)}% ({format_decimal(net_profit)} {currency})")
-                
-                # إضافة شريط التقدم
-                # تحديد لون شريط التقدم حسب النسبة
-                progress_color = "normal"
-                if achievement_percentage > 75:
-                    progress_color = "green"
-                elif achievement_percentage > 50:
-                    progress_color = "blue"
-                elif achievement_percentage > 25:
-                    progress_color = "orange"
-                else:
-                    progress_color = "red"
-                
-                # عرض شريط التقدم مع اللون المناسب
-                st.progress(achievement_percentage / 100, text=f"{format_decimal(achievement_percentage)}% - {format_decimal(egg_income_only)} {currency}")
-                
-                # إضافة معلومات المتبقي من البيض والأيام
-                if remaining_eggs > 0 or remaining_days > 0:
-                    st.info(f"**المتبقي لإكمال الإنتاج:** {format_decimal(remaining_eggs)} بيضة، {format_decimal(remaining_days)} يوم")
-                
                 # عرض ملخص النتائج في النهاية
                 st.markdown(f"### ✨ {texts[language]['summary']}")
                 st.code(results_text)
