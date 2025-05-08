@@ -648,7 +648,7 @@ texts = {
         "summary_feed_price": "مجموع سعر العلف 🌽",
         "chicken_profit_achievement": "📊 كم ربحت من الدجاجة 📊",
         "achievement_percentage": "نسبة الإنجاز:",
-        "maximum_potential_profit": "الربح المستلم من الدجاجة:"
+        "maximum_potential_profit": "الربح المتوقع من المتبقي:"
     },
     "English": {
         "title": "Chicken Calculator - NewYolk",
@@ -711,7 +711,7 @@ texts = {
         "summary_feed_price": "Total Feed Price 🌽",
         "chicken_profit_achievement": "📊 How Much You've Earned From The Chicken 📊",
         "achievement_percentage": "Achievement Percentage:",
-        "maximum_potential_profit": "Maximum Potential Profit:"
+        "maximum_potential_profit": "Expected Profit From Remaining:"
     },
     "Română": {
         "title": "Calculator Găini - NewYolk",
@@ -774,7 +774,7 @@ texts = {
         "summary_feed_price": "Preț Total Furaje 🌽",
         "chicken_profit_achievement": "📊 Cât Ați Câștigat Din Găină 📊",
         "achievement_percentage": "Procentajul de Realizare:",
-        "maximum_potential_profit": "Profitul Maxim Potențial:"
+        "maximum_potential_profit": "Profitul Preconizat Din Rămas:"
     }
 }
 
@@ -1068,8 +1068,8 @@ if calculation_type == texts[language]["chicken_profits"]:
                 # حساب الربح المستلم من الدجاجة (من البيض فقط)
                 egg_income_only = eggs_value * float(new_egg_price)
                 
-                # تعديل: الربح المستلم من الدجاجة هو قيمة البيض المتبقي - تكلفة العلف المتبقية
-                received_profit = remaining_egg_income - remaining_feed_cost
+                # حساب الربح المستلم من الدجاجة (قيمة البيض المتبقي - تكلفة العلف المتبقية)
+                received_profit = remaining_profit
                 
                 # حساب نسبة الإنجاز
                 achievement_percentage = (net_profit / max_potential_profit) * 100 if max_potential_profit > 0 else 0
@@ -1601,11 +1601,18 @@ elif calculation_type == texts[language]["group_calculation"]:
             total_remaining_eggs = sum(max(0, 580 - chicken["eggs"]) for chicken in st.session_state.chicken_data)
             total_remaining_days = sum(max(0, 730 - chicken["days"]) for chicken in st.session_state.chicken_data)
             
+            # حساب قيمة البيض المتبقي وتكلفة العلف المتبقية للمجموعة
+            total_remaining_egg_income = total_remaining_eggs * float(new_egg_price)
+            total_remaining_feed_cost = (total_remaining_days * 2) * float(new_feed_price)
+            total_remaining_profit = total_remaining_egg_income - total_remaining_feed_cost
+            
             # تحويل العملة للربح الأقصى
             if currency == "IQD":
                 total_max_potential_profit_display = total_max_potential_profit * 1480
+                total_remaining_profit_display = total_remaining_profit * 1480
             else:
                 total_max_potential_profit_display = total_max_potential_profit
+                total_remaining_profit_display = total_remaining_profit
             
             # حساب نسبة الإنجاز
             group_achievement_percentage = (total_net_profit / total_max_potential_profit) * 100 if total_max_potential_profit > 0 else 0
@@ -1614,6 +1621,7 @@ elif calculation_type == texts[language]["group_calculation"]:
             # عرض قسم "كم ربحت من الدجاجة" مع نسبة الإنجاز وشريط التقدم
             st.subheader(texts[language]["chicken_profit_achievement"])
             
+            
             # حساب الربح المستلم من الدجاج (من البيض فقط)
             total_egg_income_only = total_income
             
@@ -1621,25 +1629,13 @@ elif calculation_type == texts[language]["group_calculation"]:
             col_achieve1, col_achieve2 = st.columns(2)
             
             with col_achieve1:
-                st.markdown(f"**{texts[language]['maximum_potential_profit']}** {format_decimal(total_egg_income_only)} {display_currency}")
+                st.markdown(f"**{texts[language]['maximum_potential_profit']}** {format_decimal(total_remaining_profit_display)} {display_currency}")
             
             with col_achieve2:
                 st.markdown(f"**{texts[language]['achievement_percentage']}** {format_decimal(group_achievement_percentage)}% ({format_decimal(total_net_profit_display)} {display_currency})")
             
-            # إضافة شريط التقدم
-            # تحديد لون شريط التقدم حسب النسبة
-            progress_color = "normal"
-            if group_achievement_percentage > 75:
-                progress_color = "green"
-            elif group_achievement_percentage > 50:
-                progress_color = "blue"
-            elif group_achievement_percentage > 25:
-                progress_color = "orange"
-            else:
-                progress_color = "red"
-            
             # عرض شريط التقدم مع اللون المناسب
-            st.progress(group_achievement_percentage / 100, text=f"{format_decimal(group_achievement_percentage)}% - {format_decimal(total_egg_income_only)} {display_currency}")
+            st.progress(group_achievement_percentage / 100, text=f"{format_decimal(group_achievement_percentage)}% - {format_decimal(total_remaining_profit_display)} {display_currency}")
             
             # إضافة معلومات المتبقي من البيض والأيام للمجموعة
             if total_remaining_eggs > 0 or total_remaining_days > 0:
@@ -1677,7 +1673,7 @@ elif calculation_type == texts[language]["group_calculation"]:
 ║ {texts[language]['total_profit_with_sale']}: {format_decimal(total_profit_with_sale * 1480)} IQD
 ╠──────────────────────────────────────────────────────────────╤
 ║ {texts[language]['chicken_profit_achievement']}:
-║ {texts[language]['maximum_potential_profit']} {format_decimal(total_income_display)} {display_currency}
+║ {texts[language]['maximum_potential_profit']} {format_decimal(total_remaining_profit_display)} {display_currency}
 ║ {texts[language]['achievement_percentage']} {format_decimal(group_achievement_percentage)}% ({format_decimal(total_net_profit_display)} {display_currency})"""
 
             # إضافة معلومات المتبقي من البيض والأيام للمجموعة
