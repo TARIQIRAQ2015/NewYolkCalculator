@@ -1128,7 +1128,7 @@ if calculation_type == texts[language]["chicken_profits"]:
 ╟──────────────────────────────────────────────────────────────────╢
 ║ {texts[language]['chicken_profit_achievement']}:
 ║ {texts[language]['maximum_potential_profit']} {format_decimal(max_potential_profit)} {currency}
-║ {texts[language]['achievement_percentage']} {format_decimal(achievement_percentage)}%"""
+║ {texts[language]['achievement_percentage']} {format_decimal(achievement_percentage)}% ({format_decimal(net_profit)} {currency})"""
 
                 # إغلاق المربع
                 results_text += """
@@ -1188,7 +1188,7 @@ if calculation_type == texts[language]["chicken_profits"]:
                     st.markdown(f"**{texts[language]['maximum_potential_profit']}** {format_decimal(max_potential_profit)} {currency}")
                 
                 with col_achieve2:
-                    st.markdown(f"**{texts[language]['achievement_percentage']}** {format_decimal(achievement_percentage)}%")
+                    st.markdown(f"**{texts[language]['achievement_percentage']}** {format_decimal(achievement_percentage)}% ({format_decimal(net_profit)} {currency})")
                 
                 # إضافة شريط التقدم
                 # تحديد لون شريط التقدم حسب النسبة
@@ -1203,7 +1203,7 @@ if calculation_type == texts[language]["chicken_profits"]:
                     progress_color = "red"
                 
                 # عرض شريط التقدم مع اللون المناسب
-                st.progress(achievement_percentage / 100, text=f"{format_decimal(achievement_percentage)}%")
+                st.progress(achievement_percentage / 100, text=f"{format_decimal(achievement_percentage)}% - {format_decimal(net_profit)} {currency}")
                 
                 # عرض ملخص النتائج في النهاية
                 st.markdown(f"### ✨ {texts[language]['summary']}")
@@ -1568,7 +1568,7 @@ elif calculation_type == texts[language]["group_calculation"]:
 ╠──────────────────────────────────────────────────────────────╤
 ║ {texts[language]['chicken_profit_achievement']}:
 ║ {texts[language]['maximum_potential_profit']} {format_decimal(total_max_potential_profit_display)} {display_currency}
-║ {texts[language]['achievement_percentage']} {format_decimal(group_achievement_percentage)}%
+║ {texts[language]['achievement_percentage']} {format_decimal(group_achievement_percentage)}% ({format_decimal(total_net_profit_display)} {display_currency})
 ╚══════════════════════════════════════════════════════════════╝"""
             
             st.markdown(f"### ✨ {texts[language]['summary']}")
@@ -1656,7 +1656,7 @@ elif calculation_type == texts[language]["group_calculation"]:
                 st.markdown(f"**{texts[language]['maximum_potential_profit']}** {format_decimal(total_max_potential_profit_display)} {display_currency}")
             
             with col_achieve2:
-                st.markdown(f"**{texts[language]['achievement_percentage']}** {format_decimal(group_achievement_percentage)}%")
+                st.markdown(f"**{texts[language]['achievement_percentage']}** {format_decimal(group_achievement_percentage)}% ({format_decimal(total_net_profit_display)} {display_currency})")
             
             # إضافة شريط التقدم
             # تحديد لون شريط التقدم حسب النسبة
@@ -1671,7 +1671,7 @@ elif calculation_type == texts[language]["group_calculation"]:
                 progress_color = "red"
             
             # عرض شريط التقدم مع اللون المناسب
-            st.progress(group_achievement_percentage / 100, text=f"{format_decimal(group_achievement_percentage)}%")
+            st.progress(group_achievement_percentage / 100, text=f"{format_decimal(group_achievement_percentage)}% - {format_decimal(total_net_profit_display)} {display_currency}")
             
             # ثانياً: عرض ملخص النتائج النصي
             # تنسيق التاريخ والوقت حسب توقيت بغداد
@@ -1706,7 +1706,7 @@ elif calculation_type == texts[language]["group_calculation"]:
 ╠──────────────────────────────────────────────────────────────╤
 ║ {texts[language]['chicken_profit_achievement']}:
 ║ {texts[language]['maximum_potential_profit']} {format_decimal(total_max_potential_profit_display)} {display_currency}
-║ {texts[language]['achievement_percentage']} {format_decimal(group_achievement_percentage)}%
+║ {texts[language]['achievement_percentage']} {format_decimal(group_achievement_percentage)}% ({format_decimal(total_net_profit_display)} {display_currency})
 ╚══════════════════════════════════════════════════════════════╝"""
             
             st.markdown(f"### ✨ {texts[language]['summary']}")
