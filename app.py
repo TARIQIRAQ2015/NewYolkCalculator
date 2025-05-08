@@ -1127,7 +1127,7 @@ if calculation_type == texts[language]["chicken_profits"]:
                 results_text += f"""
 ╟──────────────────────────────────────────────────────────────────╢
 ║ {texts[language]['chicken_profit_achievement']}:
-║ {texts[language]['maximum_potential_profit']} {format_decimal(net_profit)} {currency}
+║ {texts[language]['maximum_potential_profit']} {format_decimal(egg_income_only)} {currency}
 ║ {texts[language]['achievement_percentage']} {format_decimal(achievement_percentage)}% ({format_decimal(net_profit)} {currency})"""
 
                 # إغلاق المربع
@@ -1181,11 +1181,14 @@ if calculation_type == texts[language]["chicken_profits"]:
                 # عرض قسم "كم ربحت من الدجاجة" مع نسبة الإنجاز وشريط التقدم
                 st.subheader(texts[language]["chicken_profit_achievement"])
                 
+                # حساب الربح المستلم من الدجاجة (من البيض فقط)
+                egg_income_only = eggs_value * float(new_egg_price)
+                
                 # عرض الربح المستلم ونسبة الإنجاز
                 col_achieve1, col_achieve2 = st.columns(2)
                 
                 with col_achieve1:
-                    st.markdown(f"**{texts[language]['maximum_potential_profit']}** {format_decimal(net_profit)} {currency}")
+                    st.markdown(f"**{texts[language]['maximum_potential_profit']}** {format_decimal(egg_income_only)} {currency}")
                 
                 with col_achieve2:
                     st.markdown(f"**{texts[language]['achievement_percentage']}** {format_decimal(achievement_percentage)}% ({format_decimal(net_profit)} {currency})")
@@ -1203,7 +1206,7 @@ if calculation_type == texts[language]["chicken_profits"]:
                     progress_color = "red"
                 
                 # عرض شريط التقدم مع اللون المناسب
-                st.progress(achievement_percentage / 100, text=f"{format_decimal(achievement_percentage)}% - {format_decimal(net_profit)} {currency}")
+                st.progress(achievement_percentage / 100, text=f"{format_decimal(achievement_percentage)}% - {format_decimal(egg_income_only)} {currency}")
                 
                 # عرض ملخص النتائج في النهاية
                 st.markdown(f"### ✨ {texts[language]['summary']}")
@@ -1567,7 +1570,7 @@ elif calculation_type == texts[language]["group_calculation"]:
 ║ {texts[language]['total_profit_with_sale']}: {format_decimal(total_profit_with_sale * 1480)} IQD
 ╠──────────────────────────────────────────────────────────────╤
 ║ {texts[language]['chicken_profit_achievement']}:
-║ {texts[language]['maximum_potential_profit']} {format_decimal(total_net_profit_display)} {display_currency}
+║ {texts[language]['maximum_potential_profit']} {format_decimal(total_income_display)} {display_currency}
 ║ {texts[language]['achievement_percentage']} {format_decimal(group_achievement_percentage)}% ({format_decimal(total_net_profit_display)} {display_currency})
 ╚══════════════════════════════════════════════════════════════╝"""
             
@@ -1649,11 +1652,14 @@ elif calculation_type == texts[language]["group_calculation"]:
             # عرض قسم "كم ربحت من الدجاجة" مع نسبة الإنجاز وشريط التقدم
             st.subheader(texts[language]["chicken_profit_achievement"])
             
+            # حساب الربح المستلم من الدجاج (من البيض فقط)
+            total_egg_income_only = total_income
+            
             # عرض الربح المستلم ونسبة الإنجاز
             col_achieve1, col_achieve2 = st.columns(2)
             
             with col_achieve1:
-                st.markdown(f"**{texts[language]['maximum_potential_profit']}** {format_decimal(total_net_profit_display)} {display_currency}")
+                st.markdown(f"**{texts[language]['maximum_potential_profit']}** {format_decimal(total_egg_income_only)} {display_currency}")
             
             with col_achieve2:
                 st.markdown(f"**{texts[language]['achievement_percentage']}** {format_decimal(group_achievement_percentage)}% ({format_decimal(total_net_profit_display)} {display_currency})")
@@ -1671,7 +1677,7 @@ elif calculation_type == texts[language]["group_calculation"]:
                 progress_color = "red"
             
             # عرض شريط التقدم مع اللون المناسب
-            st.progress(group_achievement_percentage / 100, text=f"{format_decimal(group_achievement_percentage)}% - {format_decimal(total_net_profit_display)} {display_currency}")
+            st.progress(group_achievement_percentage / 100, text=f"{format_decimal(group_achievement_percentage)}% - {format_decimal(total_egg_income_only)} {display_currency}")
             
             # ثانياً: عرض ملخص النتائج النصي
             # تنسيق التاريخ والوقت حسب توقيت بغداد
@@ -1705,7 +1711,7 @@ elif calculation_type == texts[language]["group_calculation"]:
 ║ {texts[language]['total_profit_with_sale']}: {format_decimal(total_profit_with_sale * 1480)} IQD
 ╠──────────────────────────────────────────────────────────────╤
 ║ {texts[language]['chicken_profit_achievement']}:
-║ {texts[language]['maximum_potential_profit']} {format_decimal(total_net_profit_display)} {display_currency}
+║ {texts[language]['maximum_potential_profit']} {format_decimal(total_income_display)} {display_currency}
 ║ {texts[language]['achievement_percentage']} {format_decimal(group_achievement_percentage)}% ({format_decimal(total_net_profit_display)} {display_currency})
 ╚══════════════════════════════════════════════════════════════╝"""
             
