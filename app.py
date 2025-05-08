@@ -908,6 +908,20 @@ language = st.selectbox(
     key="language_selector"
 )
 
+# اختيار العملة
+currency = st.selectbox(
+    texts[language]["currency"],
+    ["USD", "IQD"],
+    key="currency_selector"
+)
+
+# اختيار نوع الحساب
+calculation_type = st.selectbox(
+    texts[language]["calculation_type"],
+    [texts[language]["chicken_profits"], texts[language]["daily_rewards"]],
+    key="calculation_type_selector"
+)
+
 # تحسين الواجهة
 st.markdown(
     f"""
