@@ -1056,6 +1056,10 @@ if calculation_type == texts[language]["chicken_profits"]:
                 max_profit_before_rent = max_egg_price - max_feed_cost
                 max_potential_profit = max_profit_before_rent - max_rent
                 
+                # حساب المتبقي من البيض والأيام للوصول إلى الحد الأقصى
+                remaining_eggs = max(0, 580 - eggs_value)
+                remaining_days = max(0, 730 - days_value)
+                
                 # حساب الربح المستلم من الدجاجة (من البيض فقط)
                 egg_income_only = eggs_value * float(new_egg_price)
                 
@@ -1132,6 +1136,11 @@ if calculation_type == texts[language]["chicken_profits"]:
 ║ {texts[language]['chicken_profit_achievement']}:
 ║ {texts[language]['maximum_potential_profit']} {format_decimal(total_egg_price)} {currency}
 ║ {texts[language]['achievement_percentage']} {format_decimal(achievement_percentage)}% ({format_decimal(net_profit)} {currency})"""
+
+                # إضافة معلومات المتبقي من البيض والأيام
+                if remaining_eggs > 0 or remaining_days > 0:
+                    results_text += f"""
+║ المتبقي لإكمال الإنتاج: {format_decimal(remaining_eggs)} بيضة، {format_decimal(remaining_days)} يوم"""
 
                 # إغلاق المربع
                 results_text += """
@@ -1210,6 +1219,10 @@ if calculation_type == texts[language]["chicken_profits"]:
                 
                 # عرض شريط التقدم مع اللون المناسب
                 st.progress(achievement_percentage / 100, text=f"{format_decimal(achievement_percentage)}% - {format_decimal(egg_income_only)} {currency}")
+                
+                # إضافة معلومات المتبقي من البيض والأيام
+                if remaining_eggs > 0 or remaining_days > 0:
+                    st.info(f"**المتبقي لإكمال الإنتاج:** {format_decimal(remaining_eggs)} بيضة، {format_decimal(remaining_days)} يوم")
                 
                 # عرض ملخص النتائج في النهاية
                 st.markdown(f"### ✨ {texts[language]['summary']}")
@@ -1574,7 +1587,15 @@ elif calculation_type == texts[language]["group_calculation"]:
 ╠──────────────────────────────────────────────────────────────╤
 ║ {texts[language]['chicken_profit_achievement']}:
 ║ {texts[language]['maximum_potential_profit']} {format_decimal(total_income_display)} {display_currency}
-║ {texts[language]['achievement_percentage']} {format_decimal(group_achievement_percentage)}% ({format_decimal(total_net_profit_display)} {display_currency})
+║ {texts[language]['achievement_percentage']} {format_decimal(group_achievement_percentage)}% ({format_decimal(total_net_profit_display)} {display_currency})"""
+
+            # إضافة معلومات المتبقي من البيض والأيام للمجموعة
+            if total_remaining_eggs > 0 or total_remaining_days > 0:
+                results_text += f"""
+║ المتبقي لإكمال الإنتاج للمجموعة: {format_decimal(total_remaining_eggs)} بيضة، {format_decimal(total_remaining_days)} يوم"""
+                
+            # إغلاق المربع
+            results_text += """
 ╚══════════════════════════════════════════════════════════════╝"""
             
             st.markdown(f"### ✨ {texts[language]['summary']}")
@@ -1642,6 +1663,11 @@ elif calculation_type == texts[language]["group_calculation"]:
             # المجموع لكل الدجاج
             total_max_potential_profit = max_potential_profit_per_chicken * len(st.session_state.chicken_data)
             
+            # حساب المتبقي من البيض والأيام للمجموعة
+            # نحسب المتوسط لكل الدجاج
+            total_remaining_eggs = sum(max(0, 580 - chicken["eggs"]) for chicken in st.session_state.chicken_data)
+            total_remaining_days = sum(max(0, 730 - chicken["days"]) for chicken in st.session_state.chicken_data)
+            
             # تحويل العملة للربح الأقصى
             if currency == "IQD":
                 total_max_potential_profit_display = total_max_potential_profit * 1480
@@ -1682,6 +1708,10 @@ elif calculation_type == texts[language]["group_calculation"]:
             # عرض شريط التقدم مع اللون المناسب
             st.progress(group_achievement_percentage / 100, text=f"{format_decimal(group_achievement_percentage)}% - {format_decimal(total_egg_income_only)} {display_currency}")
             
+            # إضافة معلومات المتبقي من البيض والأيام للمجموعة
+            if total_remaining_eggs > 0 or total_remaining_days > 0:
+                st.info(f"**المتبقي لإكمال الإنتاج للمجموعة:** {format_decimal(total_remaining_eggs)} بيضة، {format_decimal(total_remaining_days)} يوم")
+            
             # ثانياً: عرض ملخص النتائج النصي
             # تنسيق التاريخ والوقت حسب توقيت بغداد
             current_time = datetime.now() + timedelta(hours=3)  # تحويل التوقيت إلى توقيت بغداد
@@ -1715,7 +1745,15 @@ elif calculation_type == texts[language]["group_calculation"]:
 ╠──────────────────────────────────────────────────────────────╤
 ║ {texts[language]['chicken_profit_achievement']}:
 ║ {texts[language]['maximum_potential_profit']} {format_decimal(total_income_display)} {display_currency}
-║ {texts[language]['achievement_percentage']} {format_decimal(group_achievement_percentage)}% ({format_decimal(total_net_profit_display)} {display_currency})
+║ {texts[language]['achievement_percentage']} {format_decimal(group_achievement_percentage)}% ({format_decimal(total_net_profit_display)} {display_currency})"""
+
+            # إضافة معلومات المتبقي من البيض والأيام للمجموعة
+            if total_remaining_eggs > 0 or total_remaining_days > 0:
+                results_text += f"""
+║ المتبقي لإكمال الإنتاج للمجموعة: {format_decimal(total_remaining_eggs)} بيضة، {format_decimal(total_remaining_days)} يوم"""
+                
+            # إغلاق المربع
+            results_text += """
 ╚══════════════════════════════════════════════════════════════╝"""
             
             st.markdown(f"### ✨ {texts[language]['summary']}")
