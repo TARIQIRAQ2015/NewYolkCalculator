@@ -578,8 +578,119 @@ st.markdown("""
             50% { transform: translateY(-10px); }
             100% { transform: translateY(0px); }
         }
+        
+        /* تنسيق قسم "كم ربحت من الدجاجة" */
+        .progress-section {
+            background: linear-gradient(135deg, rgba(30, 37, 48, 0.7), rgba(20, 27, 38, 0.7));
+            border-radius: 15px;
+            padding: 20px;
+            margin: 20px 0;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
+            backdrop-filter: blur(10px);
+            transition: all 0.3s ease;
+        }
+        
+        .progress-section:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 25px rgba(0, 0, 0, 0.3);
+            border-color: rgba(255, 255, 255, 0.2);
+        }
+        
+        .progress-info {
+            background: rgba(30, 37, 48, 0.5);
+            border-radius: 8px;
+            padding: 10px 15px;
+            margin-bottom: 10px;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            transition: all 0.3s ease;
+        }
+        
+        .progress-info:hover {
+            background: rgba(30, 37, 48, 0.7);
+            border-color: rgba(255, 255, 255, 0.2);
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+        }
+        
+        .progress-label {
+            display: block;
+            font-size: 0.9em;
+            color: rgba(255, 255, 255, 0.7);
+            margin-bottom: 5px;
+        }
+        
+        .progress-value {
+            display: block;
+            font-size: 1.2em;
+            font-weight: bold;
+            color: white;
+        }
+        
+        .progress-extras {
+            font-size: 0.9em;
+            color: rgba(255, 255, 255, 0.8);
+            font-style: italic;
+        }
+        
+        /* تحسين شريط التقدم */
+        .stProgress > div > div {
+            position: relative;
+            height: 20px !important;
+            background: rgba(20, 27, 38, 0.7) !important;
+            border-radius: 10px !important;
+            overflow: hidden;
+            box-shadow: inset 0 2px 8px rgba(0, 0, 0, 0.3) !important;
+            border: 1px solid rgba(255, 255, 255, 0.1) !important;
+            margin: 10px 0 !important;
+        }
+        
+        .stProgress > div > div > div {
+            background: linear-gradient(90deg, 
+                rgba(102, 187, 106, 0.8),
+                rgba(102, 187, 106, 1.0)
+            ) !important;
+            box-shadow: 0 0 10px rgba(102, 187, 106, 0.5) !important;
+            border-radius: 10px !important;
+            height: 100% !important;
+            transition: all 0.5s ease !important;
+        }
+        
+        /* إضافة تأثير التوهج لشريط التقدم */
+        .stProgress > div > div > div::after {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, 
+                transparent,
+                rgba(255, 255, 255, 0.3),
+                transparent
+            );
+            animation: progressShine 2.5s ease-in-out infinite;
+        }
+        
+        @keyframes progressShine {
+            0% {
+                transform: translateX(0%);
+            }
+            100% {
+                transform: translateX(200%);
+            }
+        }
     </style>
 """, unsafe_allow_html=True)
+
+# دالة لتحديد لون شريط التقدم حسب النسبة
+def get_progress_color(percentage):
+    if percentage < 33:
+        return "#FF5252"  # أحمر
+    elif percentage < 66:
+        return "#FFA726"  # برتقالي
+    else:
+        return "#66BB6A"  # أخضر
 
 # تنسيق الأرقام العشرية
 def format_decimal(number):
@@ -645,7 +756,14 @@ texts = {
         "no_chicken_data": "لا توجد بيانات دجاج مدخلة حتى الآن!",
         "not_first_year_chicken": "لا يمكن بيع الدجاجة لأنها ليست في السنة الأولى (عدد البيض أقل من 260)",
         "summary_egg_price": "مجموع سعر البيض 🥚",
-        "summary_feed_price": "مجموع سعر العلف 🌽"
+        "summary_feed_price": "مجموع سعر العلف 🌽",
+        "progress_title": "كم ربحت من الدجاجة 📊",
+        "progress_percentage": "نسبة الإنجاز:",
+        "max_potential_profit": "الربح المحتمل عند اكتمال دورة الدجاجة:",
+        "current_vs_max": "ربحك الحالي مقارنة بالحد الأقصى:",
+        "remaining_eggs": "عدد البيض المتبقي للوصول للحد الأقصى:",
+        "remaining_days": "عدد الأيام المتبقية للوصول للحد الأقصى:",
+        "completed_cycle": "أنت وصلت للحد الأقصى من دورة حياة الدجاجة!"
     },
     "English": {
         "title": "Chicken Calculator - NewYolk",
@@ -705,7 +823,14 @@ texts = {
         "no_chicken_data": "No chicken data entered yet!",
         "not_first_year_chicken": "Chicken cannot be sold as it's not in the first year (egg count less than 260)",
         "summary_egg_price": "Total Egg Price 🥚",
-        "summary_feed_price": "Total Feed Price 🌽"
+        "summary_feed_price": "Total Feed Price 🌽",
+        "progress_title": "How Much You've Earned From The Chicken 📊",
+        "progress_percentage": "Achievement Percentage:",
+        "max_potential_profit": "Maximum Potential Profit:",
+        "current_vs_max": "Your Current Profit Compared to Maximum:",
+        "remaining_eggs": "Remaining Eggs to Reach Maximum:",
+        "remaining_days": "Remaining Days to Reach Maximum:",
+        "completed_cycle": "You've reached the maximum chicken lifecycle!"
     },
     "Română": {
         "title": "Calculator Găini - NewYolk",
@@ -765,7 +890,14 @@ texts = {
         "no_chicken_data": "Nu există date despre găini introduse încă!",
         "not_first_year_chicken": "Găina nu poate fi vândută deoarece nu este în primul an (numărul de ouă mai mic de 260)",
         "summary_egg_price": "Preț Total Ouă 🥚",
-        "summary_feed_price": "Preț Total Furaje 🌽"
+        "summary_feed_price": "Preț Total Furaje 🌽",
+        "progress_title": "Cât Ați Câștigat Din Găină 📊",
+        "progress_percentage": "Procentajul de Realizare:",
+        "max_potential_profit": "Profitul Maxim Potențial:",
+        "current_vs_max": "Profitul Dvs. Actual Comparativ cu Maximul:",
+        "remaining_eggs": "Ouă Rămase Pentru a Atinge Maximul:",
+        "remaining_days": "Zile Rămase Pentru a Atinge Maximul:",
+        "completed_cycle": "Ați atins ciclul maxim de viață al găinii!"
     }
 }
 
@@ -864,23 +996,110 @@ st.markdown("""
             opacity: 0.9;
             font-weight: normal;
         }
+        
+        /* تنسيق قسم "كم ربحت من الدجاجة" */
+        .progress-section {
+            background: linear-gradient(135deg, rgba(30, 37, 48, 0.7), rgba(20, 27, 38, 0.7));
+            border-radius: 15px;
+            padding: 20px;
+            margin: 20px 0;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
+            backdrop-filter: blur(10px);
+            transition: all 0.3s ease;
+        }
+        
+        .progress-section:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 25px rgba(0, 0, 0, 0.3);
+            border-color: rgba(255, 255, 255, 0.2);
+        }
+        
+        .progress-info {
+            background: rgba(30, 37, 48, 0.5);
+            border-radius: 8px;
+            padding: 10px 15px;
+            margin-bottom: 10px;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            transition: all 0.3s ease;
+        }
+        
+        .progress-info:hover {
+            background: rgba(30, 37, 48, 0.7);
+            border-color: rgba(255, 255, 255, 0.2);
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+        }
+        
+        .progress-label {
+            display: block;
+            font-size: 0.9em;
+            color: rgba(255, 255, 255, 0.7);
+            margin-bottom: 5px;
+        }
+        
+        .progress-value {
+            display: block;
+            font-size: 1.2em;
+            font-weight: bold;
+            color: white;
+        }
+        
+        .progress-extras {
+            font-size: 0.9em;
+            color: rgba(255, 255, 255, 0.8);
+            font-style: italic;
+        }
+        
+        /* تحسين شريط التقدم */
+        .stProgress > div > div {
+            position: relative;
+            height: 20px !important;
+            background: rgba(20, 27, 38, 0.7) !important;
+            border-radius: 10px !important;
+            overflow: hidden;
+            box-shadow: inset 0 2px 8px rgba(0, 0, 0, 0.3) !important;
+            border: 1px solid rgba(255, 255, 255, 0.1) !important;
+            margin: 10px 0 !important;
+        }
+        
+        .stProgress > div > div > div {
+            background: linear-gradient(90deg, 
+                rgba(102, 187, 106, 0.8),
+                rgba(102, 187, 106, 1.0)
+            ) !important;
+            box-shadow: 0 0 10px rgba(102, 187, 106, 0.5) !important;
+            border-radius: 10px !important;
+            height: 100% !important;
+            transition: all 0.5s ease !important;
+        }
+        
+        /* إضافة تأثير التوهج لشريط التقدم */
+        .stProgress > div > div > div::after {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, 
+                transparent,
+                rgba(255, 255, 255, 0.3),
+                transparent
+            );
+            animation: progressShine 2.5s ease-in-out infinite;
+        }
+        
+        @keyframes progressShine {
+            0% {
+                transform: translateX(0%);
+            }
+            100% {
+                transform: translateX(200%);
+            }
+        }
     </style>
 """, unsafe_allow_html=True)
-
-# استخدام الأعمدة لتخطيط أفضل
-col1, col2 = st.columns(2)
-
-with col1:
-    currency = st.selectbox(
-        texts[language]["currency"],
-        ["USD", "IQD"]
-    )
-
-with col2:
-    calculation_type = st.selectbox(
-        texts[language]["calculation_type"],
-        [texts[language]["chicken_profits"], texts[language]["daily_rewards"], texts[language]["group_calculation"]]
-    )
 
 # دالة التحقق من المدخلات
 def is_number(value):
@@ -1039,6 +1258,25 @@ if calculation_type == texts[language]["chicken_profits"]:
                 profit_with_sale = 0
                 if eggs_value >= 260 and chicken_sale_price_value > 0:
                     profit_with_sale = net_profit_before_rent + chicken_sale_price_value
+                
+                # حساب الربح الأقصى المحتمل عند اكتمال دورة حياة الدجاجة (580 بيضة و730 يوم)
+                max_eggs = 580
+                max_days = 730
+                max_total_egg_price = max_eggs * float(new_egg_price)
+                max_total_feed_cost = (max_days * 2) * float(new_feed_price)
+                max_total_rent = 6  # الإيجار للسنة الثانية
+                max_net_profit_before_rent = max_total_egg_price - max_total_feed_cost
+                max_net_profit = max_net_profit_before_rent - max_total_rent
+                
+                # حساب عدد البيض والأيام المتبقية للوصول إلى الحد الأقصى
+                remaining_eggs = max(0, max_eggs - eggs_value)
+                remaining_days = max(0, max_days - days_value)
+                
+                # حساب نسبة الإنجاز بناءً على الربح الحالي مقارنة بالربح الأقصى
+                progress_percentage = min(100, (net_profit / max_net_profit * 100) if max_net_profit > 0 else 0)
+                
+                # تحديد لون شريط التقدم بناءً على النسبة
+                progress_color = get_progress_color(progress_percentage)
 
                 # تحويل العملة
                 if currency == "IQD":
@@ -1047,13 +1285,16 @@ if calculation_type == texts[language]["chicken_profits"]:
                     net_profit_before_rent = net_profit_before_rent * 1480
                     total_rent = total_rent * 1480
                     net_profit = net_profit * 1480
+                    max_net_profit = max_net_profit * 1480
+                    max_total_egg_price = max_total_egg_price * 1480
+                    max_total_feed_cost = max_total_feed_cost * 1480
+                    max_total_rent = max_total_rent * 1480
                     if profit_with_sale > 0:
                         profit_with_sale = profit_with_sale * 1480
                     chicken_sale_price_value = chicken_sale_price_value * 1480 if chicken_sale_price_value > 0 else 0
                 else:
-                    total_egg_price, total_feed_cost, net_profit_before_rent, total_rent, net_profit = (
-                        total_egg_price, total_feed_cost, net_profit_before_rent, total_rent, net_profit
-                    )
+                    # الأسعار بالدولار تبقى كما هي
+                    pass
 
                 # تنسيق التاريخ والوقت حسب توقيت بغداد
                 current_time = datetime.now() + timedelta(hours=3)  # تحويل التوقيت إلى توقيت بغداد
@@ -1154,536 +1395,104 @@ if calculation_type == texts[language]["chicken_profits"]:
                 st.markdown(f"### ✨ {texts[language]['summary']}")
                 st.code(results_text)
                 
-        except ValueError:
-            st.error(get_error_message("invalid_number", language))
-
-elif calculation_type == texts[language]["daily_rewards"]:
-    st.subheader(texts[language]["daily_rewards"] + " 📈")
-    col7, col8 = st.columns(2)
-
-    with col7:
-        rewards = st.text_input(
-            texts[language]["total_rewards"],
-            value="",
-            help=get_help_message("rewards_input", language)
-        )
-
-    with col8:
-        food = st.text_input(
-            texts[language]["total_food_cost"],
-            value="",
-            help=get_help_message("food_input", language)
-        )
-
-    if st.button(texts[language]["calculate_rewards"], type="primary"):
-        try:
-            # التحويل من نص إلى رقم بشكل صحيح
-            try:
-                rewards_value = float(rewards) if rewards else None
-                food_value = float(food) if food else None
-            except ValueError:
-                st.error(get_error_message("invalid_number", language))
-                rewards_value = None
-                food_value = None
-
-            if rewards_value is None or food_value is None:
-                st.error(get_error_message("missing_values", language))
-            else:
-                # حساب الربح اليومي
-                daily_profit = rewards_value * float(new_egg_price) - food_value * float(new_feed_price)
-
-                # تحويل العملة
-                if currency == "IQD":
-                    daily_profit = daily_profit * 1480
+                # إضافة قسم "كم ربحت من الدجاجة"
+                st.markdown(f"""
+                <div style="text-align: center; margin: 30px 0 15px; position: relative;">
+                    <hr style="height: 2px; background: linear-gradient(90deg, transparent, rgba(255,255,255,0.3), transparent); border: none; margin-bottom: 20px;" />
+                    <h3 style="font-size: 1.5em; font-weight: bold; color: white; text-shadow: 0 0 5px rgba(100,200,255,0.5);">
+                        📊 {texts[language]['progress_title']}
+                    </h3>
+                </div>
+                """, unsafe_allow_html=True)
+                
+                # إنشاء قسم بتصميم خاص للميزة
+                st.markdown('<div class="progress-section">', unsafe_allow_html=True)
+                
+                # عرض معلومات توضيحية
+                if progress_percentage >= 100:
+                    st.success(texts[language]['completed_cycle'])
                 else:
-                    daily_profit = daily_profit
-
-                # تنسيق التاريخ والوقت حسب توقيت بغداد
-                current_time = datetime.now() + timedelta(hours=3)  # تحويل التوقيت إلى توقيت بغداد
-                date_str = current_time.strftime("%Y-%m-%d")
-                time_str = current_time.strftime("%I:%M %p")
-
-                # إنشاء نص النتائج
-                results_text = f"""
-╔═════════════════════════════════════════════════════════════╗
-║ {texts[language]['calculation_time']}: {date_str} {time_str}
-╟┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┑
-║ {texts[language]['usd_results']}:
-║ {texts[language]['summary_egg_price']}: {format_decimal(rewards_value * float(new_egg_price))} USD
-║ {texts[language]['summary_feed_price']}: {format_decimal(food_value * float(new_feed_price))} USD
-║ {texts[language]['daily_profit']}: {format_decimal(daily_profit)} USD
-╟┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┑
-║ {texts[language]['iqd_results']}:
-║ {texts[language]['summary_egg_price']}: {format_decimal(rewards_value * float(new_egg_price) * 1480)} IQD
-║ {texts[language]['summary_feed_price']}: {format_decimal(food_value * float(new_feed_price) * 1480)} IQD
-║ {texts[language]['daily_profit']}: {format_decimal(daily_profit * 1480)} IQD
-╚═════════════════════════════════════════════════════════════╝"""
-
-                # عرض النتائج
-                # st.code(results_text, language="text")
-
-                # إنشاء DataFrame للرسم البياني
-                df = pd.DataFrame({
-                    texts[language]["category"]: [
-                        f"🥚 {texts[language]['total_rewards']}",
-                        f"🌽 {texts[language]['total_food_cost']}",
-                        f"💰 {texts[language]['daily_profit']}"
-                    ],
-                    texts[language]["value"]: [
-                        rewards_value * float(new_egg_price),
-                        food_value * float(new_feed_price),
-                        daily_profit
-                    ]
-                })
+                    st.info(f"{texts[language]['remaining_eggs']} {format_decimal(remaining_eggs)} 🥚 | {texts[language]['remaining_days']} {format_decimal(remaining_days)} 📅")
                 
-                # تنسيق القيم في الجدول
-                df = df.round(2)
-                df[texts[language]["value"]] = df[texts[language]["value"]].apply(lambda x: f"{format_decimal(x)} {currency}")
-                st.table(df)
-
-                # عرض الرسم البياني
-                chart_df = pd.DataFrame({
-                    texts[language]["category"]: [
-                        f"🥚 {texts[language]['total_rewards']}",
-                        f"🌽 {texts[language]['total_food_cost']}",
-                        f"💰 {texts[language]['daily_profit']}"
-                    ],
-                    texts[language]["value"]: [
-                        rewards_value * float(new_egg_price),
-                        food_value * float(new_feed_price),
-                        daily_profit
-                    ]
-                })
-                fig = create_profit_chart(chart_df, language)
-                st.plotly_chart(fig, use_container_width=True)
-
-                # عرض ملخص النتائج في النهاية
-                st.markdown(f"### ✨ {texts[language]['summary']}")
-                st.code(results_text)
+                # عرض شريط التقدم
+                progress_bar = st.progress(min(progress_percentage/100, 1.0))
+                
+                # تغيير لون شريط التقدم حسب النسبة
+                st.markdown(f"""
+                <style>
+                    .stProgress > div > div > div {{
+                        background: linear-gradient(90deg, 
+                            {progress_color}aa,
+                            {progress_color}
+                        ) !important;
+                        box-shadow: 0 0 10px {progress_color}88 !important;
+                        position: relative;
+                        overflow: hidden;
+                    }}
+                    
+                    .stProgress > div > div > div::after {{
+                        content: '';
+                        position: absolute;
+                        top: 0;
+                        left: -100%;
+                        width: 100%;
+                        height: 100%;
+                        background: linear-gradient(90deg, 
+                            transparent,
+                            rgba(255, 255, 255, 0.3),
+                            transparent
+                        );
+                        animation: progressShine 2.5s ease-in-out infinite;
+                    }}
+                    
+                    @keyframes progressShine {{
+                        0% {{ transform: translateX(0%); }}
+                        100% {{ transform: translateX(200%); }}
+                    }}
+                </style>
+                """, unsafe_allow_html=True)
+                
+                # عرض النسبة المئوية والربح المحتمل
+                col_prog1, col_prog2 = st.columns(2)
+                
+                with col_prog1:
+                    st.markdown(f"""
+                    <div class="progress-info">
+                        <span class="progress-label">{texts[language]['progress_percentage']}</span>
+                        <span class="progress-value" style="color: {progress_color}; display: flex; align-items: center; gap: 5px;">
+                            <span>📈</span> {format_decimal(progress_percentage)}%
+                        </span>
+                    </div>
+                    """, unsafe_allow_html=True)
+                    
+                    st.markdown(f"""
+                    <div class="progress-info">
+                        <span class="progress-label">{texts[language]['current_vs_max']}</span>
+                        <span class="progress-value" style="display: flex; align-items: center; gap: 5px;">
+                            <span>💰</span> {format_decimal(net_profit)} / {format_decimal(max_net_profit)} {currency}
+                        </span>
+                    </div>
+                    """, unsafe_allow_html=True)
+                
+                with col_prog2:
+                    st.markdown(f"""
+                    <div class="progress-info">
+                        <span class="progress-label">{texts[language]['max_potential_profit']}</span>
+                        <span class="progress-value" style="display: flex; align-items: center; gap: 5px;">
+                            <span>💎</span> {format_decimal(max_net_profit)} {currency}
+                        </span>
+                    </div>
+                    """, unsafe_allow_html=True)
+                    
+                    # معلومات إضافية عن الحد الأقصى
+                    st.markdown(f"""
+                    <div class="progress-info">
+                        <span class="progress-extras">({format_decimal(max_eggs)} 🥚, {format_decimal(max_days)} 📅)</span>
+                    </div>
+                    """, unsafe_allow_html=True)
+                
+                # إغلاق قسم "كم ربحت من الدجاجة"
+                st.markdown('</div>', unsafe_allow_html=True)
                 
         except ValueError:
             st.error(get_error_message("invalid_number", language))
-
-# إضافة قسم الحساب الجماعي
-elif calculation_type == texts[language]["group_calculation"]:
-    st.subheader(texts[language]["group_calculation"] + " 🐔")
-    
-    # إنشاء أو الوصول إلى جلسة لتخزين بيانات الدجاج
-    if 'chicken_data' not in st.session_state:
-        st.session_state.chicken_data = []
-    
-    # إضافة دجاجة جديدة
-    st.subheader("➕ " + texts[language]["add_chicken"])
-    col1, col2 = st.columns(2)
-    
-    with col1:
-        egg_rate = st.text_input(
-            texts[language]["daily_egg_rate"],
-            value=""
-            # تم تغييرها لتكون مثل حقل أيام النشاط بدون قيمة افتراضية
-        )
-        
-    with col2:
-        active_days = st.text_input(
-            texts[language]["active_days"],
-            value=""
-            # تم تغييرها لتكون بدون قيمة افتراضية وبدون أزرار الزيادة والنقصان
-        )
-        
-    # حقل سعر بيع الدجاجة الاختياري - يظهر شرطياً إذا كان عدد البيض أكبر من 260
-    # التحقق من أن القيمة المدخلة رقم وأكبر من أو يساوي 260
-    try:
-        egg_rate_value = float(egg_rate) if egg_rate else 0
-        is_first_year = egg_rate_value >= 260
-    except ValueError:
-        is_first_year = False  # إذا لم يكن رقماً صحيحاً
-        
-    if is_first_year:  # لا يظهر في حالة كان عدد البيض أقل من 260
-        chicken_sale_price = st.text_input(
-            texts[language]["chicken_sale_price"],
-            value=""
-            # تم تغييرها لتكون بدون قيمة افتراضية وبدون أزرار الزيادة والنقصان
-        )
-    else:
-        st.info(texts[language]["not_first_year_chicken"] if "not_first_year_chicken" in texts[language] else "لا يمكن بيع الدجاجة لأنها ليست في السنة الأولى (عدد البيض أقل من 260)")
-        chicken_sale_price = 0.0  # لا يمكن بيع الدجاجة لأنها ليست في السنة الأولى
-        
-    if st.button(texts[language]["add_chicken"], type="primary"):
-        try:
-            # التحويل من نص إلى رقم بشكل صحيح
-            egg_rate = float(egg_rate) if egg_rate else None
-            active_days = float(active_days) if active_days else None
-            
-            # التحقق من قيمة سعر بيع الدجاجة
-            if "chicken_sale_price" not in locals():
-                chicken_sale_price = "0"  # تعيين القيمة الافتراضية إذا لم تكن موجودة
-            try:
-                chicken_sale_price_value = float(chicken_sale_price) if chicken_sale_price else 0
-            except ValueError:
-                chicken_sale_price_value = 0
-            
-            if egg_rate is None or active_days is None:
-                st.error(get_error_message("missing_values", language))
-            elif egg_rate > 580:
-                st.error(get_error_message("eggs_exceed", language))
-            elif active_days > 730:
-                st.error(get_error_message("days_exceed", language))
-            else:
-                # حساب النتائج للدجاجة الحالية (مطابق لطريقة حساب أرباح الدجاج الاعتيادية)
-                eggs_count = egg_rate  # عدد البيض كما هو
-                egg_income = eggs_count * float(new_egg_price)  # ضرب عدد البيض في سعر البيض الحالي
-                feed_cost = active_days * 2 * float(new_feed_price)  # ضرب عدد الأيام في 2 ثم في سعر العلف الحالي
-                rent = 6 if eggs_count >= 260 else 0  # 6 دولارات فقط إذا كان عدد البيض 260 أو أكثر
-                net_profit_before_rent = egg_income - feed_cost  # الربح قبل دفع الايجار
-                net_profit = egg_income - feed_cost - rent  # الربح الصافي بدون بيع
-                
-                # حساب الربح مع بيع الدجاجة - فقط للدجاج التي عدد بيضها 260 أو أكثر
-                # الربح مع بيع الدجاجة = الربح قبل دفع الايجار + سعر بيع الدجاجة
-                if eggs_count >= 260 and chicken_sale_price_value > 0:  # فقط إذا كانت الدجاجة في السنة الأولى (عدد البيض أكبر من أو يساوي 260)
-                    profit_with_sale = net_profit_before_rent + chicken_sale_price_value  # الربح مع بيع الدجاجة = الربح قبل دفع الايجار + سعر بيع الدجاجة
-                else:
-                    profit_with_sale = 0  # لا يتم احتساب الربح مع البيع للدجاج التي عدد بيضها أقل من 260
-                    chicken_sale_price_value = 0.0  # تأكيد على تصفير سعر بيع الدجاجة للدجاج التي ليست في السنة الأولى
-                
-                # إضافة البيانات إلى قائمة الدجاج
-                chicken_id = len(st.session_state.chicken_data) + 1
-                st.session_state.chicken_data.append({
-                    "id": chicken_id,
-                    "eggs": eggs_count,
-                    "days": active_days,
-                    "income": egg_income,
-                    "feed_cost": feed_cost,
-                    "rent": rent,
-                    "net_profit_before_rent": net_profit_before_rent,  # الربح قبل دفع الايجار
-                    "net_profit": net_profit,  # الربح الصافي بدون بيع
-                    "chicken_sale_price": chicken_sale_price_value,  # سعر بيع الدجاجة
-                    "profit_with_sale": profit_with_sale  # الربح مع بيع الدجاجة
-                })
-                
-                st.success(get_error_message("chicken_added", language, chicken_id=chicken_id))
-        except ValueError:
-            st.error(get_error_message("invalid_number", language))
-    
-    # عرض الدجاج المضافة 
-    if st.session_state.chicken_data:
-        st.subheader("🧮 " + texts[language]["chicken_details"])
-        
-        for i, chicken in enumerate(st.session_state.chicken_data):
-            col1, col2, col3 = st.columns([3, 1, 1])
-            
-            with col1:
-                st.write(f"🐔 {texts[language]['chicken_number']} {chicken['id']}: {texts[language]['eggs_input']}: {format_decimal(chicken['eggs'])}, {texts[language]['days_input']}: {format_decimal(chicken['days'])}")
-            
-            with col3:
-                if st.button(f"❌ {texts[language]['remove_chicken']}", key=f"remove_{i}"):
-                    st.session_state.chicken_data.pop(i)
-                    st.rerun()
-        
-        # زر حساب النتائج الجماعية
-        if st.button(texts[language]["calculate_group"], type="primary"):
-            # إعداد الجدول التفصيلي
-            detailed_df = pd.DataFrame([
-                {
-                    texts[language]["chicken_number"]: chicken["id"],
-                    texts[language]["eggs_input"]: format_decimal(chicken["eggs"]),
-                    texts[language]["days_input"]: format_decimal(chicken["days"]),
-                    texts[language]["income"]: format_decimal(chicken["income"]),
-                    texts[language]["feed_cost"]: format_decimal(chicken["feed_cost"]),
-                    texts[language]["net_profit"]: format_decimal(chicken["net_profit_before_rent"]),
-                    texts[language]["profit_with_sale"]: format_decimal(chicken["profit_with_sale"]) if chicken["eggs"] >= 260 and chicken["profit_with_sale"] > 0 else "",
-                    texts[language]["rent"]: format_decimal(chicken["rent"]),
-                    texts[language]["net_profit_per_chicken"]: format_decimal(chicken["net_profit"])
-                }
-                for chicken in st.session_state.chicken_data
-            ])
-            
-            # حساب الإجماليات
-            total_eggs = sum(chicken["eggs"] for chicken in st.session_state.chicken_data)
-            total_income = sum(chicken["income"] for chicken in st.session_state.chicken_data)
-            total_feed_cost = sum(chicken["feed_cost"] for chicken in st.session_state.chicken_data)
-            total_rent = sum(chicken["rent"] for chicken in st.session_state.chicken_data)
-            total_net_profit_before_rent = sum(chicken["net_profit_before_rent"] for chicken in st.session_state.chicken_data)
-            total_net_profit = sum(chicken["net_profit"] for chicken in st.session_state.chicken_data)
-            
-            # حساب إجمالي الربح مع البيع - فقط للدجاج التي عدد بيضها 260 أو أكثر
-            # حساب مجموع أسعار بيع الدجاج المؤهلة (عدد بيضها 260 أو أكثر)
-            total_chicken_sale_prices = sum(chicken["chicken_sale_price"] for chicken in st.session_state.chicken_data if chicken["eggs"] >= 260 and chicken["chicken_sale_price"] > 0)
-            # الربح الكلي مع البيع = إجمالي الربح قبل الإيجار + مجموع أسعار بيع الدجاج
-            total_profit_with_sale = total_net_profit_before_rent + total_chicken_sale_prices
-            
-            # التحقق مما إذا كان هناك دجاج مؤهلة للحساب مع البيع (عدد بيضها 260 أو أكثر وتم تحديد سعر البيع)
-            has_sales_prices = any(chicken["eggs"] >= 260 and chicken["chicken_sale_price"] > 0 for chicken in st.session_state.chicken_data)
-            
-            # تحويل العملة إذا لزم الأمر
-            if currency == "IQD":
-                conversion_rate = 1480
-                total_income_display = total_income * conversion_rate
-                total_feed_cost_display = total_feed_cost * conversion_rate
-                total_rent_display = total_rent * conversion_rate
-                total_net_profit_before_rent_display = total_net_profit_before_rent * conversion_rate
-                total_net_profit_display = total_net_profit * conversion_rate
-                total_profit_with_sale_display = total_profit_with_sale * conversion_rate
-                display_currency = "IQD"
-            else:
-                total_income_display = total_income
-                total_feed_cost_display = total_feed_cost
-                total_rent_display = total_rent
-                total_net_profit_before_rent_display = total_net_profit_before_rent
-                total_net_profit_display = total_net_profit
-                total_profit_with_sale_display = total_profit_with_sale
-                display_currency = "USD"
-                
-            # عرض الجدول التفصيلي
-            st.subheader("📋 " + texts[language]["chicken_details"])
-            st.table(detailed_df)
-            
-            # قيمة افتراضية للمتغيرات قبل استخدامها
-            total_final_with_sale = total_profit_with_sale_display
-            
-            # إنشاء بيانات ملخص للرسم البياني
-            summary_data = [
-                {
-                    texts[language]["category"]: texts[language]["total_eggs"],
-                    texts[language]["value"]: f"{format_decimal(total_eggs)}"
-                },
-                {
-                    texts[language]["category"]: texts[language]["total_income"],
-                    texts[language]["value"]: f"{format_decimal(total_income_display)} {display_currency}"
-                },
-                {
-                    texts[language]["category"]: texts[language]["total_feed"],
-                    texts[language]["value"]: f"{format_decimal(total_feed_cost_display)} {display_currency}"
-                },
-                {
-                    texts[language]["category"]: texts[language]["net_profit"],
-                    texts[language]["value"]: f"{format_decimal(total_net_profit_before_rent_display)} {display_currency}"
-                },
-                {
-                    texts[language]["category"]: texts[language]["total_profit_with_sale"],
-                    texts[language]["value"]: f"{format_decimal(total_profit_with_sale_display)} {display_currency}"
-                } if has_sales_prices else None,
-                {
-                    texts[language]["category"]: texts[language]["total_rent"],
-                    texts[language]["value"]: f"{format_decimal(total_rent_display)} {display_currency}"
-                },
-                {
-                    texts[language]["category"]: texts[language]["net_profit_per_chicken"],
-                    texts[language]["value"]: f"{format_decimal(total_net_profit_display)} {display_currency}"
-                }
-            ]
-            
-            # إزالة القيم None من قائمة البيانات قبل إنشاء DataFrame
-            filtered_summary_data = [item for item in summary_data if item is not None]
-            summary_df = pd.DataFrame(filtered_summary_data)
-            
-            # عرض جدول الملخص الإجمالي
-            st.subheader("📊 " + texts[language]["total_summary"])
-            st.table(summary_df)
-            
-            # ثانياً: عرض ملخص النتائج النصي
-            # تنسيق التاريخ والوقت حسب توقيت بغداد
-            current_time = datetime.now() + timedelta(hours=3)  # تحويل التوقيت إلى توقيت بغداد
-            date_str = current_time.strftime("%Y-%m-%d")
-            time_str = current_time.strftime("%I:%M %p")
-            
-            # إنشاء نص النتائج
-            results_text = f"""
-╔══════════════════════════════════════════════════════════════╗
-║                  {texts[language]['summary']}                    ║
-╠══════════════════════════════════════════════════════════════╣
-║ {texts[language]['calculation_time']}: {date_str} {time_str}
-╠──────────────────────────────────────────────────────────────╤
-║ {texts[language]['usd_results']}:
-║ {texts[language]['total_eggs']}: {format_decimal(total_eggs)}
-║ {texts[language]['total_income']}: {format_decimal(total_income)} USD
-║ {texts[language]['total_feed']}: {format_decimal(total_feed_cost)} USD
-║ {texts[language]['total_first_year_profit']}: {format_decimal(total_net_profit_before_rent)} USD
-║ {texts[language]['total_rent']}: {format_decimal(total_rent)} USD
-║ {texts[language]['total_net_profit']}: {format_decimal(total_net_profit)} USD
-║ {texts[language]['total_profit_with_sale']}: {format_decimal(total_profit_with_sale)} USD
-╠──────────────────────────────────────────────────────────────╤
-║ {texts[language]['iqd_results']}:
-║ {texts[language]['total_eggs']}: {format_decimal(total_eggs)}
-║ {texts[language]['total_income']}: {format_decimal(total_income * 1480)} IQD
-║ {texts[language]['total_feed']}: {format_decimal(total_feed_cost * 1480)} IQD
-║ {texts[language]['total_first_year_profit']}: {format_decimal(total_net_profit_before_rent * 1480)} IQD
-║ {texts[language]['total_rent']}: {format_decimal(total_rent * 1480)} IQD
-║ {texts[language]['total_net_profit']}: {format_decimal(total_net_profit * 1480)} IQD
-║ {texts[language]['total_profit_with_sale']}: {format_decimal(total_profit_with_sale * 1480)} IQD
-╚══════════════════════════════════════════════════════════════╝"""
-            
-            st.markdown(f"### ✨ {texts[language]['summary']}")
-            st.code(results_text)
-            
-            # ثالثاً (اختياري): عرض الرسم البياني 
-            # إذا كان غير مطلوب يمكن إزالة هذا الجزء
-            chart_df = pd.DataFrame({
-                texts[language]["category"]: [
-                    f"💰 {texts[language]['total_income']}",
-                    f"🌽 {texts[language]['total_feed']}",
-                    f"📈 {texts[language]['total_first_year_profit']}",
-                    f"🏠 {texts[language]['total_rent']}",
-                    f"💰 {texts[language]['total_net_profit']}"
-                ],
-                texts[language]["value"]: [
-                    total_income_display,
-                    total_feed_cost_display,
-                    total_net_profit_before_rent_display,
-                    total_rent_display,
-                    total_net_profit_display
-                ]
-            })
-            
-            fig = px.pie(
-                chart_df,
-                values=texts[language]["value"],
-                names=texts[language]["category"],
-                title=texts[language]["total_summary"],
-                color_discrete_sequence=['#4CAF50', '#FF9800', '#F44336', '#9C27B0']
-            )
-            
-            fig.update_traces(
-                textposition='outside',
-                textinfo='percent+label'
-            )
-            
-            fig.update_layout(
-                title_x=0.5,
-                title_font_size=24,
-                showlegend=True,
-                legend=dict(
-                    orientation="h",
-                    yanchor="bottom",
-                    y=-0.2,
-                    xanchor="center",
-                    x=0.5
-                ),
-                margin=dict(t=60, l=0, r=0, b=0),
-                height=500,
-                paper_bgcolor='rgba(0,0,0,0)',
-                plot_bgcolor='rgba(0,0,0,0)'
-            )
-            
-            st.plotly_chart(fig, use_container_width=True)
-    else:
-        st.warning(get_error_message("no_chicken_data", language))
-
-# زر إعادة التعيين
-if st.button(texts[language]["reset"], type="secondary"):
-    # مسح بيانات الدجاج المخزنة في session_state
-    if 'chicken_data' in st.session_state:
-        st.session_state.chicken_data = []
-    st.success(get_error_message("reset_success", language))
-    st.rerun()
-
-# إضافة الأيقونات والروابط
-st.markdown("""
-    <style>
-        .social-links {
-            display: flex;
-            justify-content: center;
-            gap: 25px;
-            margin: 30px 0 20px;
-        }
-        
-        .social-links a {
-            display: inline-block;
-            transition: all 0.3s ease;
-        }
-        
-        .social-links img {
-            width: 36px;
-            height: 36px;
-            filter: brightness(1);
-            transition: all 0.3s ease;
-        }
-        
-        .social-links a:hover img {
-            transform: translateY(-3px);
-            filter: brightness(1.2);
-        }
-    </style>
-    <div class="social-links">
-        <a href="https://farm.newyolk.io/" target="_blank">
-            <img src="https://cdn-icons-png.flaticon.com/512/3059/3059997.png" alt="Website">
-        </a>
-        <a href="https://discord.gg/RYDExGGWXh" target="_blank">
-            <img src="https://cdn-icons-png.flaticon.com/512/5968/5968756.png" alt="Discord">
-        </a>
-        <a href="https://t.me/newyolkfarm" target="_blank">
-            <img src="https://upload.wikimedia.org/wikipedia/commons/8/82/Telegram_logo.svg" alt="Telegram">
-        </a>
-        <a href="https://www.facebook.com/newyolkfarming" target="_blank">
-            <img src="https://upload.wikimedia.org/wikipedia/commons/5/51/Facebook_f_logo_%282019%29.svg" alt="Facebook">
-        </a>
-    </div>
-    
-    <style>
-        .copyright {
-            text-align: center;
-            color: rgba(255,255,255,0.9);
-            padding: 24px 0;
-            font-size: 22px !important;
-            margin-top: 30px;
-            border-top: 1px solid rgba(255,255,255,0.1);
-            font-weight: 600;
-            letter-spacing: 0.5px;
-        }
-    </style>
-    <div class="copyright">By Tariq Al-Yaseen &copy; 2025-2026</div>
-    """,
-    unsafe_allow_html=True
-)
-
-st.markdown("""
-    <style>
-        /* تحسين الإيموجي في العنوان */
-        .emoji-link {
-            text-decoration: none;
-            font-size: 24px !important;
-            display: inline-block;
-            transition: all 0.3s ease;
-            line-height: 1;
-            cursor: pointer;
-            margin-right: 8px;
-        }
-        
-        .emoji-link:hover {
-            transform: scale(1.2) rotate(10deg);
-        }
-        
-        .title {
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            margin-bottom: 12px;
-        }
-        
-        .title-text {
-            background: linear-gradient(120deg, #ffffff, #e2e2e2);
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-            text-shadow: 0 2px 4px rgba(0,0,0,0.1);
-            font-size: 32px;
-            font-weight: bold;
-        }
-    </style>
-""", unsafe_allow_html=True)
-
-st.markdown("""
-    <head>
-        <meta charset="UTF-8">
-        <meta name="viewport" content="width=device-width, initial-scale=1.0">
-        <link rel="icon" type="image/png" href="https://cdn-icons-png.flaticon.com/512/3059/3059997.png">
-        <title>New Yolk Calculator</title>
-    </head>
-""", unsafe_allow_html=True)
-
-# إضافة زر نسخ النتائج باستخدام JavaScript
-def add_copy_button(text, button_text):
-    st.markdown(f"""
-        <div style="position: relative;">
-            <textarea id="clipboard-text" style="position: absolute; left: -9999px;">{text}</textarea>
-            <button onclick="copyToClipboard('clipboard-text')">{button_text}</button>
-        </div>
-    """, unsafe_allow_html=True)
