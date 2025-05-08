@@ -645,7 +645,10 @@ texts = {
         "no_chicken_data": "لا توجد بيانات دجاج مدخلة حتى الآن!",
         "not_first_year_chicken": "لا يمكن بيع الدجاجة لأنها ليست في السنة الأولى (عدد البيض أقل من 260)",
         "summary_egg_price": "مجموع سعر البيض 🥚",
-        "summary_feed_price": "مجموع سعر العلف 🌽"
+        "summary_feed_price": "مجموع سعر العلف 🌽",
+        "chicken_profit_achievement": "📊 كم ربحت من الدجاجة 📊",
+        "achievement_percentage": "نسبة الإنجاز:",
+        "maximum_potential_profit": "الربح المحتمل عند اكتمال دورة الدجاجة:"
     },
     "English": {
         "title": "Chicken Calculator - NewYolk",
@@ -705,7 +708,10 @@ texts = {
         "no_chicken_data": "No chicken data entered yet!",
         "not_first_year_chicken": "Chicken cannot be sold as it's not in the first year (egg count less than 260)",
         "summary_egg_price": "Total Egg Price 🥚",
-        "summary_feed_price": "Total Feed Price 🌽"
+        "summary_feed_price": "Total Feed Price 🌽",
+        "chicken_profit_achievement": "📊 How Much You've Earned From The Chicken 📊",
+        "achievement_percentage": "Achievement Percentage:",
+        "maximum_potential_profit": "Maximum Potential Profit:"
     },
     "Română": {
         "title": "Calculator Găini - NewYolk",
@@ -765,7 +771,10 @@ texts = {
         "no_chicken_data": "Nu există date despre găini introduse încă!",
         "not_first_year_chicken": "Găina nu poate fi vândută deoarece nu este în primul an (numărul de ouă mai mic de 260)",
         "summary_egg_price": "Preț Total Ouă 🥚",
-        "summary_feed_price": "Preț Total Furaje 🌽"
+        "summary_feed_price": "Preț Total Furaje 🌽",
+        "chicken_profit_achievement": "📊 Cât Ați Câștigat Din Găină 📊",
+        "achievement_percentage": "Procentajul de Realizare:",
+        "maximum_potential_profit": "Profitul Maxim Potențial:"
     }
 }
 
@@ -1039,6 +1048,17 @@ if calculation_type == texts[language]["chicken_profits"]:
                 profit_with_sale = 0
                 if eggs_value >= 260 and chicken_sale_price_value > 0:
                     profit_with_sale = net_profit_before_rent + chicken_sale_price_value
+                
+                # حساب الربح الأقصى المحتمل عند 580 بيضة و730 يوم
+                max_egg_price = 580 * float(new_egg_price)
+                max_feed_cost = (730 * 2) * float(new_feed_price)
+                max_rent = 6  # دائماً 6 دولار لأن عدد البيض سيكون 580 > 260
+                max_profit_before_rent = max_egg_price - max_feed_cost
+                max_potential_profit = max_profit_before_rent - max_rent
+                
+                # حساب نسبة الإنجاز
+                achievement_percentage = (net_profit / max_potential_profit) * 100 if max_potential_profit > 0 else 0
+                achievement_percentage = min(100, max(0, achievement_percentage))  # التأكد من أن النسبة بين 0 و100
 
                 # تحويل العملة
                 if currency == "IQD":
@@ -1047,12 +1067,13 @@ if calculation_type == texts[language]["chicken_profits"]:
                     net_profit_before_rent = net_profit_before_rent * 1480
                     total_rent = total_rent * 1480
                     net_profit = net_profit * 1480
+                    max_potential_profit = max_potential_profit * 1480
                     if profit_with_sale > 0:
                         profit_with_sale = profit_with_sale * 1480
                     chicken_sale_price_value = chicken_sale_price_value * 1480 if chicken_sale_price_value > 0 else 0
                 else:
-                    total_egg_price, total_feed_cost, net_profit_before_rent, total_rent, net_profit = (
-                        total_egg_price, total_feed_cost, net_profit_before_rent, total_rent, net_profit
+                    total_egg_price, total_feed_cost, net_profit_before_rent, total_rent, net_profit, max_potential_profit = (
+                        total_egg_price, total_feed_cost, net_profit_before_rent, total_rent, net_profit, max_potential_profit
                     )
 
                 # تنسيق التاريخ والوقت حسب توقيت بغداد
@@ -1102,6 +1123,13 @@ if calculation_type == texts[language]["chicken_profits"]:
 ║ {texts[language]['first_year_rental']}: {format_decimal(total_rent * 1480)} IQD
 ║ {texts[language]['final_profit']}: {format_decimal(net_profit * 1480)} IQD"""
 
+                # إضافة قسم "كم ربحت من الدجاجة" لملخص النتائج
+                results_text += f"""
+╟──────────────────────────────────────────────────────────────────╢
+║ {texts[language]['chicken_profit_achievement']}:
+║ {texts[language]['maximum_potential_profit']} {format_decimal(max_potential_profit)} {currency}
+║ {texts[language]['achievement_percentage']} {format_decimal(achievement_percentage)}%"""
+
                 # إغلاق المربع
                 results_text += """
 ╚══════════════════════════════════════════════════════════════════╝"""
@@ -1149,7 +1177,34 @@ if calculation_type == texts[language]["chicken_profits"]:
                 })
                 fig = create_profit_chart(chart_df, language)
                 st.plotly_chart(fig, use_container_width=True)
-
+                
+                # عرض قسم "كم ربحت من الدجاجة" مع نسبة الإنجاز وشريط التقدم
+                st.subheader(texts[language]["chicken_profit_achievement"])
+                
+                # عرض الربح المحتمل ونسبة الإنجاز
+                col_achieve1, col_achieve2 = st.columns(2)
+                
+                with col_achieve1:
+                    st.markdown(f"**{texts[language]['maximum_potential_profit']}** {format_decimal(max_potential_profit)} {currency}")
+                
+                with col_achieve2:
+                    st.markdown(f"**{texts[language]['achievement_percentage']}** {format_decimal(achievement_percentage)}%")
+                
+                # إضافة شريط التقدم
+                # تحديد لون شريط التقدم حسب النسبة
+                progress_color = "normal"
+                if achievement_percentage > 75:
+                    progress_color = "green"
+                elif achievement_percentage > 50:
+                    progress_color = "blue"
+                elif achievement_percentage > 25:
+                    progress_color = "orange"
+                else:
+                    progress_color = "red"
+                
+                # عرض شريط التقدم مع اللون المناسب
+                st.progress(achievement_percentage / 100, text=f"{format_decimal(achievement_percentage)}%")
+                
                 # عرض ملخص النتائج في النهاية
                 st.markdown(f"### ✨ {texts[language]['summary']}")
                 st.code(results_text)
@@ -1510,6 +1565,10 @@ elif calculation_type == texts[language]["group_calculation"]:
 ║ {texts[language]['total_rent']}: {format_decimal(total_rent * 1480)} IQD
 ║ {texts[language]['total_net_profit']}: {format_decimal(total_net_profit * 1480)} IQD
 ║ {texts[language]['total_profit_with_sale']}: {format_decimal(total_profit_with_sale * 1480)} IQD
+╠──────────────────────────────────────────────────────────────╤
+║ {texts[language]['chicken_profit_achievement']}:
+║ {texts[language]['maximum_potential_profit']} {format_decimal(total_max_potential_profit_display)} {display_currency}
+║ {texts[language]['achievement_percentage']} {format_decimal(group_achievement_percentage)}%
 ╚══════════════════════════════════════════════════════════════╝"""
             
             st.markdown(f"### ✨ {texts[language]['summary']}")
@@ -1565,6 +1624,93 @@ elif calculation_type == texts[language]["group_calculation"]:
             )
             
             st.plotly_chart(fig, use_container_width=True)
+            
+            # حساب الربح الأقصى المحتمل لجميع الدجاج
+            # لكل دجاجة: نحسب الربح الأقصى المحتمل عند 580 بيضة و730 يوم
+            max_egg_price_per_chicken = 580 * float(new_egg_price)
+            max_feed_cost_per_chicken = (730 * 2) * float(new_feed_price)
+            max_rent_per_chicken = 6  # دائماً 6 دولار لأن عدد البيض سيكون 580 > 260
+            max_profit_before_rent_per_chicken = max_egg_price_per_chicken - max_feed_cost_per_chicken
+            max_potential_profit_per_chicken = max_profit_before_rent_per_chicken - max_rent_per_chicken
+            
+            # المجموع لكل الدجاج
+            total_max_potential_profit = max_potential_profit_per_chicken * len(st.session_state.chicken_data)
+            
+            # تحويل العملة للربح الأقصى
+            if currency == "IQD":
+                total_max_potential_profit_display = total_max_potential_profit * 1480
+            else:
+                total_max_potential_profit_display = total_max_potential_profit
+            
+            # حساب نسبة الإنجاز
+            group_achievement_percentage = (total_net_profit / total_max_potential_profit) * 100 if total_max_potential_profit > 0 else 0
+            group_achievement_percentage = min(100, max(0, group_achievement_percentage))  # التأكد من أن النسبة بين 0 و100
+            
+            # عرض قسم "كم ربحت من الدجاجة" مع نسبة الإنجاز وشريط التقدم
+            st.subheader(texts[language]["chicken_profit_achievement"])
+            
+            # عرض الربح المحتمل ونسبة الإنجاز
+            col_achieve1, col_achieve2 = st.columns(2)
+            
+            with col_achieve1:
+                st.markdown(f"**{texts[language]['maximum_potential_profit']}** {format_decimal(total_max_potential_profit_display)} {display_currency}")
+            
+            with col_achieve2:
+                st.markdown(f"**{texts[language]['achievement_percentage']}** {format_decimal(group_achievement_percentage)}%")
+            
+            # إضافة شريط التقدم
+            # تحديد لون شريط التقدم حسب النسبة
+            progress_color = "normal"
+            if group_achievement_percentage > 75:
+                progress_color = "green"
+            elif group_achievement_percentage > 50:
+                progress_color = "blue"
+            elif group_achievement_percentage > 25:
+                progress_color = "orange"
+            else:
+                progress_color = "red"
+            
+            # عرض شريط التقدم مع اللون المناسب
+            st.progress(group_achievement_percentage / 100, text=f"{format_decimal(group_achievement_percentage)}%")
+            
+            # ثانياً: عرض ملخص النتائج النصي
+            # تنسيق التاريخ والوقت حسب توقيت بغداد
+            current_time = datetime.now() + timedelta(hours=3)  # تحويل التوقيت إلى توقيت بغداد
+            date_str = current_time.strftime("%Y-%m-%d")
+            time_str = current_time.strftime("%I:%M %p")
+            
+            # إنشاء نص النتائج
+            results_text = f"""
+╔══════════════════════════════════════════════════════════════╗
+║                  {texts[language]['summary']}                    ║
+╠══════════════════════════════════════════════════════════════╣
+║ {texts[language]['calculation_time']}: {date_str} {time_str}
+╠──────────────────────────────────────────────────────────────╤
+║ {texts[language]['usd_results']}:
+║ {texts[language]['total_eggs']}: {format_decimal(total_eggs)}
+║ {texts[language]['total_income']}: {format_decimal(total_income)} USD
+║ {texts[language]['total_feed']}: {format_decimal(total_feed_cost)} USD
+║ {texts[language]['total_first_year_profit']}: {format_decimal(total_net_profit_before_rent)} USD
+║ {texts[language]['total_rent']}: {format_decimal(total_rent)} USD
+║ {texts[language]['total_net_profit']}: {format_decimal(total_net_profit)} USD
+║ {texts[language]['total_profit_with_sale']}: {format_decimal(total_profit_with_sale)} USD
+╠──────────────────────────────────────────────────────────────╤
+║ {texts[language]['iqd_results']}:
+║ {texts[language]['total_eggs']}: {format_decimal(total_eggs)}
+║ {texts[language]['total_income']}: {format_decimal(total_income * 1480)} IQD
+║ {texts[language]['total_feed']}: {format_decimal(total_feed_cost * 1480)} IQD
+║ {texts[language]['total_first_year_profit']}: {format_decimal(total_net_profit_before_rent * 1480)} IQD
+║ {texts[language]['total_rent']}: {format_decimal(total_rent * 1480)} IQD
+║ {texts[language]['total_net_profit']}: {format_decimal(total_net_profit * 1480)} IQD
+║ {texts[language]['total_profit_with_sale']}: {format_decimal(total_profit_with_sale * 1480)} IQD
+╠──────────────────────────────────────────────────────────────╤
+║ {texts[language]['chicken_profit_achievement']}:
+║ {texts[language]['maximum_potential_profit']} {format_decimal(total_max_potential_profit_display)} {display_currency}
+║ {texts[language]['achievement_percentage']} {format_decimal(group_achievement_percentage)}%
+╚══════════════════════════════════════════════════════════════╝"""
+            
+            st.markdown(f"### ✨ {texts[language]['summary']}")
+            st.code(results_text)
     else:
         st.warning(get_error_message("no_chicken_data", language))
 
