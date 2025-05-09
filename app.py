@@ -708,7 +708,6 @@ texts = {
         "total_first_year_profit": "إجمالي الربح في السنة الاولى 📈",
         "total_rewards": "إجمالي عدد البيض اليومي 🥚",
         "total_food_cost": "اجمالي عدد العلف اليومي 🌽",
-        "first_year_rental": "الإيجار للسنة الثانية 🏠",
         "final_profit": "الربح الصافي خلال السنتين 💰",
         "calculation_time": "وقت الحساب ⏰",
         "summary": "ملخص النتائج ✨",
@@ -752,7 +751,9 @@ texts = {
         "total_remaining_eggs": "إجمالي البيض المتبقي 🥚",
         "total_remaining_days": "إجمالي الأيام المتبقية 📅",
         "total_remaining_profit": "إجمالي الربح المتوقع من المتبقي 📊",
-        "current_profit": " "
+        "current_profit": "الربح المتوقع من المتبقي 📈",
+        "first_year_rental": "الإيجار للسنة الثانية 🏠",
+        "remaining_rental": " "
     },
     "English": {
         "title": "Chicken Calculator - NewYolk",
@@ -779,7 +780,6 @@ texts = {
         "total_first_year_profit": "Total First Year Profit 📈",
         "total_rewards": "Total Daily Eggs Count 🥚",
         "total_food_cost": "Total Daily Feed Amount 🌽",
-        "first_year_rental": "Second Year Rental 🏠",
         "final_profit": "Two Years Net Profit 💰",
         "calculation_time": "Calculation Time ⏰",
         "summary": "Results Summary ✨",
@@ -823,7 +823,9 @@ texts = {
         "total_remaining_eggs": "Total Remaining Eggs 🥚",
         "total_remaining_days": "Total Remaining Days 📅",
         "total_remaining_profit": "Total Expected Remaining Profit 📊",
-        "current_profit": " "
+        "current_profit": "Expected Remaining Profit 📈",
+        "first_year_rental": "Second Year Rental 🏠",
+        "remaining_rental": " "
     },
     "Română": {
         "title": "Calculator Găini - NewYolk",
@@ -850,7 +852,6 @@ texts = {
         "total_first_year_profit": "Profit Total În Primul An 📈",
         "total_rewards": "Numărul Total De Ouă Zilnice 🥚",
         "total_food_cost": "Cantitatea Totală De Furaje Zilnice 🌽",
-        "first_year_rental": "Chirie Pentru Al Doilea An 🏠",
         "final_profit": "Profit Net În Cei Doi Ani 💰",
         "calculation_time": "Ora Calculului ⏰",
         "summary": "Rezumatul Rezultatelor ✨",
@@ -888,13 +889,15 @@ texts = {
         "summary_feed_price": "Preț Total Furaje 🌽",
         "remaining_eggs": "Ouă Rămase 🥚",
         "remaining_days": "Zile Rămase 📅",
-        "remaining_egg_income": "Venit Preconizat din Ouăle Rămase 💵",
-        "remaining_feed_cost": "Cost Furaje Rămas 🌽",
+        "remaining_egg_income": "Venitul Ouălor Primite Până Acum 💵",
+        "remaining_feed_cost": "Cost Furaje Consumate 🌽",
         "expected_remaining_profit": "Profit Actual Primit 💵",
         "total_remaining_eggs": "Total Ouă Rămase 🥚",
         "total_remaining_days": "Total Zile Rămase 📅",
         "total_remaining_profit": "Total Profit Preconizat Rămas 📊",
-        "current_profit": " "
+        "current_profit": "Profit Preconizat Rămas 📈",
+        "first_year_rental": "Chirie Pentru Al Doilea An 🏠",
+        "remaining_rental": " "
     }
 }
 
@@ -1222,13 +1225,16 @@ if calculation_type == texts[language]["chicken_profits"]:
                 remaining_feed_cost = remaining_days * 2 * float(new_feed_price)
                 
                 # حساب الربح الحالي المستلم
-                current_profit = net_profit_before_rent
+                current_egg_income = eggs_value * float(new_egg_price)
+                current_feed_cost = days_value * 2 * float(new_feed_price)
+                current_rent = 6 if eggs_value >= 260 else 0
+                current_profit = current_egg_income - current_feed_cost - current_rent
                 
                 # خصم قيمة الإيجار من الربح المتوقع إذا كان البيض المتبقي أكثر من 260
                 remaining_rent = 6 if remaining_eggs >= 260 else 0
                 expected_remaining_profit = remaining_egg_income - remaining_feed_cost - remaining_rent
                 
-                # تحويل عملة الربح المتوقع من المتبقي
+                # تحويل العملة
                 if currency == "IQD":
                     remaining_egg_income_display = remaining_egg_income * 1480
                     remaining_feed_cost_display = remaining_feed_cost * 1480
@@ -1274,10 +1280,8 @@ if calculation_type == texts[language]["chicken_profits"]:
                 results_text += f"""
 ║ {texts[language]['remaining_eggs']}: {format_decimal(remaining_eggs)}
 ║ {texts[language]['remaining_days']}: {format_decimal(remaining_days)}
-║ {texts[language]['remaining_egg_income']}: {format_decimal(remaining_egg_income_display)} USD
-║ {texts[language]['remaining_feed_cost']}: {format_decimal(remaining_feed_cost_display)} USD
-║ {texts[language]['first_year_rental']}: {format_decimal(remaining_rent_display)} USD
-║ {texts[language]['current_profit']}: {format_decimal(current_profit_display)} USD
+║ {texts[language]['remaining_egg_income']}: {format_decimal(current_profit_display)} USD
+║ {texts[language]['remaining_feed_cost']}: {format_decimal(current_feed_cost)} USD
 ║ {texts[language]['expected_remaining_profit']}: {format_decimal(expected_remaining_profit_display)} USD"""
 
                 # استكمال النص
@@ -1303,10 +1307,8 @@ if calculation_type == texts[language]["chicken_profits"]:
                 results_text += f"""
 ║ {texts[language]['remaining_eggs']}: {format_decimal(remaining_eggs)}
 ║ {texts[language]['remaining_days']}: {format_decimal(remaining_days)}
-║ {texts[language]['remaining_egg_income']}: {format_decimal(remaining_egg_income_display * 1480)} IQD
-║ {texts[language]['remaining_feed_cost']}: {format_decimal(remaining_feed_cost_display * 1480)} IQD
-║ {texts[language]['first_year_rental']}: {format_decimal(remaining_rent_display * 1480)} IQD
-║ {texts[language]['current_profit']}: {format_decimal(current_profit_display * 1480)} IQD
+║ {texts[language]['remaining_egg_income']}: {format_decimal(current_profit_display * 1480)} IQD
+║ {texts[language]['remaining_feed_cost']}: {format_decimal(current_feed_cost * 1480)} IQD
 ║ {texts[language]['expected_remaining_profit']}: {format_decimal(expected_remaining_profit_display * 1480)} IQD"""
 
                 # إغلاق المربع
@@ -1339,18 +1341,21 @@ if calculation_type == texts[language]["chicken_profits"]:
                 chart_values.append(total_rent)
                 chart_values.append(net_profit)
                 
-                # إضافة الربح المتوقع من المتبقي إلى الرسم البياني
+                # إضافة معلومات الربح الحالي والربح المتوقع من المتبقي إلى الرسم البياني
                 chart_categories.append(f"🥚 {texts[language]['remaining_eggs']}")
                 chart_categories.append(f"📅 {texts[language]['remaining_days']}")
                 chart_categories.append(f"💵 {texts[language]['remaining_egg_income']}")
                 chart_categories.append(f"🌽 {texts[language]['remaining_feed_cost']}")
-                chart_categories.append(f"🏠 {texts[language]['first_year_rental']}")
-                chart_categories.append(f"📊 {texts[language]['expected_remaining_profit']}")
                 chart_values.append(remaining_eggs)
                 chart_values.append(remaining_days)
-                chart_values.append(remaining_egg_income_display)
+                chart_values.append(current_profit_display)
                 chart_values.append(remaining_feed_cost_display)
-                chart_values.append(remaining_rent_display)
+                
+                # إضافة الربح المتوقع من المتبقي
+                if remaining_rent_display > 0:
+                    chart_categories.append(f"🏠 {texts[language]['first_year_rental']}")
+                    chart_values.append(remaining_rent_display)
+                chart_categories.append(f"📊 {texts[language]['expected_remaining_profit']}")
                 chart_values.append(expected_remaining_profit_display)
                 
                 df = pd.DataFrame({
@@ -1577,17 +1582,29 @@ elif calculation_type == remaining_profit_text:
 ║ {texts[language]['usd_results']}:
 ║ {texts[language]['remaining_eggs']}: {format_decimal(remaining_eggs)}
 ║ {texts[language]['remaining_days']}: {format_decimal(remaining_days)}
-║ {texts[language]['remaining_egg_income']}: {format_decimal(remaining_egg_income_display)} USD
-║ {texts[language]['remaining_feed_cost']}: {format_decimal(remaining_feed_cost_display)} USD
-║ {texts[language]['first_year_rental']}: {format_decimal(remaining_rent_display)} USD
+║ {texts[language]['remaining_egg_income']}: {format_decimal(current_profit_display)} USD
+║ {texts[language]['remaining_feed_cost']}: {format_decimal(current_feed_cost)} USD"""
+
+                # إضافة الإيجار فقط إذا كان موجودًا
+                if remaining_rent > 0:
+                    results_text += f"""
+║ {texts[language]['first_year_rental']}: {format_decimal(remaining_rent_display)} USD"""
+                    
+                results_text += f"""
 ║ {texts[language]['expected_remaining_profit']}: {format_decimal(expected_remaining_profit_display)} USD
 ╟──────────────────────────────────────────────────────────────────╢
 ║ {texts[language]['iqd_results']}:
 ║ {texts[language]['remaining_eggs']}: {format_decimal(remaining_eggs)}
 ║ {texts[language]['remaining_days']}: {format_decimal(remaining_days)}
-║ {texts[language]['remaining_egg_income']}: {format_decimal(remaining_egg_income_display * 1480)} IQD
-║ {texts[language]['remaining_feed_cost']}: {format_decimal(remaining_feed_cost_display * 1480)} IQD
-║ {texts[language]['first_year_rental']}: {format_decimal(remaining_rent_display * 1480)} IQD
+║ {texts[language]['remaining_egg_income']}: {format_decimal(current_profit_display * 1480)} IQD
+║ {texts[language]['remaining_feed_cost']}: {format_decimal(current_feed_cost * 1480)} IQD"""
+
+                # إضافة الإيجار فقط إذا كان موجودًا
+                if remaining_rent > 0:
+                    results_text += f"""
+║ {texts[language]['first_year_rental']}: {format_decimal(remaining_rent_display * 1480)} IQD"""
+                    
+                results_text += f"""
 ║ {texts[language]['expected_remaining_profit']}: {format_decimal(expected_remaining_profit_display * 1480)} IQD
 ╚══════════════════════════════════════════════════════════════════╝"""
 
@@ -1598,18 +1615,21 @@ elif calculation_type == remaining_profit_text:
                         f"📅 {texts[language]['remaining_days']}",
                         f"💵 {texts[language]['remaining_egg_income']}",
                         f"🌽 {texts[language]['remaining_feed_cost']}",
-                        f"🏠 {texts[language]['first_year_rental']}",
-                        f"📈 {texts[language]['expected_remaining_profit']}"
                     ],
                     texts[language]["value"]: [
                         remaining_eggs,
                         remaining_days,
-                        remaining_egg_income_display,
+                        current_profit_display,
                         remaining_feed_cost_display,
-                        remaining_rent_display,
-                        expected_remaining_profit_display
                     ]
                 })
+                
+                # إضافة الإيجار إذا كان موجودًا
+                if remaining_rent > 0:
+                    df.loc[len(df)] = [f"🏠 {texts[language]['first_year_rental']}", remaining_rent_display]
+                
+                # إضافة الربح المتوقع من المتبقي
+                df.loc[len(df)] = [f"📈 {texts[language]['expected_remaining_profit']}", expected_remaining_profit_display]
                 
                 # تنسيق الجدول النهائي
                 df = df.round(2)
@@ -1627,22 +1647,22 @@ elif calculation_type == remaining_profit_text:
                     texts[language]["category"]: [
                         f"💵 {texts[language]['remaining_egg_income']}",
                         f"🌽 {texts[language]['remaining_feed_cost']}",
-                        f"🏠 {texts[language]['first_year_rental']}",
-                        f"📈 {texts[language]['expected_remaining_profit']}"
                     ],
                     texts[language]["value"]: [
-                        remaining_egg_income_display,
+                        current_profit_display,
                         remaining_feed_cost_display,
-                        remaining_rent_display,
-                        expected_remaining_profit_display
                     ]
                 })
+                
+                # إضافة الإيجار إذا كان موجودًا
+                if remaining_rent > 0:
+                    chart_df.loc[len(chart_df)] = [f"🏠 {texts[language]['first_year_rental']}", remaining_rent_display]
+                
+                # إضافة الربح المتوقع من المتبقي
+                chart_df.loc[len(chart_df)] = [f"📈 {texts[language]['expected_remaining_profit']}", expected_remaining_profit_display]
+                
                 fig = create_profit_chart(chart_df, language)
                 st.plotly_chart(fig, use_container_width=True)
-
-                # عرض ملخص النتائج في النهاية
-                st.markdown(f"### ✨ {texts[language]['summary']}")
-                st.code(results_text)
         except ValueError:
             st.error(get_error_message("invalid_number", language))
     else:
