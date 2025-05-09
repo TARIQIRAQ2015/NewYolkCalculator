@@ -598,7 +598,7 @@ texts = {
         "calculation_type": "نوع الحساب 📊",
         "chicken_profits": "أرباح الدجاجة",
         "daily_rewards": "المكافآت اليومية",
-        "remaining_profit": "الربح المتوقع من المتبقي",
+        "remaining_profit": "البيض المستهلك",
         "eggs_input": "عدد البيض 🥚",
         "days_input": "عدد الأيام 📅",
         "food_input": "عدد الطعام المطلوب 🌽",
@@ -648,15 +648,17 @@ texts = {
         "not_first_year_chicken": "لا يمكن بيع الدجاجة لأنها ليست في السنة الأولى (عدد البيض أقل من 260)",
         "summary_egg_price": "مجموع سعر البيض 🥚",
         "summary_feed_price": "مجموع سعر العلف 🌽",
-        "remaining_eggs": "البيض المتبقي 🥚",
-        "remaining_days": "الأيام المتبقية 📅",
-        "remaining_egg_income": "دخل البيض المتبقي 🥚",
-        "remaining_feed_cost": "تكلفة العلف المتبقية 🌽",
+        "remaining_eggs": "عدد البيض المستهلك 🥚",
+        "remaining_days": "عدد الايام 📅",
+        "remaining_egg_income": "دخل البيض المستهلك 🥚",
+        "remaining_feed_cost": "تكلفة العلف المستهلكة 🌽",
         "remaining_profit_value": "الربح المتوقع من المتبقي 📊",
         "max_eggs": "الحد الأقصى للبيض",
         "max_days": "الحد الأقصى للأيام",
-        "total_remaining_eggs": "إجمالي البيض المتبقي 🥚",
-        "total_remaining_days": "إجمالي الأيام المتبقية 📅",
+        "total_remaining_eggs": "إجمالي البيض المستهلك 🥚",
+        "total_remaining_days": "إجمالي عدد الايام 📅",
+        "total_remaining_egg_income": "إجمالي دخل البيض المستهلك 🥚",
+        "total_remaining_feed_cost": "إجمالي تكلفة العلف المستهلكة 🌽",
         "total_remaining_profit": "إجمالي الربح المتوقع من المتبقي 📊"
     },
     "English": {
@@ -670,7 +672,7 @@ texts = {
         "calculation_type": "Calculation Type 📊",
         "chicken_profits": "Chicken Profit",
         "daily_rewards": "Daily Rewards",
-        "remaining_profit": "Expected Remaining Profit",
+        "remaining_profit": "Consumed Eggs",
         "eggs_input": "Number of Eggs 🥚",
         "days_input": "Number of Days 📅",
         "food_input": "Amount of Food Needed 🌽",
@@ -720,15 +722,17 @@ texts = {
         "not_first_year_chicken": "Chicken cannot be sold as it's not in the first year (egg count less than 260)",
         "summary_egg_price": "Total Egg Price 🥚",
         "summary_feed_price": "Total Feed Price 🌽",
-        "remaining_eggs": "Remaining Eggs 🥚",
-        "remaining_days": "Remaining Days 📅",
-        "remaining_egg_income": "Remaining Egg Income 🥚",
-        "remaining_feed_cost": "Remaining Feed Cost 🌽",
+        "remaining_eggs": "Consumed Eggs Count 🥚",
+        "remaining_days": "Days Count 📅",
+        "remaining_egg_income": "Consumed Eggs Income 🥚",
+        "remaining_feed_cost": "Consumed Feed Cost 🌽",
         "remaining_profit_value": "Expected Remaining Profit 📊",
         "max_eggs": "Maximum Eggs",
         "max_days": "Maximum Days",
-        "total_remaining_eggs": "Total Remaining Eggs 🥚",
-        "total_remaining_days": "Total Remaining Days 📅",
+        "total_remaining_eggs": "Total Consumed Eggs 🥚",
+        "total_remaining_days": "Total Days Count 📅",
+        "total_remaining_egg_income": "Total Consumed Eggs Income 🥚",
+        "total_remaining_feed_cost": "Total Consumed Feed Cost 🌽",
         "total_remaining_profit": "Total Expected Remaining Profit 📊"
     },
     "Română": {
@@ -742,7 +746,7 @@ texts = {
         "calculation_type": "Tipul Calculului 📊",
         "chicken_profits": "Profit Găină",
         "daily_rewards": "Recompensele Zilnice",
-        "remaining_profit": "Profit Rămas Preconizat",
+        "remaining_profit": "Ouă Consumate",
         "eggs_input": "Număr de Ouă 🥚",
         "days_input": "Număr de Zile 📅",
         "food_input": "Cantitate de Hrană Necesară 🌽",
@@ -792,15 +796,17 @@ texts = {
         "not_first_year_chicken": "Găina nu poate fi vândută deoarece nu este în primul an (numărul de ouă mai mic de 260)",
         "summary_egg_price": "Preț Total Ouă 🥚",
         "summary_feed_price": "Preț Total Furaje 🌽",
-        "remaining_eggs": "Ouă Rămase 🥚",
-        "remaining_days": "Zile Rămase 📅",
-        "remaining_egg_income": "Venit din Ouă Rămase 🥚",
-        "remaining_feed_cost": "Cost Furaje Rămas 🌽",
+        "remaining_eggs": "Număr Ouă Consumate 🥚",
+        "remaining_days": "Număr Zile 📅",
+        "remaining_egg_income": "Venit din Ouă Consumate 🥚",
+        "remaining_feed_cost": "Cost Furaje Consumate 🌽",
         "remaining_profit_value": "Profit Preconizat din Restul 📊",
         "max_eggs": "Număr Maxim de Ouă",
         "max_days": "Număr Maxim de Zile",
-        "total_remaining_eggs": "Total Ouă Rămase 🥚",
-        "total_remaining_days": "Total Zile Rămase 📅",
+        "total_remaining_eggs": "Total Ouă Consumate 🥚",
+        "total_remaining_days": "Total Număr Zile 📅",
+        "total_remaining_egg_income": "Total Venit din Ouă Consumate 🥚",
+        "total_remaining_feed_cost": "Total Cost Furaje Consumate 🌽",
         "total_remaining_profit": "Total Profit Preconizat din Restul 📊"
     }
 }
@@ -1076,6 +1082,21 @@ if calculation_type == texts[language]["chicken_profits"]:
                 if eggs_value >= 260 and chicken_sale_price_value > 0:
                     profit_with_sale = net_profit_before_rent + chicken_sale_price_value
 
+                # حساب المتبقي للدجاجة
+                max_eggs = 580
+                max_days = 730
+                
+                # حساب المستهلك (بدلاً من المتبقي كما كان سابقًا)
+                consumed_eggs = eggs_value
+                consumed_days = days_value
+                
+                # حساب دخل البيض المستهلك وتكلفة العلف المستهلكة
+                consumed_egg_income = consumed_eggs * float(new_egg_price)
+                consumed_feed_cost = consumed_days * 2 * float(new_feed_price)
+                
+                # حساب الربح المتوقع من المستهلك
+                consumed_profit = consumed_egg_income - consumed_feed_cost
+
                 # تحويل العملة
                 if currency == "IQD":
                     total_egg_price = total_egg_price * 1480
@@ -1086,6 +1107,9 @@ if calculation_type == texts[language]["chicken_profits"]:
                     if profit_with_sale > 0:
                         profit_with_sale = profit_with_sale * 1480
                     chicken_sale_price_value = chicken_sale_price_value * 1480 if chicken_sale_price_value > 0 else 0
+                    consumed_egg_income = consumed_egg_income * 1480
+                    consumed_feed_cost = consumed_feed_cost * 1480
+                    consumed_profit = consumed_profit * 1480
                 else:
                     total_egg_price, total_feed_cost, net_profit_before_rent, total_rent, net_profit = (
                         total_egg_price, total_feed_cost, net_profit_before_rent, total_rent, net_profit
@@ -1117,7 +1141,12 @@ if calculation_type == texts[language]["chicken_profits"]:
                 # إضافة الإيجار والربح الصافي
                 results_text += f"""
 ║ {texts[language]['first_year_rental']}: {format_decimal(total_rent)} USD
-║ {texts[language]['final_profit']}: {format_decimal(net_profit)} USD"""
+║ {texts[language]['final_profit']}: {format_decimal(net_profit)} USD
+║ {texts[language]['remaining_eggs']}: {format_decimal(consumed_eggs)}
+║ {texts[language]['remaining_days']}: {format_decimal(consumed_days)}
+║ {texts[language]['remaining_egg_income']}: {format_decimal(consumed_egg_income)} USD
+║ {texts[language]['remaining_feed_cost']}: {format_decimal(consumed_feed_cost)} USD
+║ {texts[language]['remaining_profit_value']}: {format_decimal(consumed_profit)} USD"""
 
                 # استكمال النص
                 results_text += f"""
@@ -1136,7 +1165,12 @@ if calculation_type == texts[language]["chicken_profits"]:
                 # إضافة الإيجار والربح الصافي بالدينار العراقي
                 results_text += f"""
 ║ {texts[language]['first_year_rental']}: {format_decimal(total_rent * 1480)} IQD
-║ {texts[language]['final_profit']}: {format_decimal(net_profit * 1480)} IQD"""
+║ {texts[language]['final_profit']}: {format_decimal(net_profit * 1480)} IQD
+║ {texts[language]['remaining_eggs']}: {format_decimal(consumed_eggs)}
+║ {texts[language]['remaining_days']}: {format_decimal(consumed_days)}
+║ {texts[language]['remaining_egg_income']}: {format_decimal(consumed_egg_income * 1480)} IQD
+║ {texts[language]['remaining_feed_cost']}: {format_decimal(consumed_feed_cost * 1480)} IQD
+║ {texts[language]['remaining_profit_value']}: {format_decimal(consumed_profit * 1480)} IQD"""
 
                 # إغلاق المربع
                 results_text += """
@@ -1162,11 +1196,18 @@ if calculation_type == texts[language]["chicken_profits"]:
                     chart_values.append(chicken_sale_price_value)
                     chart_values.append(profit_with_sale)
                 
-                # إضافة الإيجار والربح الصافي في النهاية
+                # إضافة الإيجار والربح الصافي والمستهلك في النهاية
                 chart_categories.append(f"🏠 {texts[language]['first_year_rental']}")
                 chart_categories.append(f"💰 {texts[language]['final_profit']}")
+                chart_categories.append(f"🥚 {texts[language]['remaining_egg_income']}")
+                chart_categories.append(f"🌽 {texts[language]['remaining_feed_cost']}")
+                chart_categories.append(f"📊 {texts[language]['remaining_profit_value']}")
+                
                 chart_values.append(total_rent)
                 chart_values.append(net_profit)
+                chart_values.append(consumed_egg_income)
+                chart_values.append(consumed_feed_cost)
+                chart_values.append(consumed_profit)
                 
                 df = pd.DataFrame({
                     texts[language]["category"]: chart_categories,
@@ -1340,30 +1381,30 @@ elif calculation_type == texts[language]["remaining_profit"]:
                 max_eggs = 580
                 max_days = 730
                 
-                # حساب المتبقي
-                remaining_eggs = max_eggs - eggs_value
-                remaining_days = max_days - days_value
+                # حساب المستهلك
+                consumed_eggs = eggs_value
+                consumed_days = days_value
                 
-                # حساب الدخل المتوقع من البيض المتبقي
-                remaining_egg_income = remaining_eggs * float(new_egg_price)
+                # حساب دخل البيض المستهلك
+                consumed_egg_income = consumed_eggs * float(new_egg_price)
                 
-                # حساب تكلفة العلف للأيام المتبقية
-                remaining_feed_cost = remaining_days * 2 * float(new_feed_price)
+                # حساب تكلفة العلف المستهلكة
+                consumed_feed_cost = consumed_days * 2 * float(new_feed_price)
                 
-                # حساب الربح المتوقع من المتبقي
-                remaining_profit = remaining_egg_income - remaining_feed_cost
+                # حساب الربح المتوقع من المستهلك
+                consumed_profit = consumed_egg_income - consumed_feed_cost
                 
                 # تحويل العملة
                 if currency == "IQD":
                     conversion_rate = 1480
-                    remaining_egg_income_display = remaining_egg_income * conversion_rate
-                    remaining_feed_cost_display = remaining_feed_cost * conversion_rate
-                    remaining_profit_display = remaining_profit * conversion_rate
+                    consumed_egg_income_display = consumed_egg_income * conversion_rate
+                    consumed_feed_cost_display = consumed_feed_cost * conversion_rate
+                    consumed_profit_display = consumed_profit * conversion_rate
                     display_currency = "IQD"
                 else:
-                    remaining_egg_income_display = remaining_egg_income
-                    remaining_feed_cost_display = remaining_feed_cost
-                    remaining_profit_display = remaining_profit
+                    consumed_egg_income_display = consumed_egg_income
+                    consumed_feed_cost_display = consumed_feed_cost
+                    consumed_profit_display = consumed_profit
                     display_currency = "USD"
                 
                 # تنسيق التاريخ والوقت حسب توقيت بغداد
@@ -1380,18 +1421,18 @@ elif calculation_type == texts[language]["remaining_profit"]:
 ╟─────────────────────────────────────────────────────────────────────────╢
 ║ {texts[language]['max_eggs']}: {format_decimal(max_eggs)}
 ║ {texts[language]['max_days']}: {format_decimal(max_days)}
-║ {texts[language]['remaining_eggs']}: {format_decimal(remaining_eggs)}
-║ {texts[language]['remaining_days']}: {format_decimal(remaining_days)}
+║ {texts[language]['remaining_eggs']}: {format_decimal(consumed_eggs)}
+║ {texts[language]['remaining_days']}: {format_decimal(consumed_days)}
 ╟─────────────────────────────────────────────────────────────────────────╢
 ║ {texts[language]['usd_results']}:
-║ {texts[language]['remaining_egg_income']}: {format_decimal(remaining_egg_income)} USD
-║ {texts[language]['remaining_feed_cost']}: {format_decimal(remaining_feed_cost)} USD
-║ {texts[language]['remaining_profit_value']}: {format_decimal(remaining_profit)} USD
+║ {texts[language]['remaining_egg_income']}: {format_decimal(consumed_egg_income)} USD
+║ {texts[language]['remaining_feed_cost']}: {format_decimal(consumed_feed_cost)} USD
+║ {texts[language]['remaining_profit_value']}: {format_decimal(consumed_profit)} USD
 ╟─────────────────────────────────────────────────────────────────────────╢
 ║ {texts[language]['iqd_results']}:
-║ {texts[language]['remaining_egg_income']}: {format_decimal(remaining_egg_income * 1480)} IQD
-║ {texts[language]['remaining_feed_cost']}: {format_decimal(remaining_feed_cost * 1480)} IQD
-║ {texts[language]['remaining_profit_value']}: {format_decimal(remaining_profit * 1480)} IQD
+║ {texts[language]['remaining_egg_income']}: {format_decimal(consumed_egg_income * 1480)} IQD
+║ {texts[language]['remaining_feed_cost']}: {format_decimal(consumed_feed_cost * 1480)} IQD
+║ {texts[language]['remaining_profit_value']}: {format_decimal(consumed_profit * 1480)} IQD
 ╚═════════════════════════════════════════════════════════════════════════╝"""
 
                 # إنشاء DataFrame للرسم البياني
@@ -1404,11 +1445,11 @@ elif calculation_type == texts[language]["remaining_profit"]:
                         f"📊 {texts[language]['remaining_profit_value']}"
                     ],
                     texts[language]["value"]: [
-                        remaining_eggs,
-                        remaining_days,
-                        remaining_egg_income_display,
-                        remaining_feed_cost_display,
-                        remaining_profit_display
+                        consumed_eggs,
+                        consumed_days,
+                        consumed_egg_income_display,
+                        consumed_feed_cost_display,
+                        consumed_profit_display
                     ]
                 })
                 
@@ -1426,9 +1467,9 @@ elif calculation_type == texts[language]["remaining_profit"]:
                         f"📊 {texts[language]['remaining_profit_value']}"
                     ],
                     texts[language]["value"]: [
-                        remaining_egg_income_display,
-                        remaining_feed_cost_display,
-                        remaining_profit_display
+                        consumed_egg_income_display,
+                        consumed_feed_cost_display,
+                        consumed_profit_display
                     ]
                 })
                 fig = create_profit_chart(chart_df, language)
@@ -1592,31 +1633,29 @@ elif calculation_type == texts[language]["group_calculation"]:
             max_eggs = 580
             max_days = 730
             
-            total_remaining_eggs = 0
-            total_remaining_days = 0
-            total_remaining_egg_income = 0
-            total_remaining_feed_cost = 0
+            total_consumed_eggs = 0
+            total_consumed_days = 0
+            total_consumed_egg_income = 0
+            total_consumed_feed_cost = 0
             
-            # حساب المتبقي لكل دجاجة ثم جمعها
+            # حساب المستهلك لكل دجاجة ثم جمعها
             for chicken in st.session_state.chicken_data:
-                # حساب المتبقي لهذه الدجاجة
-                remaining_eggs = max(0, max_eggs - chicken["eggs"])
-                remaining_days = max(0, max_days - chicken["days"])
+                # حساب المستهلك لهذه الدجاجة
+                consumed_eggs = chicken["eggs"]
+                consumed_days = chicken["days"]
                 
-                # حساب الدخل المتوقع من البيض المتبقي لهذه الدجاجة
-                remaining_egg_income = remaining_eggs * float(new_egg_price)
-                
-                # حساب تكلفة العلف للأيام المتبقية لهذه الدجاجة
-                remaining_feed_cost = remaining_days * 2 * float(new_feed_price)
+                # حساب دخل البيض المستهلك وتكلفة العلف المستهلكة لهذه الدجاجة
+                consumed_egg_income = consumed_eggs * float(new_egg_price)
+                consumed_feed_cost = consumed_days * 2 * float(new_feed_price)
                 
                 # إضافة القيم إلى المجاميع
-                total_remaining_eggs += remaining_eggs
-                total_remaining_days += remaining_days
-                total_remaining_egg_income += remaining_egg_income
-                total_remaining_feed_cost += remaining_feed_cost
+                total_consumed_eggs += consumed_eggs
+                total_consumed_days += consumed_days
+                total_consumed_egg_income += consumed_egg_income
+                total_consumed_feed_cost += consumed_feed_cost
             
-            # حساب الربح المتوقع من المتبقي للمجموعة
-            total_remaining_profit = total_remaining_egg_income - total_remaining_feed_cost
+            # حساب الربح المتوقع من المستهلك للمجموعة
+            total_consumed_profit = total_consumed_egg_income - total_consumed_feed_cost
             
             # التحقق مما إذا كان هناك دجاج مؤهلة للحساب مع البيع (عدد بيضها 260 أو أكثر وتم تحديد سعر البيع)
             has_sales_prices = any(chicken["eggs"] >= 260 and chicken["chicken_sale_price"] > 0 for chicken in st.session_state.chicken_data)
@@ -1630,9 +1669,9 @@ elif calculation_type == texts[language]["group_calculation"]:
                 total_net_profit_before_rent_display = total_net_profit_before_rent * conversion_rate
                 total_net_profit_display = total_net_profit * conversion_rate
                 total_profit_with_sale_display = total_profit_with_sale * conversion_rate
-                total_remaining_egg_income_display = total_remaining_egg_income * conversion_rate
-                total_remaining_feed_cost_display = total_remaining_feed_cost * conversion_rate
-                total_remaining_profit_display = total_remaining_profit * conversion_rate
+                total_consumed_egg_income_display = total_consumed_egg_income * conversion_rate
+                total_consumed_feed_cost_display = total_consumed_feed_cost * conversion_rate
+                total_consumed_profit_display = total_consumed_profit * conversion_rate
                 display_currency = "IQD"
             else:
                 total_income_display = total_income
@@ -1641,9 +1680,9 @@ elif calculation_type == texts[language]["group_calculation"]:
                 total_net_profit_before_rent_display = total_net_profit_before_rent
                 total_net_profit_display = total_net_profit
                 total_profit_with_sale_display = total_profit_with_sale
-                total_remaining_egg_income_display = total_remaining_egg_income
-                total_remaining_feed_cost_display = total_remaining_feed_cost
-                total_remaining_profit_display = total_remaining_profit
+                total_consumed_egg_income_display = total_consumed_egg_income
+                total_consumed_feed_cost_display = total_consumed_feed_cost
+                total_consumed_profit_display = total_consumed_profit
                 display_currency = "USD"
                 
             # عرض الجدول التفصيلي
@@ -1685,7 +1724,7 @@ elif calculation_type == texts[language]["group_calculation"]:
                 },
                 {
                     texts[language]["category"]: texts[language]["total_remaining_profit"],
-                    texts[language]["value"]: f"{format_decimal(total_remaining_profit_display)} {display_currency}"
+                    texts[language]["value"]: f"{format_decimal(total_consumed_profit_display)} {display_currency}"
                 }
             ]
             
@@ -1744,14 +1783,35 @@ elif calculation_type == texts[language]["group_calculation"]:
                 results_text += f"""
 ║ {texts[language]['total_profit_with_sale']}: {format_decimal(total_profit_with_sale * 1480)} IQD"""
 
-            # إضافة معلومات المتبقي بالدينار العراقي
+            # إضافة معلومات المستهلك
             results_text += f"""
-║ {texts[language]['total_remaining_eggs']}: {format_decimal(total_remaining_eggs)}
-║ {texts[language]['total_remaining_days']}: {format_decimal(total_remaining_days)}
-║ {texts[language]['total_remaining_egg_income']}: {format_decimal(total_remaining_egg_income * 1480)} IQD
-║ {texts[language]['total_remaining_feed_cost']}: {format_decimal(total_remaining_feed_cost * 1480)} IQD
-║ {texts[language]['total_remaining_profit']}: {format_decimal(total_remaining_profit * 1480)} IQD
-╚══════════════════════════════════════════════════════════════╝"""
+║ {texts[language]['total_remaining_eggs']}: {format_decimal(total_consumed_eggs)}
+║ {texts[language]['total_remaining_days']}: {format_decimal(total_consumed_days)}
+║ {texts[language]['total_remaining_egg_income']}: {format_decimal(total_consumed_egg_income)} USD
+║ {texts[language]['total_remaining_feed_cost']}: {format_decimal(total_consumed_feed_cost)} USD
+║ {texts[language]['total_remaining_profit']}: {format_decimal(total_consumed_profit)} USD
+╠──────────────────────────────────────────────────────────────────╤
+║ {texts[language]['iqd_results']}:
+║ {texts[language]['total_eggs']}: {format_decimal(total_eggs)}
+║ {texts[language]['total_income']}: {format_decimal(total_income * 1480)} IQD
+║ {texts[language]['total_feed']}: {format_decimal(total_feed_cost * 1480)} IQD
+║ {texts[language]['total_first_year_profit']}: {format_decimal(total_net_profit_before_rent * 1480)} IQD
+║ {texts[language]['total_rent']}: {format_decimal(total_rent * 1480)} IQD
+║ {texts[language]['total_net_profit']}: {format_decimal(total_net_profit * 1480)} IQD"""
+
+            # إضافة سطر الربح مع البيع بالدينار العراقي
+            if has_sales_prices:
+                results_text += f"""
+║ {texts[language]['total_profit_with_sale']}: {format_decimal(total_profit_with_sale * 1480)} IQD"""
+
+            # إضافة معلومات المستهلك بالدينار العراقي
+            results_text += f"""
+║ {texts[language]['total_remaining_eggs']}: {format_decimal(total_consumed_eggs)}
+║ {texts[language]['total_remaining_days']}: {format_decimal(total_consumed_days)}
+║ {texts[language]['total_remaining_egg_income']}: {format_decimal(total_consumed_egg_income * 1480)} IQD
+║ {texts[language]['total_remaining_feed_cost']}: {format_decimal(total_consumed_feed_cost * 1480)} IQD
+║ {texts[language]['total_remaining_profit']}: {format_decimal(total_consumed_profit * 1480)} IQD
+╚══════════════════════════════════════════════════════════════════╝"""
             
             st.markdown(f"### ✨ {texts[language]['summary']}")
             st.code(results_text)
@@ -1772,7 +1832,7 @@ elif calculation_type == texts[language]["group_calculation"]:
                     total_net_profit_before_rent_display,
                     total_rent_display,
                     total_net_profit_display,
-                    total_remaining_profit_display
+                    total_consumed_profit_display
                 ]
             })
             
