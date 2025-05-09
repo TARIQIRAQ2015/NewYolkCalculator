@@ -1240,7 +1240,13 @@ if calculation_type == texts[language]["chicken_profits"]:
                 
                 # تنسيق الجدول النهائي أولاً
                 df = df.round(2)
-                df[texts[language]["value"]] = df[texts[language]["value"]].apply(lambda x: f"{format_decimal(x)} {currency}")
+                # نضيف العملة للقيم المالية فقط
+                for i, category in enumerate(df[texts[language]["category"]]):
+                    if "🥚" in category or "📅" in category:
+                        df.at[i, texts[language]["value"]] = f"{format_decimal(df.at[i, texts[language]['value']])}"
+                    else:
+                        df.at[i, texts[language]["value"]] = f"{format_decimal(df.at[i, texts[language]['value']])} {currency}"
+                
                 st.table(df)
 
                 # عرض الرسم البياني
@@ -1451,11 +1457,20 @@ elif calculation_type == remaining_profit_text:
 ║ {texts[language]['usd_results']}:
 ║ {texts[language]['remaining_eggs']}: {format_decimal(remaining_eggs)}
 ║ {texts[language]['remaining_days']}: {format_decimal(remaining_days)}
-║ {texts[language]['remaining_egg_income']}: {format_decimal(remaining_egg_income * 1480)} IQD
-║ {texts[language]['remaining_feed_cost']}: {format_decimal(remaining_feed_cost * 1480)} IQD
-║ {texts[language]['first_year_rental']}: {format_decimal(remaining_rent * 1480)} IQD
-║ {texts[language]['current_profit']}: {format_decimal(current_profit * 1480)} IQD
-║ {texts[language]['expected_remaining_profit']}: {format_decimal(expected_remaining_profit * 1480)} IQD
+║ {texts[language]['remaining_egg_income']}: {format_decimal(remaining_egg_income_display)} USD
+║ {texts[language]['remaining_feed_cost']}: {format_decimal(remaining_feed_cost_display)} USD
+║ {texts[language]['first_year_rental']}: {format_decimal(remaining_rent_display)} USD
+║ {texts[language]['current_profit']}: {format_decimal(current_profit_display)} USD
+║ {texts[language]['expected_remaining_profit']}: {format_decimal(expected_remaining_profit_display)} USD
+╟──────────────────────────────────────────────────────────────────╢
+║ {texts[language]['iqd_results']}:
+║ {texts[language]['remaining_eggs']}: {format_decimal(remaining_eggs)}
+║ {texts[language]['remaining_days']}: {format_decimal(remaining_days)}
+║ {texts[language]['remaining_egg_income']}: {format_decimal(remaining_egg_income_display * 1480)} IQD
+║ {texts[language]['remaining_feed_cost']}: {format_decimal(remaining_feed_cost_display * 1480)} IQD
+║ {texts[language]['first_year_rental']}: {format_decimal(remaining_rent_display * 1480)} IQD
+║ {texts[language]['current_profit']}: {format_decimal(current_profit_display * 1480)} IQD
+║ {texts[language]['expected_remaining_profit']}: {format_decimal(expected_remaining_profit_display * 1480)} IQD
 ╚══════════════════════════════════════════════════════════════════╝"""
 
                 # إنشاء DataFrame للرسم البياني
