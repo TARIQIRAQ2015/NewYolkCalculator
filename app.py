@@ -1241,12 +1241,16 @@ if calculation_type == texts[language]["chicken_profits"]:
                     remaining_rent_display = remaining_rent * 1480
                     expected_remaining_profit_display = expected_remaining_profit * 1480
                     current_profit_display = current_profit * 1480
+                    current_egg_income_display = current_egg_income * 1480
+                    current_feed_cost_display = current_feed_cost * 1480
                 else:
                     remaining_egg_income_display = remaining_egg_income
                     remaining_feed_cost_display = remaining_feed_cost
                     remaining_rent_display = remaining_rent
                     expected_remaining_profit_display = expected_remaining_profit
                     current_profit_display = current_profit
+                    current_egg_income_display = current_egg_income
+                    current_feed_cost_display = current_feed_cost
 
                 # تنسيق التاريخ والوقت حسب توقيت بغداد
                 current_time = datetime.now() + timedelta(hours=3)  # تحويل التوقيت إلى توقيت بغداد
@@ -1280,8 +1284,8 @@ if calculation_type == texts[language]["chicken_profits"]:
                 results_text += f"""
 ║ {texts[language]['remaining_eggs']}: {format_decimal(remaining_eggs)}
 ║ {texts[language]['remaining_days']}: {format_decimal(remaining_days)}
-║ {texts[language]['remaining_egg_income']}: {format_decimal(current_profit_display)} USD
-║ {texts[language]['remaining_feed_cost']}: {format_decimal(current_feed_cost)} USD
+║ {texts[language]['remaining_egg_income']}: {format_decimal(current_egg_income_display)} USD
+║ {texts[language]['remaining_feed_cost']}: {format_decimal(current_feed_cost_display)} USD
 ║ {texts[language]['expected_remaining_profit']}: {format_decimal(expected_remaining_profit_display)} USD"""
 
                 # استكمال النص
@@ -1307,8 +1311,8 @@ if calculation_type == texts[language]["chicken_profits"]:
                 results_text += f"""
 ║ {texts[language]['remaining_eggs']}: {format_decimal(remaining_eggs)}
 ║ {texts[language]['remaining_days']}: {format_decimal(remaining_days)}
-║ {texts[language]['remaining_egg_income']}: {format_decimal(current_profit_display * 1480)} IQD
-║ {texts[language]['remaining_feed_cost']}: {format_decimal(current_feed_cost * 1480)} IQD
+║ {texts[language]['remaining_egg_income']}: {format_decimal(current_egg_income_display * 1480)} IQD
+║ {texts[language]['remaining_feed_cost']}: {format_decimal(current_feed_cost_display * 1480)} IQD
 ║ {texts[language]['expected_remaining_profit']}: {format_decimal(expected_remaining_profit_display * 1480)} IQD"""
 
                 # إغلاق المربع
@@ -1348,8 +1352,8 @@ if calculation_type == texts[language]["chicken_profits"]:
                 chart_categories.append(f"🌽 {texts[language]['remaining_feed_cost']}")
                 chart_values.append(remaining_eggs)
                 chart_values.append(remaining_days)
-                chart_values.append(current_profit_display)
-                chart_values.append(remaining_feed_cost_display)
+                chart_values.append(current_egg_income_display)
+                chart_values.append(current_feed_cost_display)
                 
                 # إضافة الربح المتوقع من المتبقي
                 if remaining_rent_display > 0:
@@ -1582,8 +1586,9 @@ elif calculation_type == remaining_profit_text:
 ║ {texts[language]['usd_results']}:
 ║ {texts[language]['remaining_eggs']}: {format_decimal(remaining_eggs)}
 ║ {texts[language]['remaining_days']}: {format_decimal(remaining_days)}
-║ {texts[language]['remaining_egg_income']}: {format_decimal(current_profit_display)} USD
-║ {texts[language]['remaining_feed_cost']}: {format_decimal(current_feed_cost)} USD"""
+║ {texts[language]['remaining_egg_income']}: {format_decimal(current_egg_income_display)} USD
+║ {texts[language]['remaining_feed_cost']}: {format_decimal(current_feed_cost_display)} USD
+║ {texts[language]['expected_remaining_profit']}: {format_decimal(expected_remaining_profit_display)} USD"""
 
                 # إضافة الإيجار فقط إذا كان موجودًا
                 if remaining_rent > 0:
@@ -1596,8 +1601,8 @@ elif calculation_type == remaining_profit_text:
 ║ {texts[language]['iqd_results']}:
 ║ {texts[language]['remaining_eggs']}: {format_decimal(remaining_eggs)}
 ║ {texts[language]['remaining_days']}: {format_decimal(remaining_days)}
-║ {texts[language]['remaining_egg_income']}: {format_decimal(current_profit_display * 1480)} IQD
-║ {texts[language]['remaining_feed_cost']}: {format_decimal(current_feed_cost * 1480)} IQD"""
+║ {texts[language]['remaining_egg_income']}: {format_decimal(current_egg_income_display * 1480)} IQD
+║ {texts[language]['remaining_feed_cost']}: {format_decimal(current_feed_cost_display * 1480)} IQD"""
 
                 # إضافة الإيجار فقط إذا كان موجودًا
                 if remaining_rent > 0:
@@ -1619,8 +1624,8 @@ elif calculation_type == remaining_profit_text:
                     texts[language]["value"]: [
                         remaining_eggs,
                         remaining_days,
-                        current_profit_display,
-                        remaining_feed_cost_display,
+                        current_egg_income_display,
+                        current_feed_cost_display,
                     ]
                 })
                 
@@ -1649,8 +1654,8 @@ elif calculation_type == remaining_profit_text:
                         f"🌽 {texts[language]['remaining_feed_cost']}",
                     ],
                     texts[language]["value"]: [
-                        current_profit_display,
-                        remaining_feed_cost_display,
+                        current_egg_income_display,
+                        current_feed_cost_display,
                     ]
                 })
                 
