@@ -460,10 +460,11 @@ st.markdown("""
         /* تحسين ملخص النتائج */
         pre {
             background: linear-gradient(45deg, 
-                #1a1a2e,
-                #16213e
+                #1c2048,
+                #192350,
+                #17285a
             ) !important;
-            border: 1px solid rgba(255, 255, 255, 0.1) !important;
+            border: 1px solid rgba(255, 255, 255, 0.15) !important;
             border-radius: 15px !important;
             padding: 20px !important;
             color: #ffffff !important;
@@ -473,39 +474,40 @@ st.markdown("""
             transition: all 0.3s ease !important;
             animation: gradientBG 15s ease infinite !important;
             background-size: 200% 200% !important;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.3) !important;
         }
 
         pre:hover {
             transform: translateY(-2px);
-            box-shadow: 0 8px 20px rgba(0,0,0,0.3);
-            border-color: rgba(255, 255, 255, 0.2) !important;
+            box-shadow: 0 8px 25px rgba(0, 0, 0, 0.4);
+            border-color: rgba(255, 255, 255, 0.25) !important;
         }
 
         /* تأثير الخلفية المتحركة */
         @keyframes gradientBG {
             0% {
                 background: linear-gradient(45deg, 
-                    #1a1a2e,
-                    #16213e,
-                    #0f3460
+                    #1c2048,
+                    #192350,
+                    #17285a
                 );
                 background-size: 200% 200%;
                 background-position: 0% 50%;
             }
             50% {
                 background: linear-gradient(45deg, 
-                    #16213e,
-                    #0f3460,
-                    #1a1a2e
+                    #192350,
+                    #17285a,
+                    #1c2048
                 );
                 background-size: 200% 200%;
                 background-position: 100% 50%;
             }
             100% {
                 background: linear-gradient(45deg, 
-                    #1a1a2e,
-                    #16213e,
-                    #0f3460
+                    #1c2048,
+                    #192350,
+                    #17285a
                 );
                 background-size: 200% 200%;
                 background-position: 0% 50%;
@@ -514,9 +516,10 @@ st.markdown("""
 
         /* تنسيق النص داخل ملخص النتائج */
         pre code {
-            color: #e2e2e2 !important;
+            color: #f8f8f8 !important;
             font-size: 1.1em !important;
-            line-height: 1.5 !important;
+            line-height: 1.6 !important;
+            letter-spacing: 0.5px !important;
         }
 
         /* تأثير الحدود المضيئة */
@@ -529,24 +532,24 @@ st.markdown("""
             bottom: -2px;
             border-radius: 16px;
             background: linear-gradient(45deg, 
-                #1a1a2e,
-                #0f3460,
-                #1a1a2e
+                #4a69ff,
+                #27c8be,
+                #4a69ff
             );
             z-index: -1;
-            animation: borderGlow 3s ease-in-out infinite;
-            opacity: 0.5;
+            animation: borderGlow 6s ease-in-out infinite;
+            opacity: 0.6;
         }
 
         @keyframes borderGlow {
             0% {
-                opacity: 0.3;
+                opacity: 0.4;
             }
             50% {
-                opacity: 0.6;
+                opacity: 0.7;
             }
             100% {
-                opacity: 0.3;
+                opacity: 0.4;
             }
         }
         
@@ -578,6 +581,99 @@ st.markdown("""
             50% { transform: translateY(-10px); }
             100% { transform: translateY(0px); }
         }
+        
+        /* تحسين جداول البيانات */
+        .dataframe {
+            border-collapse: separate !important;
+            border-spacing: 0 !important;
+            border-radius: 10px !important;
+            overflow: hidden !important;
+            width: 100% !important;
+            margin-bottom: 24px !important;
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.15) !important;
+            background: linear-gradient(135deg, rgba(28, 32, 72, 0.8), rgba(25, 35, 80, 0.8)) !important;
+        }
+
+        .dataframe th {
+            background: linear-gradient(135deg, #2c3e70, #1e2c60) !important;
+            color: white !important;
+            font-size: 1.1em !important;
+            font-weight: 600 !important;
+            text-align: center !important;
+            padding: 16px 10px !important;
+            border: none !important;
+            position: relative !important;
+            overflow: hidden !important;
+            letter-spacing: 0.5px !important;
+        }
+
+        .dataframe td {
+            background: rgba(30, 33, 60, 0.6) !important;
+            color: rgba(255, 255, 255, 0.9) !important;
+            font-size: 1em !important;
+            padding: 12px 10px !important;
+            border-top: 1px solid rgba(255, 255, 255, 0.1) !important;
+            border-bottom: none !important;
+            border-left: none !important;
+            border-right: none !important;
+            transition: all 0.2s ease-in-out !important;
+        }
+
+        .dataframe tr:hover td {
+            background: rgba(45, 55, 100, 0.7) !important;
+            transform: translateY(-1px) !important;
+        }
+
+        .dataframe tr:last-child td {
+            border-bottom: none !important;
+        }
+        
+        /* إضافة تأثيرات على صفوف الجدول بالتناوب */
+        .dataframe tr:nth-child(even) td {
+            background: rgba(25, 28, 55, 0.6) !important;
+        }
+        
+        .dataframe tr:nth-child(even):hover td {
+            background: rgba(40, 50, 95, 0.7) !important;
+        }
+        
+        /* تحسين العناوين الرئيسية */
+        h3 {
+            color: #ffffff !important;
+            font-size: 1.8em !important;
+            text-align: center !important;
+            margin: 20px 0 !important;
+            padding-bottom: 10px !important;
+            border-bottom: 2px solid rgba(255, 255, 255, 0.1) !important;
+            position: relative !important;
+            overflow: hidden !important;
+        }
+        
+        h3::after {
+            content: '';
+            position: absolute;
+            left: 0;
+            bottom: -2px;
+            width: 50px;
+            height: 2px;
+            background: linear-gradient(90deg, #4a69ff, #27c8be);
+            animation: slideRight 2s ease-in-out infinite;
+        }
+        
+        @keyframes slideRight {
+            0% {
+                left: 0;
+                width: 50px;
+            }
+            50% {
+                left: calc(100% - 50px);
+                width: 50px;
+            }
+            100% {
+                left: 0;
+                width: 50px;
+            }
+        }
     </style>
 """, unsafe_allow_html=True)
 
@@ -599,7 +695,7 @@ texts = {
         "chicken_profits": "أرباح الدجاجة",
         "daily_rewards": "المكافآت اليومية",
         "remaining_profits": "الربح المتوقع من المتبقي",
-        "eggs_input": "عدد البيض 🥚",
+        "eggs_input": "عدد البيض المستلم 🥚",
         "days_input": "عدد الأيام 📅",
         "food_input": "عدد الطعام المطلوب 🌽",
         "calculate_profits": "حساب الأرباح 🧮",
@@ -650,13 +746,13 @@ texts = {
         "summary_feed_price": "مجموع سعر العلف 🌽",
         "remaining_eggs": "البيض المتبقي 🥚",
         "remaining_days": "الأيام المتبقية 📅",
-        "remaining_egg_income": "الدخل المتوقع من البيض المتبقي 💵",
-        "remaining_feed_cost": "تكلفة العلف المتبقية 🌽",
-        "expected_remaining_profit": "الربح المتوقع من المتبقي 📈",
+        "remaining_egg_income": "دخل البيض المستلم الى الان 💵",
+        "remaining_feed_cost": "تكلفة العلف المستهلكة 🌽",
+        "expected_remaining_profit": "الربح الحالي المستلم 💵",
         "total_remaining_eggs": "إجمالي البيض المتبقي 🥚",
         "total_remaining_days": "إجمالي الأيام المتبقية 📅",
         "total_remaining_profit": "إجمالي الربح المتوقع من المتبقي 📊",
-        "current_profit": "الربح الحالي المستلم 💵"
+        "current_profit": "الربح المتوقع من المتبقي 📈"
     },
     "English": {
         "title": "Chicken Calculator - NewYolk",
@@ -670,7 +766,7 @@ texts = {
         "chicken_profits": "Chicken Profit",
         "daily_rewards": "Daily Rewards",
         "remaining_profits": "Expected Remaining Profit",
-        "eggs_input": "Number of Eggs 🥚",
+        "eggs_input": "Received Eggs Count 🥚",
         "days_input": "Number of Days 📅",
         "food_input": "Amount of Food Needed 🌽",
         "calculate_profits": "Calculate Profits 🧮",
@@ -721,13 +817,13 @@ texts = {
         "summary_feed_price": "Total Feed Price 🌽",
         "remaining_eggs": "Remaining Eggs 🥚",
         "remaining_days": "Remaining Days 📅",
-        "remaining_egg_income": "Expected Income from Remaining Eggs 💵",
-        "remaining_feed_cost": "Remaining Feed Cost 🌽",
-        "expected_remaining_profit": "Expected Remaining Profit 📈",
+        "remaining_egg_income": "Current Egg Income 💵",
+        "remaining_feed_cost": "Consumed Feed Cost 🌽",
+        "expected_remaining_profit": "Current Profit Received 💵",
         "total_remaining_eggs": "Total Remaining Eggs 🥚",
         "total_remaining_days": "Total Remaining Days 📅",
         "total_remaining_profit": "Total Expected Remaining Profit 📊",
-        "current_profit": "Current Profit Received 💵"
+        "current_profit": "Expected Remaining Profit 📈"
     },
     "Română": {
         "title": "Calculator Găini - NewYolk",
@@ -741,7 +837,7 @@ texts = {
         "chicken_profits": "Profit Găină",
         "daily_rewards": "Recompensele Zilnice",
         "remaining_profits": "Profit Preconizat Rămas",
-        "eggs_input": "Număr de Ouă 🥚",
+        "eggs_input": "Număr de Ouă Primite 🥚",
         "days_input": "Număr de Zile 📅",
         "food_input": "Cantitate de Hrană Necesară 🌽",
         "calculate_profits": "Calculați Profiturile 🧮",
@@ -794,7 +890,7 @@ texts = {
         "remaining_days": "Zile Rămase 📅",
         "remaining_egg_income": "Venit Preconizat din Ouăle Rămase 💵",
         "remaining_feed_cost": "Cost Furaje Rămas 🌽",
-        "expected_remaining_profit": "Profit Preconizat Rămas 📈",
+        "expected_remaining_profit": "Profit Actual Primit 💵",
         "total_remaining_eggs": "Total Ouă Rămase 🥚",
         "total_remaining_days": "Total Zile Rămase 📅",
         "total_remaining_profit": "Total Profit Preconizat Rămas 📊",
@@ -964,14 +1060,12 @@ if is_number(new_egg_price) and is_number(new_feed_price):
 
 # دالة إنشاء الرسم البياني
 def create_profit_chart(df, language):
-    # تخصيص الألوان
-    colors = {
-        texts[language]["total_eggs"]: '#4CAF50',
-        texts[language]["total_feed"]: '#FF9800',
-        texts[language]["total_first_year_profit"]: '#2196F3',
-        texts[language]["total_rent"]: '#F44336',
-        texts[language]["total_net_profit"]: '#9C27B0'
-    }
+    # تخصيص الألوان - مجموعة ألوان أكثر تناسقاً وجمالية
+    custom_colors = [
+        '#4CAF50', '#FF9800', '#2196F3', '#F44336', '#9C27B0', 
+        '#3F51B5', '#00BCD4', '#009688', '#FFC107', '#795548',
+        '#607D8B', '#E91E63'
+    ]
     
     # إنشاء الرسم البياني
     fig = px.pie(
@@ -979,30 +1073,58 @@ def create_profit_chart(df, language):
         values=texts[language]["value"],
         names=texts[language]["category"],
         title=texts[language]["summary"],
-        color_discrete_sequence=['#4CAF50', '#FF9800', '#2196F3', '#F44336', '#9C27B0']
+        color_discrete_sequence=custom_colors,
+        hole=0.3  # إضافة ثقب في الوسط للشكل الدائري المجوف
     )
     
     # تحديث تصميم الرسم البياني
     fig.update_traces(
         textposition='outside',
-        textinfo='percent+label'
+        textinfo='percent+label',
+        hoverinfo='label+percent+value',
+        textfont=dict(size=13, color='white'),
+        marker=dict(line=dict(color='#1c2048', width=1.5)),
+        pull=[0.03]*len(df),  # سحب جميع الشرائح قليلاً للخارج
+        rotation=90  # تدوير المخطط
     )
     
     fig.update_layout(
         title_x=0.5,
         title_font_size=24,
+        title_font_color='white',
+        title_font_family='Arial, sans-serif',
         showlegend=True,
         legend=dict(
             orientation="h",
             yanchor="bottom",
             y=-0.2,
             xanchor="center",
-            x=0.5
+            x=0.5,
+            font=dict(
+                size=12,
+                color='white'
+            )
         ),
         margin=dict(t=60, l=0, r=0, b=0),
         height=500,
         paper_bgcolor='rgba(0,0,0,0)',
-        plot_bgcolor='rgba(0,0,0,0)'
+        plot_bgcolor='rgba(0,0,0,0)',
+        hoverlabel=dict(
+            bgcolor="#1c2048",
+            font_size=14,
+            font_family="Arial, sans-serif",
+            bordercolor="white"
+        ),
+        uniformtext_minsize=12,
+        uniformtext_mode='hide',
+        annotations=[dict(
+            text=texts[language]["summary"],
+            x=0.5,
+            y=0.5,
+            font_size=16,
+            font_color='white',
+            showarrow=False
+        )]
     )
     
     return fig
