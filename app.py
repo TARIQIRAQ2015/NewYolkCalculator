@@ -1387,17 +1387,22 @@ elif calculation_type == remaining_profit_text:
                 # حساب الربح المتوقع من المتبقي
                 remaining_egg_income = remaining_eggs * float(new_egg_price)
                 remaining_feed_cost = remaining_days * 2 * float(new_feed_price)
-                expected_remaining_profit = remaining_egg_income - remaining_feed_cost
+                
+                # خصم قيمة الإيجار إذا كان البيض المتبقي أكثر من 260
+                remaining_rent = 6 if remaining_eggs >= 260 else 0
+                expected_remaining_profit = remaining_egg_income - remaining_feed_cost - remaining_rent
                 
                 # تحويل العملة
                 if currency == "IQD":
                     remaining_egg_income_display = remaining_egg_income * 1480
                     remaining_feed_cost_display = remaining_feed_cost * 1480
+                    remaining_rent_display = remaining_rent * 1480
                     expected_remaining_profit_display = expected_remaining_profit * 1480
                     display_currency = "IQD"
                 else:
                     remaining_egg_income_display = remaining_egg_income
                     remaining_feed_cost_display = remaining_feed_cost
+                    remaining_rent_display = remaining_rent
                     expected_remaining_profit_display = expected_remaining_profit
                     display_currency = "USD"
                 
@@ -1418,6 +1423,7 @@ elif calculation_type == remaining_profit_text:
 ║ {texts[language]['remaining_days']}: {format_decimal(remaining_days)}
 ║ {texts[language]['remaining_egg_income']}: {format_decimal(remaining_egg_income_display)} USD
 ║ {texts[language]['remaining_feed_cost']}: {format_decimal(remaining_feed_cost_display)} USD
+║ {texts[language]['first_year_rental']}: {format_decimal(remaining_rent_display)} USD
 ║ {texts[language]['expected_remaining_profit']}: {format_decimal(expected_remaining_profit_display)} USD
 ╟──────────────────────────────────────────────────────────────────╢
 ║ {texts[language]['iqd_results']}:
@@ -1425,6 +1431,7 @@ elif calculation_type == remaining_profit_text:
 ║ {texts[language]['remaining_days']}: {format_decimal(remaining_days)}
 ║ {texts[language]['remaining_egg_income']}: {format_decimal(remaining_egg_income * 1480)} IQD
 ║ {texts[language]['remaining_feed_cost']}: {format_decimal(remaining_feed_cost * 1480)} IQD
+║ {texts[language]['first_year_rental']}: {format_decimal(remaining_rent * 1480)} IQD
 ║ {texts[language]['expected_remaining_profit']}: {format_decimal(expected_remaining_profit * 1480)} IQD
 ╚══════════════════════════════════════════════════════════════════╝"""
 
@@ -1435,6 +1442,7 @@ elif calculation_type == remaining_profit_text:
                         f"📅 {texts[language]['remaining_days']}",
                         f"💵 {texts[language]['remaining_egg_income']}",
                         f"🌽 {texts[language]['remaining_feed_cost']}",
+                        f"🏠 {texts[language]['first_year_rental']}",
                         f"📈 {texts[language]['expected_remaining_profit']}"
                     ],
                     texts[language]["value"]: [
@@ -1442,6 +1450,7 @@ elif calculation_type == remaining_profit_text:
                         remaining_days,
                         remaining_egg_income_display,
                         remaining_feed_cost_display,
+                        remaining_rent_display,
                         expected_remaining_profit_display
                     ]
                 })
@@ -1462,11 +1471,13 @@ elif calculation_type == remaining_profit_text:
                     texts[language]["category"]: [
                         f"💵 {texts[language]['remaining_egg_income']}",
                         f"🌽 {texts[language]['remaining_feed_cost']}",
+                        f"🏠 {texts[language]['first_year_rental']}",
                         f"📈 {texts[language]['expected_remaining_profit']}"
                     ],
                     texts[language]["value"]: [
                         remaining_egg_income_display,
                         remaining_feed_cost_display,
+                        remaining_rent_display,
                         expected_remaining_profit_display
                     ]
                 })
