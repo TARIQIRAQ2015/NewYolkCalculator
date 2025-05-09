@@ -1484,7 +1484,7 @@ elif calculation_type == remaining_profit_text:
                 df = df.round(2)
                 # نضيف العملة للقيم المالية فقط
                 for i, category in enumerate(df[texts[language]["category"]]):
-                    if "💵" in category or "🌽" in category or "📈" in category:
+                    if "💵" in category or "🌽" in category or "📈" in category or "🏠" in category:
                         df.at[i, texts[language]["value"]] = f"{format_decimal(df.at[i, texts[language]['value']])} {display_currency}"
                     else:
                         df.at[i, texts[language]["value"]] = f"{format_decimal(df.at[i, texts[language]['value']])}"
