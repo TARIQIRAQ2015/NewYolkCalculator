@@ -1286,7 +1286,7 @@ if calculation_type == texts[language]["chicken_profits"]:
 ║ {texts[language]['remaining_days']}: {format_decimal(remaining_days)}
 ║ {texts[language]['remaining_egg_income']}: {format_decimal(current_egg_income_display)} USD
 ║ {texts[language]['remaining_feed_cost']}: {format_decimal(current_feed_cost_display)} USD
-║ {texts[language]['expected_remaining_profit']}: {format_decimal(expected_remaining_profit_display)} USD"""
+║ {texts[language]['expected_remaining_profit']}: {format_decimal(current_profit_display)} USD"""
 
                 # استكمال النص
                 results_text += f"""
@@ -1313,7 +1313,7 @@ if calculation_type == texts[language]["chicken_profits"]:
 ║ {texts[language]['remaining_days']}: {format_decimal(remaining_days)}
 ║ {texts[language]['remaining_egg_income']}: {format_decimal(current_egg_income_display * 1480)} IQD
 ║ {texts[language]['remaining_feed_cost']}: {format_decimal(current_feed_cost_display * 1480)} IQD
-║ {texts[language]['expected_remaining_profit']}: {format_decimal(expected_remaining_profit_display * 1480)} IQD"""
+║ {texts[language]['expected_remaining_profit']}: {format_decimal(current_profit_display * 1480)} IQD"""
 
                 # إغلاق المربع
                 results_text += """
@@ -1562,6 +1562,8 @@ elif calculation_type == remaining_profit_text:
                     remaining_rent_display = remaining_rent * 1480
                     expected_remaining_profit_display = expected_remaining_profit * 1480
                     current_profit_display = current_profit * 1480
+                    current_egg_income_display = current_egg_income * 1480
+                    current_feed_cost_display = current_feed_cost * 1480
                     display_currency = "IQD"
                 else:
                     remaining_egg_income_display = remaining_egg_income
@@ -1569,6 +1571,8 @@ elif calculation_type == remaining_profit_text:
                     remaining_rent_display = remaining_rent
                     expected_remaining_profit_display = expected_remaining_profit
                     current_profit_display = current_profit
+                    current_egg_income_display = current_egg_income
+                    current_feed_cost_display = current_feed_cost
                     display_currency = "USD"
                 
                 # تنسيق التاريخ والوقت حسب توقيت بغداد
@@ -1588,7 +1592,7 @@ elif calculation_type == remaining_profit_text:
 ║ {texts[language]['remaining_days']}: {format_decimal(remaining_days)}
 ║ {texts[language]['remaining_egg_income']}: {format_decimal(current_egg_income_display)} USD
 ║ {texts[language]['remaining_feed_cost']}: {format_decimal(current_feed_cost_display)} USD
-║ {texts[language]['expected_remaining_profit']}: {format_decimal(expected_remaining_profit_display)} USD"""
+║ {texts[language]['expected_remaining_profit']}: {format_decimal(current_profit_display)} USD"""
 
                 # إضافة الإيجار فقط إذا كان موجودًا
                 if remaining_rent > 0:
@@ -1596,7 +1600,7 @@ elif calculation_type == remaining_profit_text:
 ║ {texts[language]['first_year_rental']}: {format_decimal(remaining_rent_display)} USD"""
                     
                 results_text += f"""
-║ {texts[language]['expected_remaining_profit']}: {format_decimal(expected_remaining_profit_display)} USD
+║ {texts[language]['expected_remaining_profit']}: {format_decimal(current_profit_display)} USD
 ╟──────────────────────────────────────────────────────────────────╢
 ║ {texts[language]['iqd_results']}:
 ║ {texts[language]['remaining_eggs']}: {format_decimal(remaining_eggs)}
@@ -1604,13 +1608,13 @@ elif calculation_type == remaining_profit_text:
 ║ {texts[language]['remaining_egg_income']}: {format_decimal(current_egg_income_display * 1480)} IQD
 ║ {texts[language]['remaining_feed_cost']}: {format_decimal(current_feed_cost_display * 1480)} IQD"""
 
-                # إضافة الإيجار فقط إذا كان موجودًا
+                # إضافة الإيجار فقط إذا كان موجودًا في قسم IQD
                 if remaining_rent > 0:
                     results_text += f"""
 ║ {texts[language]['first_year_rental']}: {format_decimal(remaining_rent_display * 1480)} IQD"""
                     
                 results_text += f"""
-║ {texts[language]['expected_remaining_profit']}: {format_decimal(expected_remaining_profit_display * 1480)} IQD
+║ {texts[language]['expected_remaining_profit']}: {format_decimal(current_profit_display * 1480)} IQD
 ╚══════════════════════════════════════════════════════════════════╝"""
 
                 # إنشاء DataFrame للرسم البياني
@@ -1664,7 +1668,7 @@ elif calculation_type == remaining_profit_text:
                     chart_df.loc[len(chart_df)] = [f"🏠 {texts[language]['first_year_rental']}", remaining_rent_display]
                 
                 # إضافة الربح المتوقع من المتبقي
-                chart_df.loc[len(chart_df)] = [f"📈 {texts[language]['expected_remaining_profit']}", expected_remaining_profit_display]
+                chart_df.loc[len(chart_df)] = [f"📈 {texts[language]['expected_remaining_profit']}", current_profit_display]
                 
                 fig = create_profit_chart(chart_df, language)
                 st.plotly_chart(fig, use_container_width=True)
