@@ -907,9 +907,14 @@ with col1:
     )
 
 with col2:
+    # تعريف نص الربح المتوقع من المتبقي ليكون متطابقًا في جميع أنحاء الكود
+    remaining_profit_text = texts[language]["remaining_profits"]
     calculation_type = st.selectbox(
         texts[language]["calculation_type"],
-        [texts[language]["chicken_profits"], texts[language]["daily_rewards"], texts[language]["remaining_profits"], texts[language]["group_calculation"]]
+        [texts[language]["chicken_profits"], 
+         texts[language]["daily_rewards"], 
+         remaining_profit_text, 
+         texts[language]["group_calculation"]]
     )
 
 # دالة التحقق من المدخلات
@@ -1339,7 +1344,7 @@ elif calculation_type == texts[language]["daily_rewards"]:
         except ValueError:
             st.error(get_error_message("invalid_number", language))
 
-elif calculation_type == texts[language]["remaining_profits"]:
+elif calculation_type == remaining_profit_text:
     st.subheader(texts[language]["remaining_profits"] + " 📊")
     col9, col10 = st.columns(2)
 
