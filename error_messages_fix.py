@@ -12,14 +12,14 @@ error_messages = {
         "Română": "Vă rugăm să introduceți toate valorile necesare! ❗️"
     },
     "eggs_exceed": {
-        "العربية": "عدد البيض يجب ألا يتجاوز 580! ❗️",
-        "English": "Number of eggs should not exceed 580! ❗️",
-        "Română": "Numărul de ouă nu trebuie să depășească 580! ❗️"
+        "العربية": "عدد البيض في السنة الأولى يجب ألا يتجاوز 320! ❗️",
+        "English": "Number of eggs in first year should not exceed 320! ❗️",
+        "Română": "Numărul de ouă în primul an nu trebuie să depășească 320! ❗️"
     },
     "days_exceed": {
-        "العربية": "عدد الأيام يجب ألا يتجاوز 730! ❗️",
-        "English": "Number of days should not exceed 730! ❗️",
-        "Română": "Numărul de zile nu trebuie să depășească 730! ❗️"
+        "العربية": "عدد الأيام في السنة الأولى يجب ألا يتجاوز 365! ❗️",
+        "English": "Number of days in first year should not exceed 365! ❗️",
+        "Română": "Numărul de zile în primul an nu trebuie să depășească 365! ❗️"
     },
     "reset_success": {
         "العربية": "تم إعادة التعيين بنجاح! ✅",
@@ -51,14 +51,14 @@ error_messages = {
 # رسائل المساعدة
 help_messages = {
     "eggs_input": {
-        "العربية": "أدخل عدد البيض (بحد أقصى 580)",
-        "English": "Enter the number of eggs (max 580)",
-        "Română": "Introduceți numărul de ouă (maxim 580)"
+        "العربية": "أدخل عدد البيض للسنة الأولى (بحد أقصى 320)",
+        "English": "Enter the number of eggs for first year (max 320)",
+        "Română": "Introduceți numărul de ouă pentru primul an (maxim 320)"
     },
     "days_input": {
-        "العربية": "أدخل عدد الأيام (بحد أقصى 730)",
-        "English": "Enter the number of days (max 730)",
-        "Română": "Introduceți numărul de zile (maxim 730)"
+        "العربية": "أدخل عدد الأيام للسنة الأولى (بحد أقصى 365)",
+        "English": "Enter the number of days for first year (max 365)",
+        "Română": "Introduceți numărul de zile pentru primul an (maxim 365)"
     },
     "rewards_input": {
         "العربية": "أدخل عدد المكافآت",
