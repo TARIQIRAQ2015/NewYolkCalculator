@@ -12,14 +12,14 @@ error_messages = {
         "Română": "Vă rugăm să introduceți toate valorile necesare! ❗️"
     },
     "eggs_exceed": {
-        "العربية": "عدد البيض في السنة الأولى يجب ألا يتجاوز 320! ❗️",
-        "English": "Number of eggs in first year should not exceed 320! ❗️",
-        "Română": "Numărul de ouă în primul an nu trebuie să depășească 320! ❗️"
+        "العربية": "عدد البيض يجب ألا يتجاوز 580! ❗️",
+        "English": "Number of eggs should not exceed 580! ❗️",
+        "Română": "Numărul de ouă nu trebuie să depășească 580! ❗️"
     },
     "days_exceed": {
-        "العربية": "عدد الأيام في السنة الأولى يجب ألا يتجاوز 365! ❗️",
-        "English": "Number of days in first year should not exceed 365! ❗️",
-        "Română": "Numărul de zile în primul an nu trebuie să depășească 365! ❗️"
+        "العربية": "عدد الأيام يجب ألا يتجاوز 730! ❗️",
+        "English": "Number of days should not exceed 730! ❗️",
+        "Română": "Numărul de zile nu trebuie să depășească 730! ❗️"
     },
     "reset_success": {
         "العربية": "تم إعادة التعيين بنجاح! ✅",
@@ -32,9 +32,9 @@ error_messages = {
         "Română": "Nu există date despre găini introduse încă!"
     },
     "not_first_year_chicken": {
-        "العربية": "لا يمكن بيع الدجاجة لأنها ليست في السنة الأولى (عدد البيض أقل من 260)",
-        "English": "Chicken cannot be sold as it's not in the first year (egg count less than 260)",
-        "Română": "Găina nu poate fi vândută deoarece nu este în primul an (număr de ouă mai mic de 260)"
+        "العربية": "لا يمكن بيع الدجاجة لأنها في السنة الثانية (تجاوزت 320 بيضة أو 365 يوم)",
+        "English": "Chicken cannot be sold as it's in the second year (exceeded 320 eggs or 365 days)",
+        "Română": "Găina nu poate fi vândută deoarece este în al doilea an (a depășit 320 de ouă sau 365 de zile)"
     },
     "save_success": {
         "العربية": "تم حفظ الأسعار الجديدة بنجاح! ✅",
@@ -51,14 +51,14 @@ error_messages = {
 # رسائل المساعدة
 help_messages = {
     "eggs_input": {
-        "العربية": "أدخل عدد البيض للسنة الأولى (بحد أقصى 320)",
-        "English": "Enter the number of eggs for first year (max 320)",
-        "Română": "Introduceți numărul de ouă pentru primul an (maxim 320)"
+        "العربية": "أدخل عدد البيض (بحد أقصى 580 للسنتين، 320 للسنة الأولى)",
+        "English": "Enter the number of eggs (max 580 for both years, 320 for first year)",
+        "Română": "Introduceți numărul de ouă (maxim 580 pentru ambii ani, 320 pentru primul an)"
     },
     "days_input": {
-        "العربية": "أدخل عدد الأيام للسنة الأولى (بحد أقصى 365)",
-        "English": "Enter the number of days for first year (max 365)",
-        "Română": "Introduceți numărul de zile pentru primul an (maxim 365)"
+        "العربية": "أدخل عدد الأيام (بحد أقصى 730 للسنتين، 365 للسنة الأولى)",
+        "English": "Enter the number of days (max 730 for both years, 365 for first year)",
+        "Română": "Introduceți numărul de zile (maxim 730 pentru ambii ani, 365 pentru primul an)"
     },
     "rewards_input": {
         "العربية": "أدخل عدد المكافآت",
