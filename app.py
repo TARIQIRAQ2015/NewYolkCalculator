@@ -1180,14 +1180,130 @@ if calculation_type == texts[language]["chicken_profits"]:
                 chart_values.append(total_rent)
                 chart_values.append(net_profit)
                 
-                df = pd.DataFrame({
-                    texts[language]["category"]: chart_categories,
-                    texts[language]["value"]: chart_values
+                # تجميع البيانات بشكل منظم في الجدول
+                df_data = []
+                
+                # إضافة عنوان السنة الأولى
+                df_data.append({
+                    texts[language]["category"]: "🔷 بيانات السنة الأولى 🔷",
+                    texts[language]["value"]: ""
                 })
                 
-                # تنسيق الجدول النهائي أولاً
-                df = df.round(2)
-                df[texts[language]["value"]] = df[texts[language]["value"]].apply(lambda x: f"{format_decimal(x)} {currency}")
+                # إضافة بيانات السنة الأولى
+                df_data.append({
+                    texts[language]["category"]: f"🥚 {texts[language]['eggs_input']} (السنة الأولى)",
+                    texts[language]["value"]: f"{format_decimal(first_year_eggs)}"
+                })
+                
+                df_data.append({
+                    texts[language]["category"]: f"📅 {texts[language]['days_input']} (السنة الأولى)",
+                    texts[language]["value"]: f"{format_decimal(first_year_days)}"
+                })
+                
+                df_data.append({
+                    texts[language]["category"]: f"💵 عائد البيض (السنة الأولى)",
+                    texts[language]["value"]: f"{format_decimal(first_year_egg_income)} {currency}"
+                })
+                
+                df_data.append({
+                    texts[language]["category"]: f"🌽 تكلفة العلف (السنة الأولى)",
+                    texts[language]["value"]: f"{format_decimal(first_year_feed_cost)} {currency}"
+                })
+                
+                df_data.append({
+                    texts[language]["category"]: f"📈 {texts[language]['net_profit']}",
+                    texts[language]["value"]: f"{format_decimal(first_year_profit)} {currency}"
+                })
+                
+                # إضافة بيانات بيع الدجاجة إذا كانت مؤهلة
+                if first_year_eggs >= 320 and chicken_sale_price_value > 0:
+                    df_data.append({
+                        texts[language]["category"]: "🔷 بيانات بيع الدجاجة 🔷",
+                        texts[language]["value"]: ""
+                    })
+                    
+                    df_data.append({
+                        texts[language]["category"]: f"💰 {texts[language]['chicken_sale_price']}",
+                        texts[language]["value"]: f"{format_decimal(chicken_sale_price_value)} {currency}"
+                    })
+                    
+                    df_data.append({
+                        texts[language]["category"]: f"📊 {texts[language]['profit_with_sale']}",
+                        texts[language]["value"]: f"{format_decimal(profit_with_sale)} {currency}"
+                    })
+                
+                # إضافة بيانات السنة الثانية إذا وجدت
+                if not is_first_year_only:
+                    df_data.append({
+                        texts[language]["category"]: "🔷 بيانات السنة الثانية 🔷",
+                        texts[language]["value"]: ""
+                    })
+                    
+                    df_data.append({
+                        texts[language]["category"]: f"🥚 {texts[language]['eggs_input']} (السنة الثانية)",
+                        texts[language]["value"]: f"{format_decimal(second_year_eggs)}"
+                    })
+                    
+                    df_data.append({
+                        texts[language]["category"]: f"📅 {texts[language]['days_input']} (السنة الثانية)",
+                        texts[language]["value"]: f"{format_decimal(second_year_days)}"
+                    })
+                    
+                    df_data.append({
+                        texts[language]["category"]: f"💵 عائد البيض (السنة الثانية)",
+                        texts[language]["value"]: f"{format_decimal(second_year_egg_income)} {currency}"
+                    })
+                    
+                    df_data.append({
+                        texts[language]["category"]: f"🌽 تكلفة العلف (السنة الثانية)",
+                        texts[language]["value"]: f"{format_decimal(second_year_feed_cost)} {currency}"
+                    })
+                    
+                    df_data.append({
+                        texts[language]["category"]: f"🏠 {texts[language]['first_year_rental']}",
+                        texts[language]["value"]: f"{format_decimal(total_rent)} {currency}"
+                    })
+                    
+                    df_data.append({
+                        texts[language]["category"]: f"📈 ربح السنة الثانية",
+                        texts[language]["value"]: f"{format_decimal(second_year_profit)} {currency}"
+                    })
+                
+                # إضافة الإجماليات النهائية
+                df_data.append({
+                    texts[language]["category"]: "🔷 الإجمالي النهائي 🔷",
+                    texts[language]["value"]: ""
+                })
+                
+                df_data.append({
+                    texts[language]["category"]: f"🥚 إجمالي عدد البيض",
+                    texts[language]["value"]: f"{format_decimal(first_year_eggs + second_year_eggs)}"
+                })
+                
+                df_data.append({
+                    texts[language]["category"]: f"📅 إجمالي عدد الأيام",
+                    texts[language]["value"]: f"{format_decimal(first_year_days + second_year_days)}"
+                })
+                
+                df_data.append({
+                    texts[language]["category"]: f"💵 إجمالي عائد البيض",
+                    texts[language]["value"]: f"{format_decimal(total_egg_price)} {currency}"
+                })
+                
+                df_data.append({
+                    texts[language]["category"]: f"🌽 إجمالي تكلفة العلف",
+                    texts[language]["value"]: f"{format_decimal(total_feed_cost)} {currency}"
+                })
+                
+                df_data.append({
+                    texts[language]["category"]: f"💰 {texts[language]['final_profit']}",
+                    texts[language]["value"]: f"{format_decimal(net_profit)} {currency}"
+                })
+                
+                # إنشاء DataFrame من البيانات المنظمة
+                df = pd.DataFrame(df_data)
+                
+                # عرض الجدول
                 st.table(df)
 
                 # عرض الرسم البياني
@@ -1526,41 +1642,73 @@ elif calculation_type == texts[language]["group_calculation"]:
             # قيمة افتراضية للمتغيرات قبل استخدامها
             total_final_with_sale = total_profit_with_sale_display
             
-            # إنشاء بيانات ملخص للرسم البياني
-            summary_data = [
-                {
-                    texts[language]["category"]: texts[language]["total_eggs"],
-                    texts[language]["value"]: f"{format_decimal(total_eggs)}"
-                },
-                {
-                    texts[language]["category"]: texts[language]["total_income"],
-                    texts[language]["value"]: f"{format_decimal(total_income_display)} {display_currency}"
-                },
-                {
-                    texts[language]["category"]: texts[language]["total_feed"],
-                    texts[language]["value"]: f"{format_decimal(total_feed_cost_display)} {display_currency}"
-                },
-                {
-                    texts[language]["category"]: texts[language]["net_profit"],
-                    texts[language]["value"]: f"{format_decimal(total_net_profit_before_rent_display)} {display_currency}"
-                },
-                {
+            # إنشاء بيانات ملخص منظمة للجدول
+            summary_data = []
+            
+            # إضافة عنوان البيانات الإجمالية
+            summary_data.append({
+                texts[language]["category"]: "🔷 البيانات الإجمالية للدجاج 🔷",
+                texts[language]["value"]: ""
+            })
+            
+            # إضافة البيانات الأساسية
+            summary_data.append({
+                texts[language]["category"]: texts[language]["total_eggs"],
+                texts[language]["value"]: f"{format_decimal(total_eggs)}"
+            })
+            
+            summary_data.append({
+                texts[language]["category"]: texts[language]["total_income"],
+                texts[language]["value"]: f"{format_decimal(total_income_display)} {display_currency}"
+            })
+            
+            summary_data.append({
+                texts[language]["category"]: texts[language]["total_feed"],
+                texts[language]["value"]: f"{format_decimal(total_feed_cost_display)} {display_currency}"
+            })
+            
+            summary_data.append({
+                texts[language]["category"]: texts[language]["net_profit"],
+                texts[language]["value"]: f"{format_decimal(total_net_profit_before_rent_display)} {display_currency}"
+            })
+            
+            # إضافة بيانات بيع الدجاج إذا كانت مؤهلة
+            if has_sales_prices:
+                summary_data.append({
+                    texts[language]["category"]: "🔷 بيانات بيع الدجاج 🔷",
+                    texts[language]["value"]: ""
+                })
+                
+                summary_data.append({
                     texts[language]["category"]: texts[language]["total_profit_with_sale"],
                     texts[language]["value"]: f"{format_decimal(total_profit_with_sale_display)} {display_currency}"
-                } if has_sales_prices else None,
-                {
+                })
+            
+            # إضافة بيانات الإيجار
+            if total_rent > 0:
+                summary_data.append({
+                    texts[language]["category"]: "🔷 بيانات الإيجار 🔷",
+                    texts[language]["value"]: ""
+                })
+                
+                summary_data.append({
                     texts[language]["category"]: texts[language]["total_rent"],
                     texts[language]["value"]: f"{format_decimal(total_rent_display)} {display_currency}"
-                },
-                {
-                    texts[language]["category"]: texts[language]["net_profit_per_chicken"],
-                    texts[language]["value"]: f"{format_decimal(total_net_profit_display)} {display_currency}"
-                }
-            ]
+                })
             
-            # إزالة القيم None من قائمة البيانات قبل إنشاء DataFrame
-            filtered_summary_data = [item for item in summary_data if item is not None]
-            summary_df = pd.DataFrame(filtered_summary_data)
+            # إضافة الربح النهائي
+            summary_data.append({
+                texts[language]["category"]: "🔷 الربح النهائي 🔷",
+                texts[language]["value"]: ""
+            })
+            
+            summary_data.append({
+                texts[language]["category"]: texts[language]["net_profit_per_chicken"],
+                texts[language]["value"]: f"{format_decimal(total_net_profit_display)} {display_currency}"
+            })
+            
+            # إنشاء DataFrame من البيانات المنظمة
+            summary_df = pd.DataFrame(summary_data)
             
             # عرض جدول الملخص الإجمالي
             st.subheader("📊 " + texts[language]["total_summary"])
