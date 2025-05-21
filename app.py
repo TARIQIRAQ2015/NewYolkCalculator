@@ -990,18 +990,15 @@ if calculation_type == texts[language]["chicken_profits"]:
     # إضافة حقل سعر بيع الدجاجة
     try:
         eggs_value = float(eggs) if eggs else 0
-        days_value = float(days) if days else 0
-        is_first_year = eggs_value <= 320 and days_value <= 365
     except ValueError:
-        is_first_year = False  # إذا لم يكن رقماً صحيحاً
+        eggs_value = 0  # إذا لم يكن رقماً صحيحاً
         
-    if is_first_year:
+    if eggs_value >= 320:
         chicken_sale_price = st.text_input(
             texts[language]["chicken_sale_price"],
             value=""
         )
     else:
-        st.info(texts[language]["not_first_year_chicken"] if "not_first_year_chicken" in texts[language] else "لا يمكن بيع الدجاجة لأنها ليست في السنة الأولى")
         chicken_sale_price = "0"
 
     if st.button(texts[language]["calculate_profits"], type="primary"):
@@ -1065,9 +1062,9 @@ if calculation_type == texts[language]["chicken_profits"]:
                 net_profit_before_rent = first_year_profit + second_year_profit
                 net_profit = net_profit_before_rent - total_rent
                 
-                # حساب الربح مع بيع الدجاجة - فقط للدجاج التي في السنة الأولى
+                # حساب الربح مع بيع الدجاجة - فقط للدجاج التي أنتجت 320 بيضة أو أكثر
                 profit_with_sale = 0
-                if is_first_year_only and chicken_sale_price_value > 0:
+                if first_year_eggs >= 320 and chicken_sale_price_value > 0:
                     profit_with_sale = net_profit_before_rent + chicken_sale_price_value
 
                 # تحويل العملة
@@ -1121,8 +1118,8 @@ if calculation_type == texts[language]["chicken_profits"]:
 ║ ربح السنة الثانية: {format_decimal(second_year_profit)} USD
 ║ الإيجار للسنة الثانية: {format_decimal(total_rent)} USD"""
 
-                # إضافة سعر البيع والربح مع البيع إذا كانت الدجاجة في السنة الأولى وتم إدخال سعر البيع
-                if is_first_year_only and chicken_sale_price_value > 0:
+                # إضافة سعر البيع والربح مع البيع إذا كانت الدجاجة أنتجت 320 بيضة أو أكثر وتم إدخال سعر البيع
+                if first_year_eggs >= 320 and chicken_sale_price_value > 0:
                     results_text += f"""
 ║
 ║ 📊 بيع الدجاجة (متاح فقط في السنة الأولى):
@@ -1172,7 +1169,7 @@ if calculation_type == texts[language]["chicken_profits"]:
 ║ الإيجار للسنة الثانية: {format_decimal(total_rent * 1480)} IQD"""
 
                 # إضافة سعر البيع والربح مع البيع بالدينار العراقي
-                if is_first_year_only and chicken_sale_price_value > 0:
+                if first_year_eggs >= 320 and chicken_sale_price_value > 0:
                     results_text += f"""
 ║
 ║ 📊 بيع الدجاجة (متاح فقط في السنة الأولى):
@@ -1212,7 +1209,7 @@ if calculation_type == texts[language]["chicken_profits"]:
                 ]
                 
                 # إضافة سعر البيع والربح مع البيع إلى الرسم البياني
-                if is_first_year_only and chicken_sale_price_value > 0:
+                if first_year_eggs >= 320 and chicken_sale_price_value > 0:
                     chart_categories.append(f"💰 {texts[language]['chicken_sale_price']}")
                     chart_categories.append(f"📊 {texts[language]['profit_with_sale']}")
                     chart_values.append(chicken_sale_price_value)
@@ -1382,23 +1379,20 @@ elif calculation_type == texts[language]["group_calculation"]:
             # تم تغييرها لتكون بدون قيمة افتراضية وبدون أزرار الزيادة والنقصان
         )
         
-    # حقل سعر بيع الدجاجة الاختياري - يظهر شرطياً إذا كان عدد البيض أكبر من 260
-    # التحقق من أن القيمة المدخلة رقم وأكبر من أو يساوي 260
+    # حقل سعر بيع الدجاجة الاختياري - يظهر شرطياً إذا كان عدد البيض أكبر من أو يساوي 320
     try:
         egg_rate_value = float(egg_rate) if egg_rate else 0
-        is_first_year = egg_rate_value >= 260
     except ValueError:
-        is_first_year = False  # إذا لم يكن رقماً صحيحاً
+        egg_rate_value = 0  # إذا لم يكن رقماً صحيحاً
         
-    if is_first_year:  # لا يظهر في حالة كان عدد البيض أقل من 260
+    if egg_rate_value >= 320:  # يظهر فقط إذا أكمل الدجاجة إنتاج 320 بيضة
         chicken_sale_price = st.text_input(
             texts[language]["chicken_sale_price"],
             value=""
             # تم تغييرها لتكون بدون قيمة افتراضية وبدون أزرار الزيادة والنقصان
         )
     else:
-        st.info(texts[language]["not_first_year_chicken"] if "not_first_year_chicken" in texts[language] else "لا يمكن بيع الدجاجة لأنها ليست في السنة الأولى (عدد البيض أقل من 260)")
-        chicken_sale_price = 0.0  # لا يمكن بيع الدجاجة لأنها ليست في السنة الأولى
+        chicken_sale_price = "0"  # لا يمكن بيع الدجاجة لأنها لم تكمل 320 بيضة
         
     if st.button(texts[language]["add_chicken"], type="primary"):
         try:
@@ -1471,11 +1465,11 @@ elif calculation_type == texts[language]["group_calculation"]:
                     chicken_sale_price_value = 0
                 
                 profit_with_sale = 0
-                if is_first_year_only and chicken_sale_price_value > 0:
+                if first_year_eggs >= 320 and chicken_sale_price_value > 0:
                     profit_with_sale = first_year_profit + chicken_sale_price_value  # الربح مع بيع الدجاجة = الربح في السنة الأولى + سعر بيع الدجاجة
                 else:
-                    profit_with_sale = 0  # لا يتم احتساب الربح مع البيع للدجاج التي ليست في السنة الأولى
-                    chicken_sale_price_value = 0.0  # تأكيد على تصفير سعر بيع الدجاجة للدجاج التي ليست في السنة الأولى
+                    profit_with_sale = 0  # لا يتم احتساب الربح مع البيع للدجاج التي لم تكمل 320 بيضة
+                    chicken_sale_price_value = 0.0  # تأكيد على تصفير سعر بيع الدجاجة
                 
                 # إضافة البيانات إلى قائمة الدجاج
                 chicken_id = len(st.session_state.chicken_data) + 1
@@ -1537,14 +1531,14 @@ elif calculation_type == texts[language]["group_calculation"]:
             total_net_profit_before_rent = sum(chicken["net_profit_before_rent"] for chicken in st.session_state.chicken_data)
             total_net_profit = sum(chicken["net_profit"] for chicken in st.session_state.chicken_data)
             
-            # حساب إجمالي الربح مع البيع - فقط للدجاج التي في السنة الأولى (عدد البيض أقل من أو يساوي 320 وعدد الأيام أقل من أو يساوي 365)
+            # حساب إجمالي الربح مع البيع - فقط للدجاج التي أكملت 320 بيضة أو أكثر
             # حساب مجموع أسعار بيع الدجاج المؤهلة
-            total_chicken_sale_prices = sum(chicken["chicken_sale_price"] for chicken in st.session_state.chicken_data if chicken["eggs"] <= 320 and chicken["days"] <= 365 and chicken["chicken_sale_price"] > 0)
+            total_chicken_sale_prices = sum(chicken["chicken_sale_price"] for chicken in st.session_state.chicken_data if chicken["eggs"] >= 320 and chicken["chicken_sale_price"] > 0)
             # الربح الكلي مع البيع = إجمالي الربح قبل الإيجار + مجموع أسعار بيع الدجاج
             total_profit_with_sale = total_net_profit_before_rent + total_chicken_sale_prices
             
-            # التحقق مما إذا كان هناك دجاج مؤهلة للحساب مع البيع (في السنة الأولى وتم تحديد سعر البيع)
-            has_sales_prices = any(chicken["eggs"] <= 320 and chicken["days"] <= 365 and chicken["chicken_sale_price"] > 0 for chicken in st.session_state.chicken_data)
+            # التحقق مما إذا كان هناك دجاج مؤهلة للحساب مع البيع (أكملت 320 بيضة وتم تحديد سعر البيع)
+            has_sales_prices = any(chicken["eggs"] >= 320 and chicken["chicken_sale_price"] > 0 for chicken in st.session_state.chicken_data)
             
             # تحويل العملة إذا لزم الأمر
             if currency == "IQD":
