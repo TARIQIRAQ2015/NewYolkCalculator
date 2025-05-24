@@ -1736,4 +1736,3 @@ texts = {
         "English": "Production Rate",
         "Română": "Rata de Producție"
     }
-}
