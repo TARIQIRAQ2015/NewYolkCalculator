@@ -1,193 +1,1767 @@
-# قائمة بالرسائل المترجمة للغات الثلاث
+import streamlit as st
+import pandas as pd
+import plotly.express as px
+from datetime import datetime, timedelta
 
-error_messages = {
-    "invalid_number": {
-        "العربية": "يرجى إدخال أرقام صحيحة! ❗️",
-        "English": "Please enter valid numbers! ❗️",
-        "Română": "Vă rugăm să introduceți numere valide! ❗️"
-    },
-    "missing_values": {
-        "العربية": "يرجى إدخال جميع القيم المطلوبة! ❗️",
-        "English": "Please enter all required values! ❗️",
-        "Română": "Vă rugăm să introduceți toate valorile necesare! ❗️"
-    },
-    "eggs_exceed": {
-        "العربية": "عدد البيض يجب ألا يتجاوز 580! ❗️",
-        "English": "Number of eggs should not exceed 580! ❗️",
-        "Română": "Numărul de ouă nu trebuie să depășească 580! ❗️"
-    },
-    "days_exceed": {
-        "العربية": "عدد الأيام يجب ألا يتجاوز 730! ❗️",
-        "English": "Number of days should not exceed 730! ❗️",
-        "Română": "Numărul de zile nu trebuie să depășească 730! ❗️"
-    },
-    "reset_success": {
-        "العربية": "تم إعادة التعيين بنجاح! ✅",
-        "English": "Reset successful! ✅",
-        "Română": "Resetare reușită! ✅"
-    },
-    "no_chicken_data": {
-        "العربية": "لا توجد بيانات دجاج مدخلة حتى الآن!",
-        "English": "No chicken data entered yet!",
-        "Română": "Nu există date despre găini introduse încă!"
-    },
-    "not_first_year_chicken": {
-        "العربية": "لا يمكن بيع الدجاجة لأنها ليست في السنة الأولى (عدد البيض أقل من 320)",
-        "English": "Chicken cannot be sold as it's not in the first year (egg count less than 320)",
-        "Română": "Găina nu poate fi vândută deoarece nu este în primul an (numărul de ouă mai mic de 320)"
-    },
-    "save_success": {
-        "العربية": "تم حفظ الأسعار الجديدة بنجاح! ✅",
-        "English": "New prices saved successfully! ✅",
-        "Română": "Prețurile noi au fost salvate cu succes! ✅"
-    },
-    "chicken_added": {
-        "العربية": "تمت إضافة الدجاجة رقم {chicken_id} بنجاح! ✅",
-        "English": "Chicken #{chicken_id} added successfully! ✅",
-        "Română": "Găina #{chicken_id} a fost adăugată cu succes! ✅"
-    },
-    "first_year_profit": {
-        "العربية": "ربح السنة الأولى",
-        "English": "First Year Profit",
-        "Română": "Profit Primul An"
-    },
-    "second_year_profit": {
-        "العربية": "ربح السنة الثانية", 
-        "English": "Second Year Profit",
-        "Română": "Profit Al Doilea An"
-    },
-    "first_year_eggs": {
-        "العربية": "بيض السنة الأولى",
-        "English": "First Year Eggs",
-        "Română": "Ouă Primul An"
-    },
-    "second_year_eggs": {
-        "العربية": "بيض السنة الثانية",
-        "English": "Second Year Eggs", 
-        "Română": "Ouă Al Doilea An"
-    },
-    "first_year_days": {
-        "العربية": "أيام السنة الأولى",
-        "English": "First Year Days",
-        "Română": "Zile Primul An"
-    },
-    "second_year_days": {
-        "العربية": "أيام السنة الثانية",
-        "English": "Second Year Days",
-        "Română": "Zile Al Doilea An"
-    },
-    "total_two_years_profit": {
-        "العربية": "إجمالي ربح السنتين",
-        "English": "Total Two Years Profit", 
-        "Română": "Profit Total Doi Ani"
-    },
-    "first_year_income": {
-        "العربية": "دخل السنة الأولى",
-        "English": "First Year Income",
-        "Română": "Venit Primul An"
-    },
-    "second_year_income": {
-        "العربية": "دخل السنة الثانية",
-        "English": "Second Year Income",
-        "Română": "Venit Al Doilea An"
-    },
-    "first_year_feed_cost": {
-        "العربية": "تكلفة علف السنة الأولى",
-        "English": "First Year Feed Cost",
-        "Română": "Cost Furaje Primul An"
-    },
-    "second_year_feed_cost": {
-        "العربية": "تكلفة علف السنة الثانية",
-        "English": "Second Year Feed Cost",
-        "Română": "Cost Furaje Al Doilea An"
-    },
-    "year_separator": {
-        "العربية": "═══════════════════════════════════════",
-        "English": "═══════════════════════════════════════",
-        "Română": "═══════════════════════════════════════"
-    }
-}
+# استيراد رسائل الخطأ المترجمة
+from error_messages_fix import get_error_message, get_help_message
 
-# رسائل المساعدة
-help_messages = {
-    "eggs_input": {
-        "العربية": "أدخل عدد البيض (بحد أقصى 580)",
-        "English": "Enter the number of eggs (max 580)",
-        "Română": "Introduceți numărul de ouă (maxim 580)"
-    },
-    "days_input": {
-        "العربية": "أدخل عدد الأيام (بحد أقصى 730)",
-        "English": "Enter the number of days (max 730)",
-        "Română": "Introduceți numărul de zile (maxim 730)"
-    },
-    "rewards_input": {
-        "العربية": "أدخل عدد المكافآت",
-        "English": "Enter the number of rewards",
-        "Română": "Introduceți numărul de recompense"
-    },
-    "food_input": {
-        "العربية": "أدخل عدد الطعام المطلوب",
-        "English": "Enter the amount of food needed",
-        "Română": "Introduceți cantitatea de hrană necesară"
-    },
-    "first_year_explanation": {
-        "العربية": "السنة الأولى تشمل أول 320 بيضة و365 يوم بدون إيجار",
-        "English": "First year includes first 320 eggs and 365 days without rent",
-        "Română": "Primul an include primele 320 de ouă și 365 de zile fără chirie"
-    },
-    "second_year_explanation": {
-        "العربية": "السنة الثانية تشمل 260 بيضة إضافية مع إيجار",
-        "English": "Second year includes additional 260 eggs with rent",
-        "Română": "Al doilea an include 260 de ouă adiționale cu chirie"
-    }
-}
+# تحسين الواجهة
+st.set_page_config(
+    page_title="New Yolk Calculator",
+    page_icon="🐔",
+    layout="wide"
+)
 
-# استخدام الرسائل
-def get_error_message(key, language, **kwargs):
-    if key in error_messages and language in error_messages[key]:
-        # تنسيق الرسالة باستخدام المتغيرات إذا تم توفيرها
-        return error_messages[key][language].format(**kwargs)
-    else:
-        # رسالة افتراضية بالإنجليزية إذا كان المفتاح أو اللغة غير موجودين
-        return "An error occurred!"
-
-# استخدام رسائل المساعدة
-def get_help_message(key, language):
-    if key in help_messages and language in help_messages[key]:
-        return help_messages[key][language]
-    else:
-        # رسالة افتراضية بالإنجليزية إذا كان المفتاح أو اللغة غير موجودين
-        return ""
-
-# دالة لتنسيق عناوين السنوات
-def get_year_header(year_number, language):
-    year_headers = {
-        1: {
-            "العربية": "🥇 السنة الأولى (First Year)",
-            "English": "🥇 First Year",
-            "Română": "🥇 Primul An"
-        },
-        2: {
-            "العربية": "🥈 السنة الثانية (Second Year)", 
-            "English": "🥈 Second Year",
-            "Română": "🥈 Al Doilea An"
+# إخفاء أزرار التحكم بالمظهر
+st.markdown("""
+    <style>
+        /* إخفاء العناصر غير الضرورية */
+        #MainMenu {visibility: hidden;}
+        footer {visibility: hidden;}
+        header {visibility: hidden;}
+        [data-testid="stToolbar"] {visibility: hidden;}
+        
+        /* تحسين المظهر العام والخلفية */
+        .stApp {
+            background: linear-gradient(135deg, 
+                #1a1a2e,
+                #16213e,
+                #0f3460,
+                #162447
+            );
+            background-size: 400% 400%;
+            animation: gradient 15s ease infinite;
+            color: #e2e2e2;
         }
-    }
-    
-    if year_number in year_headers and language in year_headers[year_number]:
-        return year_headers[year_number][language]
-    else:
-        return f"Year {year_number}"
+        
+        @keyframes gradient {
+            0% { background-position: 0% 50%; }
+            50% { background-position: 100% 50%; }
+            100% { background-position: 0% 50%; }
+        }
+        
+        /* تأثير الإيموجي */
+        .emoji-link {
+            text-decoration: none;
+            display: inline-block;
+            transition: all 0.3s ease;
+            cursor: pointer;
+            font-size: 32px;
+            margin-right: 10px;
+        }
+        .emoji-link:hover {
+            transform: scale(1.5);
+            text-shadow: 0 0 20px rgba(255,255,255,0.5);
+        }
+        
+        /* تحسين القوائم المنسدلة */
+        .stSelectbox > div > div,
+        .stNumberInput > div > div {
+            background: linear-gradient(135deg, #1e212b 0%, #161b25 100%) !important;
+            border: 1px solid rgba(255, 255, 255, 0.2) !important;
+            border-radius: 8px !important;
+            color: #ffffff !important;
+            backdrop-filter: blur(10px);
+            transition: all 0.3s ease;
+            padding: 12px !important;
+            box-shadow: 0 2px 6px rgba(0,0,0,0.1);
+            height: auto !important;
+            min-height: 48px !important;
+            font-size: 16px !important;
+            line-height: 1.5 !important;
+            position: relative;
+            overflow: hidden;
+        }
+        
+        /* تأثير الموجة عند التحويم */
+        .stSelectbox > div > div::before,
+        .stNumberInput > div > div::before,
+        div[data-baseweb="select"] ul li::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(
+                90deg,
+                transparent,
+                rgba(255, 255, 255, 0.05),
+                transparent
+            );
+            transition: all 0.5s ease;
+            z-index: 1;
+        }
+        
+        .stSelectbox > div > div:hover::before,
+        .stNumberInput > div > div:hover::before,
+        div[data-baseweb="select"] ul li:hover::before {
+            left: 100%;
+        }
+        
+        /* تأثير التحويم */
+        .stSelectbox > div > div:hover,
+        .stNumberInput > div > div:hover {
+            background: linear-gradient(135deg, #161b25 0%, #1e212b 100%) !important;
+            border-color: rgba(255, 255, 255, 0.3) !important;
+            transform: translateY(-1px);
+            box-shadow: 0 4px 12px rgba(0,0,0,0.2);
+        }
+        
+        /* تحسين قائمة الخيارات المنسدلة */
+        div[data-baseweb="select"] > div {
+            background: linear-gradient(135deg, #1e212b 0%, #161b25 100%) !important;
+            backdrop-filter: blur(10px) !important;
+            border-radius: 8px !important;
+            border: 1px solid rgba(255, 255, 255, 0.2) !important;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.2);
+            padding: 8px !important;
+            transition: all 0.3s ease;
+        }
+        
+        div[data-baseweb="select"] ul {
+            background: linear-gradient(135deg, #1e212b 0%, #161b25 100%) !important;
+            padding: 4px !important;
+            border-radius: 8px !important;
+            backdrop-filter: blur(10px);
+        }
+        
+        /* تحسين عناصر القائمة */
+        div[data-baseweb="select"] ul li {
+            background: transparent !important;
+            transition: all 0.3s ease;
+            border-radius: 6px;
+            margin: 2px 0;
+            padding: 10px 12px !important;
+            position: relative;
+            overflow: hidden;
+            cursor: pointer;
+            color: rgba(255, 255, 255, 0.8) !important;
+        }
+        
+        div[data-baseweb="select"] ul li:hover {
+            background: linear-gradient(135deg, #161b25 0%, #1e212b 100%) !important;
+            transform: translateX(4px);
+            color: #ffffff !important;
+        }
+        
+        /* تحسين الأيقونات في القوائم */
+        .stSelectbox svg,
+        div[data-baseweb="select"] svg {
+            transition: all 0.3s ease;
+            fill: rgba(255, 255, 255, 0.7) !important;
+        }
+        
+        .stSelectbox:hover svg,
+        div[data-baseweb="select"]:hover svg {
+            fill: rgba(255, 255, 255, 1) !important;
+            transform: translateY(1px);
+        }
+        
+        /* تحسين النص المحدد */
+        div[data-baseweb="select"] [aria-selected="true"] {
+            background: linear-gradient(135deg, #1e212b 0%, #161b25 100%) !important;
+            color: #ffffff !important;
+            font-weight: 500 !important;
+        }
+        
+        /* تحسين الخط والقراءة */
+        .stMarkdown {
+            font-size: 16px !important;
+            line-height: 1.6 !important;
+            color: #e2e2e2 !important;
+        }
+        
+        /* تحسين المسافات بين العناصر */
+        .element-container {
+            margin: 1.5rem 0 !important;
+        }
+        
+        /* إخفاء أزرار الزيادة والنقصان في حقول الإدخال العددية */
+        input[type="number"]::-webkit-inner-spin-button, 
+        input[type="number"]::-webkit-outer-spin-button { 
+            -webkit-appearance: none; 
+            margin: 0; 
+        }
+        
+        input[type="number"] {
+            -moz-appearance: textfield;
+        }
+        
+        /* إخفاء رسالة "Press Enter to apply" وجميع رسائل المساعدة */
+        .stNumberInput [data-testid="InputHelpText"],
+        .stTextInput [data-testid="InputHelpText"],
+        [data-testid="stForm"] [data-testid="InputHelpText"] {
+            display: none !important;
+        }
+        
+        /* إضافة تنسيق لتوافق أفضل مع جميع اللغات */
+        [dir="rtl"] .stNumberInput input,
+        [dir="rtl"] .stTextInput input {
+            text-align: right !important;
+        }
+        
+        [dir="ltr"] .stNumberInput input,
+        [dir="ltr"] .stTextInput input {
+            text-align: left !important;
+        }
+        
+        /* تحسين النصوص والعناصر الأخرى */
+        .stMarkdown {
+            color: #e2e2e2;
+        }
+        
+        /* تحسين الروابط */
+        a {
+            color: #4f8fba !important;
+            text-decoration: none !important;
+            transition: all 0.3s ease;
+        }
+        a:hover {
+            color: #6ba5d1 !important;
+            text-decoration: none !important;
+        }
+        
+        /* تحسين تأثير الضغط على الدجاجة */
+        .emoji-link {
+            font-size: 24px;
+            text-decoration: none;
+            transition: all 0.3s ease;
+            display: inline-block;
+            margin-right: 8px;
+            filter: drop-shadow(0 0 8px rgba(255,255,255,0.2));
+        }
+        
+        .emoji-link:hover {
+            transform: scale(1.2);
+            filter: drop-shadow(0 0 12px rgba(255,255,255,0.4));
+        }
+        
+        .emoji-link:active {
+            transform: scale(0.95);
+        }
+        
+        /* تحسين العنوان */
+        .title {
+            font-size: 32px;
+            font-weight: bold;
+            margin-bottom: 12px;
+            text-align: center;
+            background: linear-gradient(120deg, #ffffff, #e2e2e2);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            text-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        }
+        
+        .title-text {
+            text-decoration: none;
+            color: inherit;
+            margin-left: 8px;
+        }
+        
+        /* تحسين القوائم المنسدلة */
+        .stSelectbox > div > div {
+            background: linear-gradient(135deg, #1e212b 0%, #161b25 100%) !important;
+            border: 1px solid rgba(255, 255, 255, 0.2) !important;
+            border-radius: 8px !important;
+            color: #ffffff !important;
+            backdrop-filter: blur(10px);
+            transition: all 0.3s ease;
+            padding: 12px !important;
+            box-shadow: 0 2px 6px rgba(0,0,0,0.1);
+            height: auto !important;
+            min-height: 48px !important;
+            font-size: 16px !important;
+            line-height: 1.5 !important;
+        }
+        
+        /* تحسين قائمة الخيارات المنسدلة */
+        div[data-baseweb="select"] > div {
+            background: linear-gradient(135deg, #1e212b 0%, #161b25 100%) !important;
+            backdrop-filter: blur(10px) !important;
+            border-radius: 8px !important;
+            border: 1px solid rgba(255, 255, 255, 0.2) !important;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.2);
+            padding: 8px !important;
+            min-width: 200px !important;
+        }
+        
+        div[data-baseweb="select"] ul {
+            background: linear-gradient(135deg, #1e212b 0%, #161b25 100%) !important;
+            padding: 4px !important;
+        }
+        
+        div[data-baseweb="select"] ul li {
+            color: #ffffff !important;
+            font-size: 16px !important;
+            padding: 12px !important;
+            margin: 4px 0 !important;
+            border-radius: 6px !important;
+            line-height: 1.5 !important;
+        }
+        
+        /* تحسين النصوص في القوائم */
+        .stSelectbox label {
+            color: #ffffff !important;
+            font-size: 18px !important;
+            font-weight: 500 !important;
+            margin-bottom: 12px !important;
+            text-shadow: 0 1px 2px rgba(0,0,0,0.1);
+            line-height: 1.5 !important;
+        }
+        
+        /* تحسين الأيقونة في القائمة المنسدلة */
+        .stSelectbox svg {
+            fill: #ffffff !important;
+            width: 24px !important;
+            height: 24px !important;
+        }
+        
+        /* تحسين العنوان */
+        .subtitle {
+            font-size: 18px;
+            color: #b8b8b8;
+            margin-bottom: 24px;
+            text-align: center;
+        }
+        
+        /* تحسين أزرار الحساب */
+        .stButton > button {
+            background: linear-gradient(135deg, rgba(255,255,255,0.1), rgba(255,255,255,0.05)) !important;
+            border: 1px solid rgba(255,255,255,0.2) !important;
+            color: #e2e2e2 !important;
+            border-radius: 8px !important;
+            padding: 8px 16px !important;
+            font-weight: 500 !important;
+            transition: all 0.3s ease !important;
+            backdrop-filter: blur(10px);
+            box-shadow: 0 2px 6px rgba(0,0,0,0.1);
+        }
+        
+        .stButton > button:hover {
+            background: linear-gradient(135deg, rgba(255,255,255,0.15), rgba(255,255,255,0.1)) !important;
+            border-color: rgba(255,255,255,0.3) !important;
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+        }
+        
+        .stButton > button:active {
+            transform: translateY(0);
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        }
+        
+        /* تحسين حقول الإدخال */
+        .stNumberInput > div > div > input {
+            background: linear-gradient(135deg, #1e212b 0%, #161b25 100%) !important;
+            border: 1px solid rgba(255, 255, 255, 0.15) !important;
+            border-radius: 8px !important;
+            color: #e2e2e2 !important;
+            padding: 8px 12px !important;
+            transition: all 0.3s ease;
+        }
+        
+        .stNumberInput > div > div > input:focus {
+            border-color: rgba(255, 255, 255, 0.3) !important;
+            box-shadow: 0 0 0 2px rgba(255,255,255,0.1) !important;
+        }
+        
+        /* تحسين حقوق النشر */
+        .copyright {
+            text-align: center;
+            color: rgba(255,255,255,0.5);
+            padding: 16px;
+            font-size: 14px;
+            margin-top: 32px;
+            border-top: 1px solid rgba(255,255,255,0.1);
+        }
+        
+        /* تحسين الشريط العلوي */
+        .stProgress > div > div {
+            background: rgba(30, 37, 48, 0.7) !important;
+            border: 1px solid rgba(255, 255, 255, 0.2) !important;
+            border-radius: 8px !important;
+            overflow: hidden;
+            position: relative;
+            height: 48px !important;
+            box-shadow: 0 2px 6px rgba(0,0,0,0.1);
+            backdrop-filter: blur(10px);
+        }
+        
+        .stProgress > div > div > div {
+            background: linear-gradient(90deg, 
+                rgba(255,255,255,0.1),
+                rgba(255,255,255,0.15),
+                rgba(255,255,255,0.1)
+            ) !important;
+            border-radius: 6px !important;
+            height: 100% !important;
+            transition: all 0.3s ease !important;
+            backdrop-filter: blur(5px);
+        }
+        
+        .stProgress > div > div::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(
+                90deg,
+                transparent,
+                rgba(255, 255, 255, 0.05),
+                transparent
+            );
+            transition: all 0.5s ease;
+            z-index: 1;
+        }
+        
+        .stProgress > div > div:hover::before {
+            left: 100%;
+        }
+        
+        .stProgress > div > div:hover {
+            background: rgba(22, 27, 37, 0.8) !important;
+            border-color: rgba(255, 255, 255, 0.3) !important;
+            transform: translateY(-1px);
+            box-shadow: 0 4px 12px rgba(0,0,0,0.2);
+        }
+        
+        /* تحديث شفافية القوائم المنسدلة */
+        .stSelectbox > div > div,
+        .stNumberInput > div > div {
+            background: rgba(30, 37, 48, 0.7) !important;
+            backdrop-filter: blur(10px);
+        }
+        
+        .stSelectbox > div > div:hover,
+        .stNumberInput > div > div:hover {
+            background: rgba(22, 27, 37, 0.8) !important;
+        }
+        
+        div[data-baseweb="select"] > div,
+        div[data-baseweb="popover"] > div {
+            background: rgba(30, 37, 48, 0.7) !important;
+            backdrop-filter: blur(10px) !important;
+        }
+        
+        div[data-baseweb="select"] ul,
+        div[data-baseweb="menu"] ul {
+            background: rgba(30, 37, 48, 0.7) !important;
+            backdrop-filter: blur(10px);
+        }
+        
+        div[data-baseweb="select"] ul li:hover,
+        div[data-baseweb="menu"] ul li:hover {
+            background: rgba(22, 27, 37, 0.8) !important;
+        }
+        
+        /* تحسين ملخص النتائج */
+        pre {
+            background: linear-gradient(45deg, 
+                #1a1a2e,
+                #16213e
+            ) !important;
+            border: 1px solid rgba(255, 255, 255, 0.1) !important;
+            border-radius: 15px !important;
+            padding: 20px !important;
+            color: #ffffff !important;
+            font-family: 'Courier New', monospace !important;
+            position: relative !important;
+            overflow: hidden !important;
+            transition: all 0.3s ease !important;
+            animation: gradientBG 15s ease infinite !important;
+            background-size: 200% 200% !important;
+        }
 
-# دالة لتنسيق عناوين الإجماليات
-def get_totals_header(language):
-    totals_headers = {
-        "العربية": "💰 الإجماليات (Totals)",
-        "English": "💰 Totals", 
-        "Română": "💰 Totaluri"
+        pre:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 20px rgba(0,0,0,0.3);
+            border-color: rgba(255, 255, 255, 0.2) !important;
+        }
+
+        /* تأثير الخلفية المتحركة */
+        @keyframes gradientBG {
+            0% {
+                background: linear-gradient(45deg, 
+                    #1a1a2e,
+                    #16213e,
+                    #0f3460
+                );
+                background-size: 200% 200%;
+                background-position: 0% 50%;
+            }
+            50% {
+                background: linear-gradient(45deg, 
+                    #16213e,
+                    #0f3460,
+                    #1a1a2e
+                );
+                background-size: 200% 200%;
+                background-position: 100% 50%;
+            }
+            100% {
+                background: linear-gradient(45deg, 
+                    #1a1a2e,
+                    #16213e,
+                    #0f3460
+                );
+                background-size: 200% 200%;
+                background-position: 0% 50%;
+            }
+        }
+
+        /* تنسيق النص داخل ملخص النتائج */
+        pre code {
+            color: #e2e2e2 !important;
+            font-size: 1.1em !important;
+            line-height: 1.5 !important;
+        }
+
+        /* تأثير الحدود المضيئة */
+        pre::before {
+            content: '';
+            position: absolute;
+            top: -2px;
+            left: -2px;
+            right: -2px;
+            bottom: -2px;
+            border-radius: 16px;
+            background: linear-gradient(45deg, 
+                #1a1a2e,
+                #0f3460,
+                #1a1a2e
+            );
+            z-index: -1;
+            animation: borderGlow 3s ease-in-out infinite;
+            opacity: 0.5;
+        }
+
+        @keyframes borderGlow {
+            0% {
+                opacity: 0.3;
+            }
+            50% {
+                opacity: 0.6;
+            }
+            100% {
+                opacity: 0.3;
+            }
+        }
+        
+        /* تنسيق العنوان الرئيسي */
+        .main-title {
+            font-size: 2.5em !important;
+            font-weight: bold !important;
+            text-align: center !important;
+            margin-bottom: 1em !important;
+            color: #ffffff !important;
+            text-shadow: 0 0 10px rgba(255,255,255,0.3);
+        }
+        
+        /* تأثير الإيموجي المتحرك */
+        .chicken-emoji {
+            display: inline-block;
+            font-size: 2em;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            animation: float 2s ease-in-out infinite;
+        }
+        
+        .chicken-emoji:hover {
+            transform: scale(1.3) rotate(15deg);
+        }
+        
+        @keyframes float {
+            0% { transform: translateY(0px); }
+            50% { transform: translateY(-10px); }
+            100% { transform: translateY(0px); }
+        }
+    </style>
+""", unsafe_allow_html=True)
+
+# تنسيق الأرقام العشرية
+def format_decimal(number):
+    return f"{number:.10f}".rstrip('0').rstrip('.') if '.' in f"{number}" else f"{number}"
+
+# تعريف النصوص بجميع اللغات
+texts = {
+    "العربية": {
+        "title": "حاسبة الدجاج - نيويولك",
+        "subtitle": "نيويولك توفر لك حاسبة أرباح دقيقة ومباشرة",
+        "language": "اللغة 🌍",
+        "currency": "العملة 💵",
+        "egg_price": "سعر البيض الحالي 🥚",
+        "feed_price": "سعر العلف الحالي 🌽",
+        "save_prices": "حفظ الأسعار 💾",
+        "calculation_type": "نوع الحساب 📊",
+        "chicken_profits": "أرباح الدجاجة",
+        "daily_rewards": "المكافآت اليومية",
+        "eggs_input": "عدد البيض 🥚",
+        "days_input": "عدد الأيام 📅",
+        "food_input": "عدد الطعام المطلوب 🌽",
+        "calculate_profits": "حساب الأرباح 🧮",
+        "calculate_rewards": "حساب الربح اليومي 📈",
+        "reset": "إعادة تعيين 🔄",
+        "value": "القيمة",
+        "category": "الفئة",
+        "net_profit": "الربح في السنة الاولى 📈",
+        "total_first_year_profit": "إجمالي الربح في السنة الاولى 📈",
+        "total_rewards": "إجمالي عدد البيض اليومي 🥚",
+        "total_food_cost": "اجمالي عدد العلف اليومي 🌽",
+        "first_year_rental": "الإيجار للسنة الثانية 🏠",
+        "final_profit": "الربح الصافي خلال السنتين 💰",
+        "calculation_time": "وقت الحساب ⏰",
+        "summary": "ملخص النتائج ✨",
+        "usd_results": "النتائج بالدولار الأمريكي 💵",
+        "iqd_results": "النتائج بالدينار العراقي 💵",
+        "daily_profit": "الربح اليومي 📈",
+        "am": "صباحاً",
+        "pm": "مساءً",
+        "copy_results": "نسخ النتائج",
+        "group_calculation": "الحساب الجماعي",
+        "chicken_number": "رقم الدجاجة",
+        "add_chicken": "إضافة دجاجة",
+        "daily_egg_rate": "عدد البيض الحالي",
+        "active_days": "عدد الأيام النشطة",
+        "chicken_details": "تفاصيل الدجاج",
+        "egg_count": "عدد البيض",
+        "income": "الدخل",
+        "feed_cost": "تكلفة العلف",
+        "rent": "الإيجار للسنة الثانية",
+        "net_profit_per_chicken": "الربح الصافي خلال السنتين",
+        "profit_with_sale": "📊 الربح مع بيع الدجاجة في السنة الاولى 📊",
+        "chicken_sale_price": "سعر بيع الدجاجة (اختياري) 💰",
+        "total_summary": "الملخص الإجمالي",
+        "total_eggs": "إجمالي عدد البيض",
+        "total_income": "إجمالي الدخل",
+        "total_feed": "إجمالي تكلفة العلف",
+        "total_rent": "إجمالي الإيجار للسنة الثانية",
+        "total_net_profit": "إجمالي الربح الصافي خلال السنتين",
+        "total_profit_with_sale": "إجمالي الربح الصافي مع بيع الدجاج خلال السنة الاولى 🐔",
+        "remove_chicken": "حذف الدجاجة",
+        "calculate_group": "حساب النتائج الجماعية",
+        "no_chicken_data": "لا توجد بيانات دجاج مدخلة حتى الآن!",
+        "not_first_year_chicken": "لا يمكن بيع الدجاجة لأنها ليست في السنة الأولى (عدد البيض أقل من 320)",
+        "summary_egg_price": "مجموع سعر البيض 🥚",
+        "summary_feed_price": "مجموع سعر العلف 🌽"
+    },
+    "English": {
+        "title": "Chicken Calculator - NewYolk",
+        "subtitle": "NewYolk Provides You With Accurate And Direct Profit Calculator",
+        "language": "Language 🌍",
+        "currency": "Currency 💵",
+        "egg_price": "Current Egg Price 🥚",
+        "feed_price": "Current Feed Price 🌽",
+        "save_prices": "Save Prices 💾",
+        "calculation_type": "Calculation Type 📊",
+        "chicken_profits": "Chicken Profit",
+        "daily_rewards": "Daily Rewards",
+        "eggs_input": "Number of Eggs 🥚",
+        "days_input": "Number of Days 📅",
+        "food_input": "Amount of Food Needed 🌽",
+        "calculate_profits": "Calculate Profits 🧮",
+        "calculate_rewards": "Calculate Daily Profit 📈",
+        "reset": "Reset 🔄",
+        "value": "Value",
+        "category": "Category",
+        "net_profit": "First Year Profit 📈",
+        "total_first_year_profit": "Total First Year Profit 📈",
+        "total_rewards": "Total Daily Eggs Count 🥚",
+        "total_food_cost": "Total Daily Feed Amount 🌽",
+        "first_year_rental": "Second Year Rental 🏠",
+        "final_profit": "Two Years Net Profit 💰",
+        "calculation_time": "Calculation Time ⏰",
+        "summary": "Results Summary ✨",
+        "usd_results": "Results in USD 💵",
+        "iqd_results": "Results in IQD 💵",
+        "daily_profit": "Daily Profit 📈",
+        "am": "AM",
+        "pm": "PM",
+        "copy_results": "Copy Results",
+        "group_calculation": "Group Calculation",
+        "chicken_number": "Chicken Number",
+        "add_chicken": "Add Chicken",
+        "daily_egg_rate": "Current Egg Count",
+        "active_days": "Active Days",
+        "chicken_details": "Chicken Details",
+        "egg_count": "Egg Count",
+        "income": "Income",
+        "feed_cost": "Feed Cost",
+        "rent": "Second Year Rental",
+        "net_profit_per_chicken": "Two Years Net Profit",
+        "profit_with_sale": "📊 First Year Profit With Chicken Sale 📊",
+        "chicken_sale_price": "Chicken Sale Price (Optional) 💰",
+        "total_summary": "Total Summary",
+        "total_eggs": "Total Eggs",
+        "total_income": "Total Income",
+        "total_feed": "Total Feed Cost",
+        "total_rent": "Total Second Year Rental",
+        "total_net_profit": "Total Two Years Net Profit",
+        "total_profit_with_sale": "Total Net Profit With Chicken Sale During First Year 🐔",
+        "remove_chicken": "Remove Chicken",
+        "calculate_group": "Calculate Group Results",
+        "no_chicken_data": "No chicken data entered yet!",
+        "not_first_year_chicken": "Chicken cannot be sold as it's not in the first year (egg count less than 320)",
+        "summary_egg_price": "Total Egg Price 🥚",
+        "summary_feed_price": "Total Feed Price 🌽"
+    },
+    "Română": {
+        "title": "Calculator Găini - NewYolk",
+        "subtitle": "NewYolk Vă Oferă Un Calculator De Profit Precis Și Direct",
+        "language": "Limbă 🌍",
+        "currency": "Monedă 💵",
+        "egg_price": "Preț Curent Ouă 🥚",
+        "feed_price": "Preț Curent Furaje 🌽",
+        "save_prices": "Salvează Prețurile 💾",
+        "calculation_type": "Tipul Calculului 📊",
+        "chicken_profits": "Profit Găină",
+        "daily_rewards": "Recompensele Zilnice",
+        "eggs_input": "Număr de Ouă 🥚",
+        "days_input": "Număr de Zile 📅",
+        "food_input": "Cantitate de Hrană Necesară 🌽",
+        "calculate_profits": "Calculați Profiturile 🧮",
+        "calculate_rewards": "Calculați Profitul Zilnic 📈",
+        "reset": "Resetare 🔄",
+        "value": "Valoare",
+        "category": "Categorie",
+        "net_profit": "Profit În Primul An 📈",
+        "total_first_year_profit": "Profit Total În Primul An 📈",
+        "total_rewards": "Numărul Total De Ouă Zilnice 🥚",
+        "total_food_cost": "Cantitatea Totală De Furaje Zilnice 🌽",
+        "first_year_rental": "Chirie Pentru Al Doilea An 🏠",
+        "final_profit": "Profit Net În Cei Doi Ani 💰",
+        "calculation_time": "Ora Calculului ⏰",
+        "summary": "Rezumatul Rezultatelor ✨",
+        "usd_results": "Rezultate în USD 💵",
+        "iqd_results": "Rezultate în IQD 💵",
+        "daily_profit": "Profit Zilnic 📈",
+        "am": "AM",
+        "pm": "PM",
+        "copy_results": "Copiază Rezultatele",
+        "group_calculation": "Calcul de Grup",
+        "chicken_number": "Numărul Găinii",
+        "add_chicken": "Adaugă Găină",
+        "daily_egg_rate": "Numărul Actual de Ouă",
+        "active_days": "Zile Active",
+        "chicken_details": "Detalii Găini",
+        "egg_count": "Număr Ouă",
+        "income": "Venit",
+        "feed_cost": "Cost Furaje",
+        "rent": "Chirie Pentru Al Doilea An",
+        "net_profit_per_chicken": "Profit Net În Cei Doi Ani",
+        "profit_with_sale": "📊 Profit Din Primul An Cu Vânzarea Găinii 📊",
+        "chicken_sale_price": "Preț Vânzare Găină (Opțional) 💰",
+        "total_summary": "Rezumat Total",
+        "total_eggs": "Total Ouă",
+        "total_income": "Venit Total",
+        "total_feed": "Cost Total Furaje",
+        "total_rent": "Chirie Totală Pentru Al Doilea An",
+        "total_net_profit": "Profit Net Total În Cei Doi Ani",
+        "total_profit_with_sale": "Profit Net Total Cu Vânzarea Găinilor În Primul An 🐔",
+        "remove_chicken": "Elimină Găina",
+        "calculate_group": "Calculează Rezultatele de Grup",
+        "no_chicken_data": "Nu există date despre găini introduse încă!",
+        "not_first_year_chicken": "Găina nu poate fi vândută deoarece nu este în primul an (numărul de ouă mai mic de 320)",
+        "summary_egg_price": "Preț Total Ouă 🥚",
+        "summary_feed_price": "Preț Total Furaje 🌽"
+    }
+}
+
+# اختيار اللغة
+language = st.selectbox(
+    "اللغة | Language | Limbă 🌍",
+    ["العربية", "English", "Română"],
+    key="language_selector"
+)
+
+# تحسين الواجهة
+st.markdown(
+    f"""
+    <style>
+        .stApp {{
+            direction: {'rtl' if language == 'العربية' else 'ltr'};
+        }}
+        .title {{
+            font-size: 36px;
+            font-weight: bold;
+            text-align: center;
+            padding: 20px;
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+        }}
+        .subtitle {{
+            font-size: 24px;
+            text-align: center;
+            margin-bottom: 30px;
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+        }}
+        .stButton {{
+            direction: {'rtl' if language == 'العربية' else 'ltr'};
+            text-align: {'right' if language == 'العربية' else 'left'};
+            font-size: 24px;
+        }}
+        .stSelectbox, .stTextInput {{
+            direction: {'rtl' if language == 'العربية' else 'ltr'};
+            text-align: {'right' if language == 'العربية' else 'left'};
+            font-size: 24px;
+        }}
+        .stButton button {{
+            font-size: 24px;
+            padding: 10px 24px;
+            border-radius: 12px;
+            width: 100%;
+        }}
+        .stTable th, .stTable td {{
+            text-align: {'right' if language == 'العربية' else 'left'} !important;
+            direction: {'rtl' if language == 'العربية' else 'ltr'} !important;
+        }}
+        [data-testid="stMarkdownContainer"] {{
+            direction: {'rtl' if language == 'العربية' else 'ltr'};
+            text-align: {'right' if language == 'العربية' else 'left'};
+        }}
+        .element-container {{
+            direction: {'rtl' if language == 'العربية' else 'ltr'};
+        }}
+        thead tr th:first-child {{
+            text-align: {'right' if language == 'العربية' else 'left'} !important;
+        }}
+        tbody tr td:first-child {{
+            text-align: {'right' if language == 'العربية' else 'left'} !important;
+        }}
+    </style>
+    <div class="main-title">
+        {texts[language]["title"]}
+        <a href="https://newyolkcalculator.streamlit.app" target="_blank" class="chicken-emoji">🐔</a>
+        <div class="subtitle">
+            {texts[language]["subtitle"]}
+        </div>
+    </div>
+    """,
+    unsafe_allow_html=True
+)
+
+st.markdown("""
+    <style>
+        .main-title {
+            font-size: 2.5em !important;
+            font-weight: bold !important;
+            text-align: center !important;
+            margin-bottom: 0.2em !important;
+            color: #ffffff !important;
+            text-shadow: 0 0 10px rgba(255,255,255,0.3);
+        }
+        
+        .subtitle {
+            font-size: 0.7em;
+            text-align: center;
+            margin-top: 0.5em;
+            color: #e2e2e2;
+            opacity: 0.9;
+            font-weight: normal;
+        }
+    </style>
+""", unsafe_allow_html=True)
+
+# استخدام الأعمدة لتخطيط أفضل
+col1, col2 = st.columns(2)
+
+with col1:
+    currency = st.selectbox(
+        texts[language]["currency"],
+        ["USD", "IQD"]
+    )
+
+with col2:
+    calculation_type = st.selectbox(
+        texts[language]["calculation_type"],
+        [texts[language]["chicken_profits"], texts[language]["daily_rewards"], texts[language]["group_calculation"]]
+    )
+
+# دالة التحقق من المدخلات
+def is_number(value):
+    try:
+        float(value)
+        return True
+    except ValueError:
+        return False
+
+# قسم تعديل الأسعار
+st.subheader(texts[language]["save_prices"])
+col3, col4 = st.columns(2)
+
+with col3:
+    new_egg_price = st.text_input(
+        texts[language]["egg_price"],
+        value="0.1185"
+    )
+
+with col4:
+    new_feed_price = st.text_input(
+        texts[language]["feed_price"],
+        value="0.0196"
+    )
+
+if st.button(texts[language]["save_prices"], type="secondary"):
+    if not is_number(new_egg_price) or not is_number(new_feed_price):
+        st.error(get_error_message("invalid_number", language))
+    else:
+        st.success(get_error_message("save_success", language))
+
+# تحديث الأسعار بناءً على العملة
+if is_number(new_egg_price) and is_number(new_feed_price):
+    if currency == "IQD":
+        egg_price_display = float(new_egg_price) * 1480
+        feed_price_display = float(new_feed_price) * 1480
+    else:
+        egg_price_display = float(new_egg_price)
+        feed_price_display = float(new_feed_price)
+
+    st.write(f"{texts[language]['egg_price']}: {format_decimal(egg_price_display)} {currency}")
+    st.write(f"{texts[language]['feed_price']}: {format_decimal(feed_price_display)} {currency}")
+
+# دالة إنشاء الرسم البياني
+def create_profit_chart(df, language):
+    # تخصيص الألوان
+    colors = {
+        texts[language]["total_eggs"]: '#4CAF50',
+        texts[language]["total_feed"]: '#FF9800',
+        texts[language]["total_first_year_profit"]: '#2196F3',
+        texts[language]["total_rent"]: '#F44336',
+        texts[language]["total_net_profit"]: '#9C27B0'
     }
     
-    if language in totals_headers:
-        return totals_headers[language]
+    # إنشاء الرسم البياني
+    fig = px.pie(
+        df,
+        values=texts[language]["value"],
+        names=texts[language]["category"],
+        title=texts[language]["summary"],
+        color_discrete_sequence=['#4CAF50', '#FF9800', '#2196F3', '#F44336', '#9C27B0']
+    )
+    
+    # تحديث تصميم الرسم البياني
+    fig.update_traces(
+        textposition='outside',
+        textinfo='percent+label'
+    )
+    
+    fig.update_layout(
+        title_x=0.5,
+        title_font_size=24,
+        showlegend=True,
+        legend=dict(
+            orientation="h",
+            yanchor="bottom",
+            y=-0.2,
+            xanchor="center",
+            x=0.5
+        ),
+        margin=dict(t=60, l=0, r=0, b=0),
+        height=500,
+        paper_bgcolor='rgba(0,0,0,0)',
+        plot_bgcolor='rgba(0,0,0,0)'
+    )
+    
+    return fig
+
+if calculation_type == texts[language]["chicken_profits"]:
+    st.subheader(texts[language]["chicken_profits"] + " 📈")
+    col5, col6 = st.columns(2)
+
+    with col5:
+        eggs = st.text_input(
+            texts[language]["eggs_input"],
+            value="",
+            help=get_help_message("eggs_input", language)
+        )
+
+    with col6:
+        days = st.text_input(
+            texts[language]["days_input"],
+            value="",
+            help=get_help_message("days_input", language)
+        )
+
+    # إضافة حقل سعر بيع الدجاجة
+    try:
+        eggs_value = float(eggs) if eggs else 0
+        is_first_year = eggs_value >= 320
+    except ValueError:
+        is_first_year = False  # إذا لم يكن رقماً صحيحاً
+        
+    if is_first_year:
+        chicken_sale_price = st.text_input(
+            texts[language]["chicken_sale_price"],
+            value=""
+        )
     else:
-        return "💰 Totals"
+        if eggs: # نظهر الرسالة فقط إذا أدخل المستخدم قيمة للبيض
+            st.info(texts[language]["not_first_year_chicken"])
+        chicken_sale_price = "0"
+
+    if st.button(texts[language]["calculate_profits"], type="primary"):
+        try:
+            # التحويل من نص إلى رقم بشكل صحيح
+            try:
+                eggs_value = float(eggs) if eggs else None
+                days_value = float(days) if days else None
+                chicken_sale_price_value = float(chicken_sale_price) if chicken_sale_price else 0
+            except ValueError:
+                st.error(get_error_message("invalid_number", language))
+                eggs_value = None
+                days_value = None
+                chicken_sale_price_value = 0
+
+            if eggs_value is None or days_value is None:
+                st.error(get_error_message("missing_values", language))
+            elif eggs_value > 580:
+                st.error(get_error_message("eggs_exceed", language))
+            elif days_value > 730:
+                st.error(get_error_message("days_exceed", language))
+            else:
+                # فصل السنة الأولى والثانية
+                # السنة الأولى: 320 بيضة و 365 يوم
+                first_year_eggs = min(eggs_value, 320)
+                second_year_eggs = max(0, eggs_value - 320)
+                
+                first_year_days = min(days_value, 365)
+                second_year_days = max(0, days_value - 365)
+                
+                # حساب أرباح السنة الأولى
+                first_year_income = first_year_eggs * float(new_egg_price)
+                first_year_feed_cost = (first_year_days * 2) * float(new_feed_price)
+                first_year_profit = first_year_income - first_year_feed_cost
+                
+                # حساب أرباح السنة الثانية 
+                # السنة الثانية: 260 بيضة إضافية مع إيجار 6 دولار
+                second_year_income = second_year_eggs * float(new_egg_price)
+                second_year_feed_cost = (second_year_days * 2) * float(new_feed_price)
+                second_year_rent = 6 if second_year_eggs > 0 else 0  # إيجار فقط إذا دخلت السنة الثانية
+                second_year_profit = second_year_income - second_year_feed_cost - second_year_rent
+                
+                # الإجماليات
+                total_egg_price = first_year_income + second_year_income
+                total_feed_cost = first_year_feed_cost + second_year_feed_cost
+                net_profit_before_rent = first_year_profit + second_year_profit + second_year_rent
+                net_profit = first_year_profit + second_year_profit
+                
+                # حساب الربح مع بيع الدجاجة - فقط للدجاج التي عدد بيضها 320 أو أكثر
+                profit_with_sale = 0
+                if eggs_value >= 320 and chicken_sale_price_value > 0:
+                    profit_with_sale = first_year_profit + chicken_sale_price_value
+
+                # تحويل العملة
+                if currency == "IQD":
+                    first_year_income = first_year_income * 1480
+                    first_year_feed_cost = first_year_feed_cost * 1480
+                    first_year_profit = first_year_profit * 1480
+                    
+                    second_year_income = second_year_income * 1480
+                    second_year_feed_cost = second_year_feed_cost * 1480
+                    second_year_rent = second_year_rent * 1480
+                    second_year_profit = second_year_profit * 1480
+                    
+                    total_egg_price = total_egg_price * 1480
+                    total_feed_cost = total_feed_cost * 1480
+                    net_profit_before_rent = net_profit_before_rent * 1480
+                    net_profit = net_profit * 1480
+                    
+                    if profit_with_sale > 0:
+                        profit_with_sale = profit_with_sale * 1480
+                    chicken_sale_price_value = chicken_sale_price_value * 1480 if chicken_sale_price_value > 0 else 0
+
+                # تنسيق التاريخ والوقت حسب توقيت بغداد
+                current_time = datetime.now() + timedelta(hours=3)  # تحويل التوقيت إلى توقيت بغداد
+                date_str = current_time.strftime("%Y-%m-%d")
+                time_str = current_time.strftime("%I:%M %p")
+
+                # إنشاء نص النتائج مع فصل السنة الأولى والثانية
+                results_text = f"""
+╔══════════════════════════════════════════════════════════════════╗
+║                  {texts[language]['summary']}                    ║
+╠══════════════════════════════════════════════════════════════════╣
+║ {texts[language]['calculation_time']}: {date_str} {time_str}
+╠══════════════════════════════════════════════════════════════════╣
+║                    🥇 السنة الأولى (First Year)                  ║
+║                     320 بيضة - 365 يوم - بدون إيجار             ║
+╟──────────────────────────────────────────────────────────────────╢
+║ عدد البيض: {format_decimal(first_year_eggs)}
+║ عدد الأيام: {format_decimal(first_year_days)}
+║ دخل البيض: {format_decimal(first_year_income)} {currency}
+║ تكلفة العلف: {format_decimal(first_year_feed_cost)} {currency}
+║ ربح السنة الأولى: {format_decimal(first_year_profit)} {currency}"""
+
+                # إضافة سعر البيع والربح مع البيع للسنة الأولى إذا كانت الدجاجة مؤهلة
+                if eggs_value >= 320 and chicken_sale_price_value > 0:
+                    results_text += f"""
+║ سعر بيع الدجاجة: {format_decimal(chicken_sale_price_value)} {currency}
+║ ربح السنة الأولى مع البيع: {format_decimal(profit_with_sale)} {currency}"""
+
+                # إضافة السنة الثانية إذا كانت موجودة
+                if second_year_eggs > 0 or second_year_days > 0:
+                    results_text += f"""
+╠══════════════════════════════════════════════════════════════════╣
+║                    🥈 السنة الثانية (Second Year)                ║
+║                     260 بيضة إضافية - مع إيجار 6 دولار           ║
+╟──────────────────────────────────────────────────────────────────╢
+║ عدد البيض: {format_decimal(second_year_eggs)}
+║ عدد الأيام: {format_decimal(second_year_days)}
+║ دخل البيض: {format_decimal(second_year_income)} {currency}
+║ تكلفة العلف: {format_decimal(second_year_feed_cost)} {currency}
+║ الإيجار: {format_decimal(second_year_rent)} {currency}
+║ ربح السنة الثانية: {format_decimal(second_year_profit)} {currency}"""
+
+                # إضافة الإجماليات
+                results_text += f"""
+╠══════════════════════════════════════════════════════════════════╣
+║                      💰 الإجماليات (Totals)                     ║
+╟──────────────────────────────────────────────────────────────────╢
+║ إجمالي البيض: {format_decimal(eggs_value)}
+║ إجمالي الأيام: {format_decimal(days_value)}
+║ إجمالي دخل البيض: {format_decimal(total_egg_price)} {currency}
+║ إجمالي تكلفة العلف: {format_decimal(total_feed_cost)} {currency}
+║ إجمالي الإيجار: {format_decimal(second_year_rent)} {currency}
+║ صافي الربح (السنتين): {format_decimal(net_profit)} {currency}"""
+
+                # إضافة الربح مع البيع في الإجماليات إذا كان موجوداً
+                if eggs_value >= 320 and chicken_sale_price_value > 0:
+                    results_text += f"""
+║ الربح مع بيع الدجاجة (السنة الأولى فقط): {format_decimal(profit_with_sale)} {currency}"""
+
+                # إغلاق المربع
+                results_text += """
+╚══════════════════════════════════════════════════════════════════╝"""
+
+                # إنشاء DataFrame للجدول والرسم البياني
+                chart_categories = [
+                    f"🥇 ربح السنة الأولى",
+                    f"🌽 تكلفة علف السنة الأولى", 
+                    f"🥚 دخل بيض السنة الأولى"
+                ]
+                
+                chart_values = [
+                    first_year_profit,
+                    first_year_feed_cost,
+                    first_year_income
+                ]
+                
+                # إضافة السنة الثانية إذا كانت موجودة
+                if second_year_eggs > 0 or second_year_days > 0:
+                    chart_categories.extend([
+                        f"🥈 ربح السنة الثانية",
+                        f"🌽 تكلفة علف السنة الثانية",
+                        f"🥚 دخل بيض السنة الثانية",
+                        f"🏠 إيجار السنة الثانية"
+                    ])
+                    chart_values.extend([
+                        second_year_profit,
+                        second_year_feed_cost,
+                        second_year_income,
+                        second_year_rent
+                    ])
+                
+                # إضافة سعر البيع والربح مع البيع إذا كان موجوداً
+                if eggs_value >= 320 and chicken_sale_price_value > 0:
+                    chart_categories.extend([
+                        f"💰 سعر بيع الدجاجة",
+                        f"📊 ربح السنة الأولى مع البيع"
+                    ])
+                    chart_values.extend([
+                        chicken_sale_price_value,
+                        profit_with_sale
+                    ])
+                
+                # إضافة الربح الصافي الإجمالي
+                chart_categories.append(f"💰 صافي الربح (السنتين)")
+                chart_values.append(net_profit)
+                
+                df = pd.DataFrame({
+                    texts[language]["category"]: chart_categories,
+                    texts[language]["value"]: chart_values
+                })
+                
+                # تنسيق الجدول النهائي أولاً
+                df = df.round(2)
+                df[texts[language]["value"]] = df[texts[language]["value"]].apply(lambda x: f"{format_decimal(x)} {currency}")
+                st.table(df)
+
+                # عرض الرسم البياني
+                chart_df = pd.DataFrame({
+                    texts[language]["category"]: chart_categories,
+                    texts[language]["value"]: chart_values
+                })
+                fig = create_profit_chart(chart_df, language)
+                st.plotly_chart(fig, use_container_width=True)
+
+                # عرض ملخص النتائج في النهاية
+                st.markdown(f"### ✨ {texts[language]['summary']}")
+                st.code(results_text)
+                
+        except ValueError:
+            st.error(get_error_message("invalid_number", language))
+
+elif calculation_type == texts[language]["daily_rewards"]:
+    st.subheader(texts[language]["daily_rewards"] + " 📈")
+    col7, col8 = st.columns(2)
+
+    with col7:
+        rewards = st.text_input(
+            texts[language]["total_rewards"],
+            value="",
+            help=get_help_message("rewards_input", language)
+        )
+
+    with col8:
+        food = st.text_input(
+            texts[language]["total_food_cost"],
+            value="",
+            help=get_help_message("food_input", language)
+        )
+
+    if st.button(texts[language]["calculate_rewards"], type="primary"):
+        try:
+            # التحويل من نص إلى رقم بشكل صحيح
+            try:
+                rewards_value = float(rewards) if rewards else None
+                food_value = float(food) if food else None
+            except ValueError:
+                st.error(get_error_message("invalid_number", language))
+                rewards_value = None
+                food_value = None
+
+            if rewards_value is None or food_value is None:
+                st.error(get_error_message("missing_values", language))
+            else:
+                # حساب الربح اليومي
+                daily_profit = rewards_value * float(new_egg_price) - food_value * float(new_feed_price)
+
+                # تحويل العملة
+                if currency == "IQD":
+                    daily_profit = daily_profit * 1480
+                else:
+                    daily_profit = daily_profit
+
+                # تنسيق التاريخ والوقت حسب توقيت بغداد
+                current_time = datetime.now() + timedelta(hours=3)  # تحويل التوقيت إلى توقيت بغداد
+                date_str = current_time.strftime("%Y-%m-%d")
+                time_str = current_time.strftime("%I:%M %p")
+
+                # إنشاء نص النتائج
+                results_text = f"""
+╔═════════════════════════════════════════════════════════════╗
+║ {texts[language]['calculation_time']}: {date_str} {time_str}
+╟┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┑
+║ {texts[language]['usd_results']}:
+║ {texts[language]['summary_egg_price']}: {format_decimal(rewards_value * float(new_egg_price))} USD
+║ {texts[language]['summary_feed_price']}: {format_decimal(food_value * float(new_feed_price))} USD
+║ {texts[language]['daily_profit']}: {format_decimal(daily_profit)} USD
+╟┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┑
+║ {texts[language]['iqd_results']}:
+║ {texts[language]['summary_egg_price']}: {format_decimal(rewards_value * float(new_egg_price) * 1480)} IQD
+║ {texts[language]['summary_feed_price']}: {format_decimal(food_value * float(new_feed_price) * 1480)} IQD
+║ {texts[language]['daily_profit']}: {format_decimal(daily_profit * 1480)} IQD
+╚═════════════════════════════════════════════════════════════╝"""
+
+                # إنشاء DataFrame للرسم البياني
+                df = pd.DataFrame({
+                    texts[language]["category"]: [
+                        f"🥚 {texts[language]['total_rewards']}",
+                        f"🌽 {texts[language]['total_food_cost']}",
+                        f"💰 {texts[language]['daily_profit']}"
+                    ],
+                    texts[language]["value"]: [
+                        rewards_value * float(new_egg_price),
+                        food_value * float(new_feed_price),
+                        daily_profit
+                    ]
+                })
+                
+                # تنسيق القيم في الجدول
+                df = df.round(2)
+                df[texts[language]["value"]] = df[texts[language]["value"]].apply(lambda x: f"{format_decimal(x)} {currency}")
+                st.table(df)
+
+                # عرض الرسم البياني
+                chart_df = pd.DataFrame({
+                    texts[language]["category"]: [
+                        f"🥚 {texts[language]['total_rewards']}",
+                        f"🌽 {texts[language]['total_food_cost']}",
+                        f"💰 {texts[language]['daily_profit']}"
+                    ],
+                    texts[language]["value"]: [
+                        rewards_value * float(new_egg_price),
+                        food_value * float(new_feed_price),
+                        daily_profit
+                    ]
+                })
+                fig = create_profit_chart(chart_df, language)
+                st.plotly_chart(fig, use_container_width=True)
+
+                # عرض ملخص النتائج في النهاية
+                st.markdown(f"### ✨ {texts[language]['summary']}")
+                st.code(results_text)
+                
+        except ValueError:
+            st.error(get_error_message("invalid_number", language))
+
+# إضافة قسم الحساب الجماعي
+elif calculation_type == texts[language]["group_calculation"]:
+    st.subheader(texts[language]["group_calculation"] + " 🐔")
+    
+    # إنشاء أو الوصول إلى جلسة لتخزين بيانات الدجاج
+    if 'chicken_data' not in st.session_state:
+        st.session_state.chicken_data = []
+    
+    # إضافة دجاجة جديدة
+    st.subheader("➕ " + texts[language]["add_chicken"])
+    col1, col2 = st.columns(2)
+    
+    with col1:
+        egg_rate = st.text_input(
+            texts[language]["daily_egg_rate"],
+            value=""
+        )
+        
+    with col2:
+        active_days = st.text_input(
+            texts[language]["active_days"],
+            value=""
+        )
+        
+    # حقل سعر بيع الدجاجة الاختياري - يظهر شرطياً إذا كان عدد البيض أكبر من 320
+    try:
+        egg_rate_value = float(egg_rate) if egg_rate else 0
+        is_first_year = egg_rate_value >= 320
+    except ValueError:
+        is_first_year = False
+        
+    if is_first_year:
+        chicken_sale_price = st.text_input(
+            texts[language]["chicken_sale_price"],
+            value=""
+        )
+    else:
+        st.info(texts[language]["not_first_year_chicken"])
+        chicken_sale_price = 0.0
+        
+    if st.button(texts[language]["add_chicken"], type="primary"):
+        try:
+            # التحويل من نص إلى رقم بشكل صحيح
+            egg_rate = float(egg_rate) if egg_rate else None
+            active_days = float(active_days) if active_days else None
+            
+            # التحقق من قيمة سعر بيع الدجاجة
+            if "chicken_sale_price" not in locals():
+                chicken_sale_price = "0"
+            try:
+                chicken_sale_price_value = float(chicken_sale_price) if chicken_sale_price else 0
+            except ValueError:
+                chicken_sale_price_value = 0
+            
+            if egg_rate is None or active_days is None:
+                st.error(get_error_message("missing_values", language))
+            elif egg_rate > 580:
+                st.error(get_error_message("eggs_exceed", language))
+            elif active_days > 730:
+                st.error(get_error_message("days_exceed", language))
+            else:
+                # فصل السنة الأولى والثانية لكل دجاجة
+                # السنة الأولى: 320 بيضة و 365 يوم
+                first_year_eggs = min(egg_rate, 320)
+                second_year_eggs = max(0, egg_rate - 320)
+                
+                first_year_days = min(active_days, 365)
+                second_year_days = max(0, active_days - 365)
+                
+                # حساب أرباح السنة الأولى
+                first_year_income = first_year_eggs * float(new_egg_price)
+                first_year_feed_cost = (first_year_days * 2) * float(new_feed_price)
+                first_year_profit = first_year_income - first_year_feed_cost
+                
+                # حساب أرباح السنة الثانية
+                # السنة الثانية: 260 بيضة إضافية مع إيجار
+                second_year_income = second_year_eggs * float(new_egg_price)
+                second_year_feed_cost = (second_year_days * 2) * float(new_feed_price)
+                second_year_rent = 6 if second_year_eggs > 0 else 0
+                second_year_profit = second_year_income - second_year_feed_cost - second_year_rent
+                
+                # الإجماليات
+                eggs_count = egg_rate
+                egg_income = first_year_income + second_year_income
+                feed_cost = first_year_feed_cost + second_year_feed_cost
+                rent = second_year_rent
+                net_profit_before_rent = first_year_profit + second_year_profit + second_year_rent
+                net_profit = first_year_profit + second_year_profit
+                
+                # حساب الربح مع بيع الدجاجة - فقط للدجاج التي عدد بيضها 320 أو أكثر
+                if eggs_count >= 320 and chicken_sale_price_value > 0:
+                    profit_with_sale = first_year_profit + chicken_sale_price_value
+                else:
+                    profit_with_sale = 0
+                    chicken_sale_price_value = 0.0
+                
+                # إضافة البيانات إلى قائمة الدجاج
+                chicken_id = len(st.session_state.chicken_data) + 1
+                st.session_state.chicken_data.append({
+                    "id": chicken_id,
+                    "eggs": eggs_count,
+                    "days": active_days,
+                    "first_year_eggs": first_year_eggs,
+                    "second_year_eggs": second_year_eggs,
+                    "first_year_days": first_year_days,
+                    "second_year_days": second_year_days,
+                    "first_year_income": first_year_income,
+                    "second_year_income": second_year_income,
+                    "first_year_feed_cost": first_year_feed_cost,
+                    "second_year_feed_cost": second_year_feed_cost,
+                    "first_year_profit": first_year_profit,
+                    "second_year_profit": second_year_profit,
+                    "income": egg_income,
+                    "feed_cost": feed_cost,
+                    "rent": rent,
+                    "net_profit_before_rent": net_profit_before_rent,
+                    "net_profit": net_profit,
+                    "chicken_sale_price": chicken_sale_price_value,
+                    "profit_with_sale": profit_with_sale
+                })
+                
+                st.success(get_error_message("chicken_added", language, chicken_id=chicken_id))
+        except ValueError:
+            st.error(get_error_message("invalid_number", language))
+    
+    # عرض الدجاج المضافة 
+    if st.session_state.chicken_data:
+        st.subheader("🧮 " + texts[language]["chicken_details"])
+        
+        for i, chicken in enumerate(st.session_state.chicken_data):
+            col1, col2, col3 = st.columns([3, 1, 1])
+            
+            with col1:
+                st.write(f"🐔 {texts[language]['chicken_number']} {chicken['id']}: {texts[language]['eggs_input']}: {format_decimal(chicken['eggs'])}, {texts[language]['days_input']}: {format_decimal(chicken['days'])}")
+            
+            with col3:
+                if st.button(f"❌ {texts[language]['remove_chicken']}", key=f"remove_{i}"):
+                    st.session_state.chicken_data.pop(i)
+                    st.rerun()
+        
+        # زر حساب النتائج الجماعية
+        if st.button(texts[language]["calculate_group"], type="primary"):
+            # إعداد الجدول التفصيلي مع فصل السنة الأولى والثانية
+            detailed_df = pd.DataFrame([
+                {
+                    texts[language]["chicken_number"]: chicken["id"],
+                    "🥇 بيض السنة الأولى": format_decimal(chicken["first_year_eggs"]),
+                    "🥇 أيام السنة الأولى": format_decimal(chicken["first_year_days"]),
+                    "🥇 ربح السنة الأولى": format_decimal(chicken["first_year_profit"]),
+                    "🥈 بيض السنة الثانية": format_decimal(chicken["second_year_eggs"]) if chicken["second_year_eggs"] > 0 else "-",
+                    "🥈 أيام السنة الثانية": format_decimal(chicken["second_year_days"]) if chicken["second_year_days"] > 0 else "-",
+                    "🥈 ربح السنة الثانية": format_decimal(chicken["second_year_profit"]) if chicken["second_year_eggs"] > 0 else "-",
+                    "🏠 الإيجار": format_decimal(chicken["rent"]) if chicken["rent"] > 0 else "-",
+                    "💰 صافي الربح (السنتين)": format_decimal(chicken["net_profit"]),
+                    "📊 الربح مع البيع": format_decimal(chicken["profit_with_sale"]) if chicken["eggs"] >= 320 and chicken["profit_with_sale"] > 0 else "-"
+                }
+                for chicken in st.session_state.chicken_data
+            ])
+            
+            # حساب الإجماليات مع فصل السنة الأولى والثانية
+            total_eggs = sum(chicken["eggs"] for chicken in st.session_state.chicken_data)
+            total_first_year_eggs = sum(chicken["first_year_eggs"] for chicken in st.session_state.chicken_data)
+            total_second_year_eggs = sum(chicken["second_year_eggs"] for chicken in st.session_state.chicken_data)
+            
+            total_first_year_income = sum(chicken["first_year_income"] for chicken in st.session_state.chicken_data)
+            total_second_year_income = sum(chicken["second_year_income"] for chicken in st.session_state.chicken_data)
+            total_income = total_first_year_income + total_second_year_income
+            
+            total_first_year_feed_cost = sum(chicken["first_year_feed_cost"] for chicken in st.session_state.chicken_data)
+            total_second_year_feed_cost = sum(chicken["second_year_feed_cost"] for chicken in st.session_state.chicken_data)
+            total_feed_cost = total_first_year_feed_cost + total_second_year_feed_cost
+            
+            total_first_year_profit = sum(chicken["first_year_profit"] for chicken in st.session_state.chicken_data)
+            total_second_year_profit = sum(chicken["second_year_profit"] for chicken in st.session_state.chicken_data)
+            
+            total_rent = sum(chicken["rent"] for chicken in st.session_state.chicken_data)
+            total_net_profit_before_rent = sum(chicken["net_profit_before_rent"] for chicken in st.session_state.chicken_data)
+            total_net_profit = sum(chicken["net_profit"] for chicken in st.session_state.chicken_data)
+            
+            # حساب إجمالي الربح مع البيع - فقط للدجاج التي عدد بيضها 320 أو أكثر
+            total_chicken_sale_prices = sum(chicken["chicken_sale_price"] for chicken in st.session_state.chicken_data if chicken["eggs"] >= 320 and chicken["chicken_sale_price"] > 0)
+            total_profit_with_sale = total_first_year_profit + total_chicken_sale_prices
+            
+            # التحقق مما إذا كان هناك دجاج مؤهلة للحساب مع البيع (عدد بيضها 320 أو أكثر وتم تحديد سعر البيع)
+            has_sales_prices = any(chicken["eggs"] >= 320 and chicken["chicken_sale_price"] > 0 for chicken in st.session_state.chicken_data)
+            
+            # عرض الجدول التفصيلي
+            st.subheader("📋 " + texts[language]["chicken_details"])
+            st.table(detailed_df)
+            
+            # تحويل العملة إذا لزم الأمر
+            if currency == "IQD":
+                conversion_rate = 1480
+                total_first_year_income_display = total_first_year_income * conversion_rate
+                total_second_year_income_display = total_second_year_income * conversion_rate
+                total_income_display = total_income * conversion_rate
+                total_first_year_feed_cost_display = total_first_year_feed_cost * conversion_rate
+                total_second_year_feed_cost_display = total_second_year_feed_cost * conversion_rate
+                total_feed_cost_display = total_feed_cost * conversion_rate
+                total_first_year_profit_display = total_first_year_profit * conversion_rate
+                total_second_year_profit_display = total_second_year_profit * conversion_rate
+                total_rent_display = total_rent * conversion_rate
+                total_net_profit_before_rent_display = total_net_profit_before_rent * conversion_rate
+                total_net_profit_display = total_net_profit * conversion_rate
+                total_profit_with_sale_display = total_profit_with_sale * conversion_rate
+                display_currency = "IQD"
+            else:
+                total_first_year_income_display = total_first_year_income
+                total_second_year_income_display = total_second_year_income
+                total_income_display = total_income
+                total_first_year_feed_cost_display = total_first_year_feed_cost
+                total_second_year_feed_cost_display = total_second_year_feed_cost
+                total_feed_cost_display = total_feed_cost
+                total_first_year_profit_display = total_first_year_profit
+                total_second_year_profit_display = total_second_year_profit
+                total_rent_display = total_rent
+                total_net_profit_before_rent_display = total_net_profit_before_rent
+                total_net_profit_display = total_net_profit
+                total_profit_with_sale_display = total_profit_with_sale
+                display_currency = "USD"
+                
+            # إنشاء بيانات ملخص للجدول مع فصل السنة الأولى والثانية
+            summary_data = [
+                {
+                    texts[language]["category"]: "🥇 إجمالي بيض السنة الأولى",
+                    texts[language]["value"]: f"{format_decimal(total_first_year_eggs)}"
+                },
+                {
+                    texts[language]["category"]: "🥇 إجمالي دخل السنة الأولى",
+                    texts[language]["value"]: f"{format_decimal(total_first_year_income_display)} {display_currency}"
+                },
+                {
+                    texts[language]["category"]: "🥇 إجمالي علف السنة الأولى",
+                    texts[language]["value"]: f"{format_decimal(total_first_year_feed_cost_display)} {display_currency}"
+                },
+                {
+                    texts[language]["category"]: "🥇 إجمالي ربح السنة الأولى",
+                    texts[language]["value"]: f"{format_decimal(total_first_year_profit_display)} {display_currency}"
+                }
+            ]
+            
+            # إضافة السنة الثانية إذا كانت موجودة
+            if total_second_year_eggs > 0:
+                summary_data.extend([
+                    {
+                        texts[language]["category"]: "🥈 إجمالي بيض السنة الثانية",
+                        texts[language]["value"]: f"{format_decimal(total_second_year_eggs)}"
+                    },
+                    {
+                        texts[language]["category"]: "🥈 إجمالي دخل السنة الثانية",
+                        texts[language]["value"]: f"{format_decimal(total_second_year_income_display)} {display_currency}"
+                    },
+                    {
+                        texts[language]["category"]: "🥈 إجمالي علف السنة الثانية",
+                        texts[language]["value"]: f"{format_decimal(total_second_year_feed_cost_display)} {display_currency}"
+                    },
+                    {
+                        texts[language]["category"]: "🥈 إجمالي ربح السنة الثانية",
+                        texts[language]["value"]: f"{format_decimal(total_second_year_profit_display)} {display_currency}"
+                    },
+                    {
+                        texts[language]["category"]: "🏠 إجمالي الإيجار",
+                        texts[language]["value"]: f"{format_decimal(total_rent_display)} {display_currency}"
+                    }
+                ])
+            
+            # إضافة الإجماليات العامة
+            summary_data.extend([
+                {
+                    texts[language]["category"]: "💰 صافي الربح الإجمالي (السنتين)",
+                    texts[language]["value"]: f"{format_decimal(total_net_profit_display)} {display_currency}"
+                }
+            ])
+            
+            # إضافة الربح مع البيع إذا كان موجوداً
+            if has_sales_prices:
+                summary_data.append({
+                    texts[language]["category"]: "📊 الربح مع البيع (السنة الأولى فقط)",
+                    texts[language]["value"]: f"{format_decimal(total_profit_with_sale_display)} {display_currency}"
+                })
+            
+            # إزالة القيم None من قائمة البيانات قبل إنشاء DataFrame
+            filtered_summary_data = [item for item in summary_data if item is not None]
+            summary_df = pd.DataFrame(filtered_summary_data)
+            
+            # عرض جدول الملخص الإجمالي
+            st.subheader("📊 " + texts[language]["total_summary"])
+            st.table(summary_df)
+            
+            # ثانياً: عرض ملخص النتائج النصي
+            # تنسيق التاريخ والوقت حسب توقيت بغداد
+            current_time = datetime.now() + timedelta(hours=3)  # تحويل التوقيت إلى توقيت بغداد
+            date_str = current_time.strftime("%Y-%m-%d")
+            time_str = current_time.strftime("%I:%M %p")
+            
+            # إنشاء نص النتائج مع فصل السنة الأولى والثانية
+            results_text = f"""
+╔══════════════════════════════════════════════════════════════╗
+║                  {texts[language]['summary']}                    ║
+╠══════════════════════════════════════════════════════════════╣
+║ {texts[language]['calculation_time']}: {date_str} {time_str}
+╠══════════════════════════════════════════════════════════════╣
+║                    🥇 السنة الأولى (First Year)                  ║
+║                     320 بيضة - 365 يوم - بدون إيجار             ║
+╟──────────────────────────────────────────────────────────────╢
+║ إجمالي بيض السنة الأولى: {format_decimal(total_first_year_eggs)}
+║ إجمالي دخل السنة الأولى: {format_decimal(total_first_year_income)} USD
+║ إجمالي علف السنة الأولى: {format_decimal(total_first_year_feed_cost)} USD
+║ إجمالي ربح السنة الأولى: {format_decimal(total_first_year_profit)} USD"""
+
+            # إضافة السنة الثانية إذا كانت موجودة
+            if total_second_year_eggs > 0:
+                results_text += f"""
+╠══════════════════════════════════════════════════════════════╣
+║                    🥈 السنة الثانية (Second Year)                ║
+║                     260 بيضة إضافية - مع إيجار 6 دولار           ║
+╟──────────────────────────────────────────────────────────────╢
+║ إجمالي بيض السنة الثانية: {format_decimal(total_second_year_eggs)}
+║ إجمالي دخل السنة الثانية: {format_decimal(total_second_year_income)} USD
+║ إجمالي علف السنة الثانية: {format_decimal(total_second_year_feed_cost)} USD
+║ إجمالي ربح السنة الثانية: {format_decimal(total_second_year_profit)} USD
+║ إجمالي الإيجار: {format_decimal(total_rent)} USD"""
+
+            # إضافة الإجماليات
+            results_text += f"""
+╠══════════════════════════════════════════════════════════════╣
+║                      💰 الإجماليات (Totals)                     ║
+╟──────────────────────────────────────────────────────────────╢
+║ إجمالي عدد الدجاج: {len(st.session_state.chicken_data)}
+║ إجمالي البيض: {format_decimal(total_eggs)}
+║ إجمالي الدخل: {format_decimal(total_income)} USD
+║ إجمالي تكلفة العلف: {format_decimal(total_feed_cost)} USD
+║ إجمالي الإيجار: {format_decimal(total_rent)} USD
+║ صافي الربح الإجمالي (السنتين): {format_decimal(total_net_profit)} USD"""
+
+            # إضافة الربح مع البيع إذا كان موجوداً
+            if has_sales_prices:
+                results_text += f"""
+║ الربح مع البيع (السنة الأولى فقط): {format_decimal(total_profit_with_sale)} USD"""
+
+            # إضافة النتائج بالدينار العراقي
+            results_text += f"""
+╠══════════════════════════════════════════════════════════════╣
+║                    💵 بالدينار العراقي (IQD)                    ║
+╟──────────────────────────────────────────────────────────────╢
+║ إجمالي ربح السنة الأولى: {format_decimal(total_first_year_profit * 1480)} IQD"""
+
+            if total_second_year_eggs > 0:
+                results_text += f"""
+║ إجمالي ربح السنة الثانية: {format_decimal(total_second_year_profit * 1480)} IQD"""
+
+            results_text += f"""
+║ صافي الربح الإجمالي (السنتين): {format_decimal(total_net_profit * 1480)} IQD"""
+
+            if has_sales_prices:
+                results_text += f"""
+║ الربح مع البيع (السنة الأولى فقط): {format_decimal(total_profit_with_sale * 1480)} IQD"""
+
+            # إغلاق المربع
+            results_text += """
+╚══════════════════════════════════════════════════════════════╝"""
+            
+            st.markdown(f"### ✨ {texts[language]['summary']}")
+            st.code(results_text)
+            
+            # الرسم البياني مع فصل السنة الأولى والثانية
+            chart_categories = [
+                f"🥇 ربح السنة الأولى",
+                f"🌽 علف السنة الأولى"
+            ]
+            chart_values = [
+                total_first_year_profit_display,
+                total_first_year_feed_cost_display
+            ]
+            
+            # إضافة السنة الثانية إذا كانت موجودة
+            if total_second_year_eggs > 0:
+                chart_categories.extend([
+                    f"🥈 ربح السنة الثانية",
+                    f"🌽 علف السنة الثانية",
+                    f"🏠 الإيجار"
+                ])
+                chart_values.extend([
+                    total_second_year_profit_display,
+                    total_second_year_feed_cost_display,
+                    total_rent_display
+                ])
+            
+            chart_df = pd.DataFrame({
+                texts[language]["category"]: chart_categories,
+                texts[language]["value"]: chart_values
+            })
+            
+            fig = px.pie(
+                chart_df,
+                values=texts[language]["value"],
+                names=texts[language]["category"],
+                title=texts[language]["total_summary"],
+                color_discrete_sequence=['#4CAF50', '#FF9800', '#F44336', '#9C27B0']
+            )
+            
+            fig.update_traces(
+                textposition='outside',
+                textinfo='percent+label'
+            )
+            
+            fig.update_layout(
+                title_x=0.5,
+                title_font_size=24,
+                showlegend=True,
+                legend=dict(
+                    orientation="h",
+                    yanchor="bottom",
+                    y=-0.2,
+                    xanchor="center",
+                    x=0.5
+                ),
+                margin=dict(t=60, l=0, r=0, b=0),
+                height=500,
+                paper_bgcolor='rgba(0,0,0,0)',
+                plot_bgcolor='rgba(0,0,0,0)'
+            )
+            
+            st.plotly_chart(fig, use_container_width=True)
+    else:
+        st.warning(get_error_message("no_chicken_data", language))
+
+# زر إعادة التعيين
+if st.button(texts[language]["reset"], type="secondary"):
+    # مسح بيانات الدجاج المخزنة في session_state
+    if 'chicken_data' in st.session_state:
+        st.session_state.chicken_data = []
+    st.success(get_error_message("reset_success", language))
+    st.rerun()
+
+# إضافة الأيقونات والروابط
+st.markdown("""
+    <style>
+        .social-links {
+            display: flex;
+            justify-content: center;
+            gap: 25px;
+            margin: 30px 0 20px;
+        }
+        
+        .social-links a {
+            display: inline-block;
+            transition: all 0.3s ease;
+        }
+        
+        .social-links img {
+            width: 36px;
+            height: 36px;
+            filter: brightness(1);
+            transition: all 0.3s ease;
+        }
