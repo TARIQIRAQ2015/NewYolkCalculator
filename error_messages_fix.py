@@ -45,11 +45,6 @@ error_messages = {
         "العربية": "تمت إضافة الدجاجة رقم {chicken_id} بنجاح! ✅",
         "English": "Chicken #{chicken_id} added successfully! ✅",
         "Română": "Găina #{chicken_id} a fost adăugată cu succes! ✅"
-    },
-    "year_selection": {
-        "العربية": "اختر السنة المراد حسابها",
-        "English": "Select year to calculate",
-        "Română": "Selectați anul pentru calcul"
     }
 }
 
@@ -74,23 +69,22 @@ help_messages = {
         "العربية": "أدخل عدد الطعام المطلوب",
         "English": "Enter the amount of food needed",
         "Română": "Introduceți cantitatea de hrană necesară"
-    },
-    "year_help": {
-        "العربية": "السنة الأولى: إنتاج أعلى بدون إيجار - السنة الثانية: إنتاج أقل مع إيجار",
-        "English": "First year: Higher yield, no rent - Second year: Lower yield with rent",
-        "Română": "Anul 1: Producție mai mare fără chirie - Anul 2: Producție mai mică cu chirie"
     }
 }
 
 # استخدام الرسائل
 def get_error_message(key, language, **kwargs):
     if key in error_messages and language in error_messages[key]:
+        # تنسيق الرسالة باستخدام المتغيرات إذا تم توفيرها
         return error_messages[key][language].format(**kwargs)
     else:
+        # رسالة افتراضية بالإنجليزية إذا كان المفتاح أو اللغة غير موجودين
         return "An error occurred!"
 
+# استخدام رسائل المساعدة
 def get_help_message(key, language):
     if key in help_messages and language in help_messages[key]:
         return help_messages[key][language]
     else:
+        # رسالة افتراضية بالإنجليزية إذا كان المفتاح أو اللغة غير موجودين
         return ""
