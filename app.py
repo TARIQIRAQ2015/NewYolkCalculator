@@ -6,40 +6,6 @@ from datetime import datetime, timedelta
 # استيراد رسائل الخطأ المترجمة
 from error_messages_fix import get_error_message, get_help_message
 
-def calculate_year_profits(total_eggs, total_days, egg_price, feed_price):
-    # حساب السنة الأولى
-    first_year_eggs = min(total_eggs, 320)
-    first_year_days = min(total_days, 365)
-    first_year_income = first_year_eggs * egg_price
-    first_year_feed_cost = (first_year_days * 2) * feed_price
-    first_year_profit = first_year_income - first_year_feed_cost
-    
-    # حساب السنة الثانية
-    second_year_eggs = max(0, total_eggs - 320)
-    second_year_days = max(0, total_days - 365)
-    second_year_income = second_year_eggs * egg_price
-    second_year_feed_cost = (second_year_days * 2) * feed_price
-    second_year_rent = 6 if second_year_eggs > 0 else 0
-    second_year_profit = second_year_income - second_year_feed_cost - second_year_rent
-    
-    return {
-        'first_year': {
-            'eggs': first_year_eggs,
-            'days': first_year_days,
-            'income': first_year_income,
-            'feed_cost': first_year_feed_cost,
-            'profit': first_year_profit
-        },
-        'second_year': {
-            'eggs': second_year_eggs,
-            'days': second_year_days,
-            'income': second_year_income,
-            'feed_cost': second_year_feed_cost,
-            'rent': second_year_rent,
-            'profit': second_year_profit
-        }
-    }
-
 # تحسين الواجهة
 st.set_page_config(
     page_title="New Yolk Calculator",
@@ -1024,8 +990,7 @@ if calculation_type == texts[language]["chicken_profits"]:
     # إضافة حقل سعر بيع الدجاجة
     try:
         eggs_value = float(eggs) if eggs else 0
-        # تحديث شرط السنة الأولى ليكون 320 بيضة
-        is_first_year = eggs_value >= 320
+        is_first_year = eggs_value >= 260
     except ValueError:
         is_first_year = False  # إذا لم يكن رقماً صحيحاً
         
@@ -1034,10 +999,9 @@ if calculation_type == texts[language]["chicken_profits"]:
             texts[language]["chicken_sale_price"],
             value=""
         )
-        st.info("✨ يمكنك بيع الدجاجة لأنها أنتجت 320 بيضة أو أكثر في السنة الأولى")
     else:
         if eggs: # نظهر الرسالة فقط إذا أدخل المستخدم قيمة للبيض
-            st.warning("⚠️ لا يمكن بيع الدجاجة لأنها لم تنتج 320 بيضة في السنة الأولى")
+            st.info(texts[language]["not_first_year_chicken"])
         chicken_sale_price = "0"
 
     if st.button(texts[language]["calculate_profits"], type="primary"):
@@ -1060,28 +1024,14 @@ if calculation_type == texts[language]["chicken_profits"]:
             elif days_value > 730:
                 st.error(get_error_message("days_exceed", language))
             else:
-                # حساب الأرباح للسنة الأولى والثانية
-                yearly_profits = calculate_year_profits(eggs_value, days_value, float(new_egg_price), float(new_feed_price))
+                # حساب الأرباح
+                total_egg_price = eggs_value * float(new_egg_price)  # ضرب عدد البيض في سعر البيض الحالي
+                total_feed_cost = (days_value * 2) * float(new_feed_price)  # ضرب عدد الأيام في 2 ثم في سعر العلف الحالي
                 
-                # استخراج النتائج للسنة الأولى
-                first_year = yearly_profits['first_year']
-                first_year_income = first_year['income']
-                first_year_feed_cost = first_year['feed_cost']
-                first_year_profit = first_year['profit']
+                # حساب الإيجار
+                total_rent = 6 if eggs_value >= 260 else 0  # 6 دولار فقط إذا كان عدد البيض 260 أو أكثر
                 
-                # استخراج النتائج للسنة الثانية
-                second_year = yearly_profits['second_year']
-                second_year_income = second_year['income']
-                second_year_feed_cost = second_year['feed_cost']
-                second_year_rent = second_year['rent']
-                second_year_profit = second_year['profit']
-                
-                # حساب الإجماليات
-                total_egg_price = first_year_income + second_year_income
-                total_feed_cost = first_year_feed_cost + second_year_feed_cost
-                total_rent = second_year_rent
-                
-                # حساب النتائج النهائية
+                # حساب النتائج
                 net_profit_before_rent = total_egg_price - total_feed_cost
                 net_profit = net_profit_before_rent - total_rent
                 
@@ -1110,33 +1060,17 @@ if calculation_type == texts[language]["chicken_profits"]:
                 date_str = current_time.strftime("%Y-%m-%d")
                 time_str = current_time.strftime("%I:%M %p")
 
-                # إنشاء نص النتائج مع تفاصيل السنة الأولى والثانية
+                # إنشاء نص النتائج مع إضافة الربح مع البيع
                 results_text = f"""
 ╔══════════════════════════════════════════════════════════════════╗
 ║                  {texts[language]['summary']}                    ║
 ╠══════════════════════════════════════════════════════════════════╣
 ║ {texts[language]['calculation_time']}: {date_str} {time_str}
 ╟──────────────────────────────────────────────────────────────────╢
-║ 🥇 السنة الأولى (320 بيضة - 365 يوم - بدون إيجار):
-║ عدد البيض: {first_year['eggs']} بيضة
-║ عدد الأيام: {first_year['days']} يوم
-║ الدخل: {format_decimal(first_year_income)} USD
-║ تكلفة العلف: {format_decimal(first_year_feed_cost)} USD
-║ الربح: {format_decimal(first_year_profit)} USD
-╟──────────────────────────────────────────────────────────────────╢
-║ 🥈 السنة الثانية (إذا وجدت):
-║ عدد البيض الإضافي: {second_year['eggs']} بيضة
-║ عدد الأيام الإضافية: {second_year['days']} يوم
-║ الدخل: {format_decimal(second_year_income)} USD
-║ تكلفة العلف: {format_decimal(second_year_feed_cost)} USD
-║ الإيجار: {format_decimal(second_year_rent)} USD
-║ الربح: {format_decimal(second_year_profit)} USD
-╟──────────────────────────────────────────────────────────────────╢
-║ 💰 الإجماليات:
-║ إجمالي الدخل: {format_decimal(total_egg_price)} USD
-║ إجمالي تكلفة العلف: {format_decimal(total_feed_cost)} USD
-║ إجمالي الإيجار: {format_decimal(total_rent)} USD
-║ صافي الربح: {format_decimal(net_profit)} USD"""
+║ {texts[language]['usd_results']}:
+║ {texts[language]['summary_egg_price']}: {format_decimal(total_egg_price)} USD
+║ {texts[language]['summary_feed_price']}: {format_decimal(total_feed_cost)} USD
+║ {texts[language]['net_profit']}: {format_decimal(net_profit_before_rent)} USD"""
 
                 # إضافة سعر البيع والربح مع البيع إذا كانت الدجاجة في السنة الأولى وتم إدخال سعر البيع
                 if eggs_value >= 260 and chicken_sale_price_value > 0:
@@ -1174,35 +1108,15 @@ if calculation_type == texts[language]["chicken_profits"]:
 
                 # إنشاء DataFrame للرسم البياني
                 chart_categories = [
-                    # السنة الأولى
-                    f"🥇 دخل السنة الأولى",
-                    f"🌽 تكلفة علف السنة الأولى",
-                    f"💰 ربح السنة الأولى",
-                    # السنة الثانية
-                    f"🥈 دخل السنة الثانية",
-                    f"🌽 تكلفة علف السنة الثانية",
-                    f"🏠 إيجار السنة الثانية",
-                    f"💰 ربح السنة الثانية",
-                    # الإجماليات
-                    f"📊 إجمالي الدخل",
-                    f"📊 إجمالي التكاليف",
-                    f"📈 صافي الربح"
+                        f"🥚 {texts[language]['eggs_input']}",
+                        f"🌽 {texts[language]['food_input']}",
+                        f"📈 {texts[language]['net_profit']}",
                 ]
                 
                 chart_values = [
-                    # السنة الأولى
-                    first_year_income,
-                    first_year_feed_cost,
-                    first_year_profit,
-                    # السنة الثانية
-                    second_year_income,
-                    second_year_feed_cost,
-                    second_year_rent,
-                    second_year_profit,
-                    # الإجماليات
-                    total_egg_price,
-                    total_feed_cost + total_rent,
-                    net_profit
+                        total_egg_price,
+                        total_feed_cost,
+                        net_profit_before_rent,
                 ]
                 
                 # إضافة سعر البيع والربح مع البيع إلى الرسم البياني
