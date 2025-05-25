@@ -1772,4 +1772,94 @@ st.markdown("""
         .social-links img {
             width: 36px;
             height: 36px;
-            filter:
+            filter: brightness(1);
+            transition: all 0.3s ease;
+        }
+        
+        .social-links a:hover img {
+            transform: translateY(-3px);
+            filter: brightness(1.2);
+        }
+    </style>
+    <div class="social-links">
+        <a href="https://farm.newyolk.io/" target="_blank">
+            <img src="https://cdn-icons-png.flaticon.com/512/3059/3059997.png" alt="Website">
+        </a>
+        <a href="https://discord.gg/RYDExGGWXh" target="_blank">
+            <img src="https://cdn-icons-png.flaticon.com/512/5968/5968756.png" alt="Discord">
+        </a>
+        <a href="https://t.me/newyolkfarm" target="_blank">
+            <img src="https://upload.wikimedia.org/wikipedia/commons/8/82/Telegram_logo.svg" alt="Telegram">
+        </a>
+        <a href="https://www.facebook.com/newyolkfarming" target="_blank">
+            <img src="https://upload.wikimedia.org/wikipedia/commons/5/51/Facebook_f_logo_%282019%29.svg" alt="Facebook">
+        </a>
+    </div>
+    
+    <style>
+        .copyright {
+            text-align: center;
+            color: rgba(255,255,255,0.9);
+            padding: 24px 0;
+            font-size: 22px !important;
+            margin-top: 30px;
+            border-top: 1px solid rgba(255,255,255,0.1);
+            font-weight: 600;
+            letter-spacing: 0.5px;
+        }
+    </style>
+    <div class="copyright">By Tariq Al-Yaseen &copy; 2025-2026</div>
+""", unsafe_allow_html=True)
+
+st.markdown("""
+    <style>
+        /* تحسين الإيموجي في العنوان */
+        .emoji-link {
+            text-decoration: none;
+            font-size: 24px !important;
+            display: inline-block;
+            transition: all 0.3s ease;
+            line-height: 1;
+            cursor: pointer;
+            margin-right: 8px;
+        }
+        
+        .emoji-link:hover {
+            transform: scale(1.2) rotate(10deg);
+        }
+        
+        .title {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin-bottom: 12px;
+        }
+        
+        .title-text {
+            background: linear-gradient(120deg, #ffffff, #e2e2e2);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            text-shadow: 0 2px 4px rgba(0,0,0,0.1);
+            font-size: 32px;
+            font-weight: bold;
+        }
+    </style>
+""", unsafe_allow_html=True)
+
+st.markdown("""
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <link rel="icon" type="image/png" href="https://cdn-icons-png.flaticon.com/512/3059/3059997.png">
+        <title>New Yolk Calculator</title>
+    </head>
+""", unsafe_allow_html=True)
+
+# إضافة زر نسخ النتائج باستخدام JavaScript
+def add_copy_button(text, button_text):
+    st.markdown(f"""
+        <div style="position: relative;">
+            <textarea id="clipboard-text" style="position: absolute; left: -9999px;">{text}</textarea>
+            <button onclick="copyToClipboard('clipboard-text')">{button_text}</button>
+        </div>
+    """, unsafe_allow_html=True)
