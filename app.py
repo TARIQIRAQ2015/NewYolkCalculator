@@ -1108,29 +1108,21 @@ if calculation_type == texts[language]["chicken_profits"]:
 
                 # إنشاء DataFrame للرسم البياني
                 chart_categories = [
-                        f"🥚 {texts[language]['eggs_input']}",
-                        f"🌽 {texts[language]['food_input']}",
-                        f"📈 {texts[language]['net_profit']}",
+                    f"🥇 ربح السنة الأولى",
+                    f"🥈 ربح السنة الثانية",
+                    f"💰 صافي الربح الكلي"
                 ]
                 
                 chart_values = [
-                        total_egg_price,
-                        total_feed_cost,
-                        net_profit_before_rent,
+                    first_year_profit,
+                    second_year_profit,
+                    net_profit
                 ]
                 
-                # إضافة سعر البيع والربح مع البيع إلى الرسم البياني
-                if eggs_value >= 260 and chicken_sale_price_value > 0:
-                    chart_categories.append(f"💰 {texts[language]['chicken_sale_price']}")
-                    chart_categories.append(f"📊 {texts[language]['profit_with_sale']}")
+                # إضافة سعر البيع إذا كان متاحاً
+                if eggs_value >= 320 and chicken_sale_price_value > 0:
+                    chart_categories.append(f"💰 ربح البيع")
                     chart_values.append(chicken_sale_price_value)
-                    chart_values.append(profit_with_sale)
-                
-                # إضافة الإيجار والربح الصافي في النهاية
-                chart_categories.append(f"🏠 {texts[language]['first_year_rental']}")
-                chart_categories.append(f"💰 {texts[language]['final_profit']}")
-                chart_values.append(total_rent)
-                chart_values.append(net_profit)
                 
                 df = pd.DataFrame({
                     texts[language]["category"]: chart_categories,
