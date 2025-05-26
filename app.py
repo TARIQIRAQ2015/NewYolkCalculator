@@ -1013,8 +1013,8 @@ if calculation_type == texts[language]["chicken_profits"]:
                 # منطق توزيع البيض الصحيح: السنة الثانية أولاً، ثم ما تبقى للسنة الأولى
                 # منطق توزيع البيض الصحيح: السنة الثانية أولاً، ثم ما تبقى للسنة الأولى
                 if eggs_value > 320:
-                    # أولاً: حساب السنة الثانية (حد أقصى 260 بيضة)
-                    second_year_eggs = min(eggs_value - 320, 260)
+                    # أولاً: حساب السنة الثانية (حد أقصى 260 بيضة من الفائض عن 320)
+                    second_year_eggs = min(260, eggs_value - 320)
                     # ثانياً: حساب ما تبقى للسنة الأولى
                     first_year_eggs = eggs_value - second_year_eggs
                 else:
@@ -1055,7 +1055,7 @@ if calculation_type == texts[language]["chicken_profits"]:
                 # إنشاء نص النتائج
                 results_text = f"""
 ║ {texts[language]['summary']} ✨
-
+║ 
 ║ {texts[language]['calculation_time']} ⏰: {date_str} {time_str}
 ║ 
 ║ {texts[language]['usd_results']} 💵:
@@ -1355,8 +1355,8 @@ elif calculation_type == texts[language]["group_calculation"]:
                 total_days = active_days
                 
                 if total_eggs > 320:
-                    # أولاً: حساب السنة الثانية (حد أقصى 260 بيضة)
-                    second_year_eggs_count = min(total_eggs - 320, 260)
+                    # أولاً: حساب السنة الثانية (حد أقصى 260 بيضة من الفائض عن 320)
+                    second_year_eggs_count = min(260, total_eggs - 320)
                     # ثانياً: حساب ما تبقى للسنة الأولى
                     first_year_eggs_count = total_eggs - second_year_eggs_count
                 else:
