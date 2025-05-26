@@ -1002,8 +1002,6 @@ if calculation_type == texts[language]["chicken_profits"]:
             value=""
         )
     else:
-        if eggs: # نظهر الرسالة فقط إذا أدخل المستخدم قيمة للبيض
-            st.info(texts[language]["not_first_year_chicken"])
         chicken_sale_price = "0"
 
     if st.button(texts[language]["calculate_profits"], type="primary"):
@@ -1037,7 +1035,7 @@ if calculation_type == texts[language]["chicken_profits"]:
                 second_year_eggs = max(0, min(eggs_value - 320, 260))  # عدد البيض في السنة الثانية (حد أقصى 260)
                 second_year_days = max(0, min(days_value - 365, 365))  # عدد الأيام في السنة الثانية
                 second_year_egg_price = second_year_eggs * float(new_egg_price)  # سعر البيض في السنة الثانية
-                second_year_feed_cost = (second_year_days * 2) * float(new_feed_price)  # تكلفة العلف في السنة الثانية
+                second_year_feed_cost = (days_value * 2) * float(new_feed_price)  # تكلفة العلف بناءً على الأيام المحددة
                 
                 # حساب الإيجار للسنة الثانية
                 total_rent = 6 if eggs_value >= 320 else 0  # 6 دولار فقط إذا كان عدد البيض 320 أو أكثر
