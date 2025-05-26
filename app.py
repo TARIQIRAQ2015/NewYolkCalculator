@@ -1072,69 +1072,94 @@ if calculation_type == texts[language]["chicken_profits"]:
                 date_str = current_time.strftime("%Y-%m-%d")
                 time_str = current_time.strftime("%I:%M %p")
 
-                # إنشاء نص النتائج مع إضافة الربح مع البيع
+                # إنشاء نص النتائج
                 results_text = f"""
 ║ {texts[language]['summary']} ✨                 
 
 ║ {texts[language]['calculation_time']} ⏰: {date_str} {time_str}
 ║ {texts[language]['usd_results']} 💵:
+"""
 
-║ السنة الأولى (حد أقصى 320 بيضة):
-║ عدد البيض 🥚: {format_decimal(first_year_eggs)} بيضة
-║ سعر البيض 💵: {format_decimal(first_year_egg_price)} USD
-║ تكلفة العلف 🌽: {format_decimal(first_year_feed_cost)} USD
-║ {texts[language]['first_year_profit']} 📈: {format_decimal(first_year_profit)} USD"""
-
-                # إضافة سعر البيع والربح مع البيع إذا كانت الدجاجة في السنة الأولى وتم إدخال سعر البيع
-                if eggs_value >= 320 and chicken_sale_price_value > 0:
+                # عرض معلومات السنة الأولى فقط إذا كان عدد البيض أكبر من 260
+                if eggs_value > 260:
                     results_text += f"""
-║ {texts[language]['chicken_sale_price']} 💰: {format_decimal(chicken_sale_price_value)} USD
-║ 📊 {texts[language]['profit_with_sale']} 📊: {format_decimal(profit_with_sale)} USD"""
+║ السنة الأولى (حد أقصى 320 بيضة):
+║ عدد البيض: {format_decimal(first_year_eggs)} 🥚
+║ سعر البيض: {format_decimal(first_year_egg_price)} 💵
+║ تكلفة العلف: {format_decimal(first_year_feed_cost)} 🌽
+║ {texts[language]['first_year_profit']}: {format_decimal(first_year_profit)} 📈"""
 
-                # إضافة معلومات السنة الثانية والربح الصافي
-                results_text += f"""
+                    # إضافة سعر البيع والربح مع البيع إذا كان عدد البيض 320 أو أكثر
+                    if eggs_value >= 320 and chicken_sale_price_value > 0:
+                        results_text += f"""
+║ {texts[language]['chicken_sale_price']}: {format_decimal(chicken_sale_price_value)} 💰
+║ {texts[language]['profit_with_sale']}: {format_decimal(profit_with_sale)} 📈"""
+
+                # عرض معلومات السنة الثانية
+                if eggs_value <= 260:
+                    results_text += f"""
+║ السنة الثانية (حد أقصى 260 بيضة):
+║ عدد البيض: {format_decimal(eggs_value)} 🥚
+║ سعر البيض: {format_decimal(second_year_egg_price)} 💵
+║ تكلفة العلف: {format_decimal(second_year_feed_cost)} 🌽
+║ {texts[language]['second_year_profit']}: {format_decimal(second_year_profit)} 📈
+║ {texts[language]['final_profit']}: {format_decimal(net_profit)} 💰"""
+                else:
+                    results_text += f"""
 
 ║ السنة الثانية (حد أقصى 260 بيضة):
-║ عدد البيض 🥚: {format_decimal(second_year_eggs)} بيضة
-║ سعر البيض 💵: {format_decimal(second_year_egg_price)} USD
-║ تكلفة العلف 🌽: {format_decimal(second_year_feed_cost)} USD
-║ {texts[language]['first_year_rental']} 🏠: {format_decimal(total_rent)} USD
-║ {texts[language]['second_year_profit']} 📈: {format_decimal(second_year_profit)} USD
-║ {texts[language]['second_year_profit_after_rent']} 📈: {format_decimal(second_year_profit_after_rent)} USD
+║ عدد البيض: {format_decimal(second_year_eggs)} 🥚
+║ سعر البيض: {format_decimal(second_year_egg_price)} 💵
+║ تكلفة العلف: {format_decimal(second_year_feed_cost)} 🌽
+║ {texts[language]['first_year_rental']}: {format_decimal(total_rent)} 🏠
+║ {texts[language]['second_year_profit']}: {format_decimal(second_year_profit)} 📈
+║ {texts[language]['second_year_profit_after_rent']}: {format_decimal(second_year_profit_after_rent)} 📈
 
-║ {texts[language]['final_profit']} 💰: {format_decimal(net_profit)} USD
-"""
+║ {texts[language]['final_profit']}: {format_decimal(net_profit)} 💰"""
+
 
                 # استكمال النص بالدينار العراقي
                 results_text += f"""
-║ {texts[language]['iqd_results']} 💵:
+║ {texts[language]['iqd_results']} 💵:"""
 
+                # عرض معلومات السنة الأولى بالدينار العراقي
+                if eggs_value > 260:
+                    results_text += f"""
 ║ السنة الأولى (حد أقصى 320 بيضة):
-║ عدد البيض 🥚: {format_decimal(first_year_eggs)} بيضة
-║ سعر البيض 💵: {format_decimal(first_year_egg_price * 1480)} IQD
-║ تكلفة العلف 🌽: {format_decimal(first_year_feed_cost * 1480)} IQD
-║ {texts[language]['first_year_profit']} 📈: {format_decimal(first_year_profit * 1480)} IQD
+║ عدد البيض: {format_decimal(first_year_eggs)} 🥚
+║ سعر البيض: {format_decimal(first_year_egg_price * 1480)} 💵
+║ تكلفة العلف: {format_decimal(first_year_feed_cost * 1480)} 🌽
+║ {texts[language]['first_year_profit']}: {format_decimal(first_year_profit * 1480)} 📈"""
+
+                    # إضافة سعر البيع والربح مع البيع بالدينار العراقي
+                    if eggs_value >= 320 and chicken_sale_price_value > 0:
+                        results_text += f"""
+║ {texts[language]['chicken_sale_price']}: {format_decimal(chicken_sale_price_value * 1480)} 💰
+║ {texts[language]['profit_with_sale']}: {format_decimal(profit_with_sale * 1480)} 📈"""
+
+                # عرض معلومات السنة الثانية بالدينار العراقي
+                if eggs_value <= 260:
+                    results_text += f"""
+║ السنة الثانية (حد أقصى 260 بيضة):
+║ عدد البيض: {format_decimal(eggs_value)} 🥚
+║ سعر البيض: {format_decimal(second_year_egg_price * 1480)} 💵
+║ تكلفة العلف: {format_decimal(second_year_feed_cost * 1480)} 🌽
+║ {texts[language]['second_year_profit']}: {format_decimal(second_year_profit * 1480)} 📈
+║ {texts[language]['final_profit']}: {format_decimal(net_profit * 1480)} 💰"""
+                else:
+                    results_text += f"""
 
 ║ السنة الثانية (حد أقصى 260 بيضة):
-║ عدد البيض 🥚: {format_decimal(second_year_eggs)} بيضة
-║ سعر البيض 💵: {format_decimal(second_year_egg_price * 1480)} IQD
-║ تكلفة العلف 🌽: {format_decimal(second_year_feed_cost * 1480)} IQD
-║ {texts[language]['first_year_rental']} 🏠: {format_decimal(total_rent * 1480)} IQD
-║ {texts[language]['second_year_profit']} 📈: {format_decimal(second_year_profit * 1480)} IQD
-║ {texts[language]['second_year_profit_after_rent']} 📈: {format_decimal(second_year_profit_after_rent * 1480)} IQD
+║ عدد البيض: {format_decimal(second_year_eggs)} 🥚
+║ سعر البيض: {format_decimal(second_year_egg_price * 1480)} 💵
+║ تكلفة العلف: {format_decimal(second_year_feed_cost * 1480)} 🌽
+║ {texts[language]['first_year_rental']}: {format_decimal(total_rent * 1480)} 🏠
+║ {texts[language]['second_year_profit']}: {format_decimal(second_year_profit * 1480)} 📈
+║ {texts[language]['second_year_profit_after_rent']}: {format_decimal(second_year_profit_after_rent * 1480)} 📈
 
-║ {texts[language]['final_profit']} 💰: {format_decimal(net_profit * 1480)} IQD"""
+║ {texts[language]['final_profit']}: {format_decimal(net_profit * 1480)} 💰"""
 
-                # إضافة سعر البيع والربح مع البيع بالدينار العراقي
-                if eggs_value >= 320 and chicken_sale_price_value > 0:
-                    results_text += f"""
-║ {texts[language]['chicken_sale_price']} 💰: {format_decimal(chicken_sale_price_value * 1480)} IQD
-║ 📊 {texts[language]['profit_with_sale']} 📊: {format_decimal(profit_with_sale * 1480)} IQD"""
-
-                # إضافة الإيجار والربح الصافي بالدينار العراقي
-                results_text += f"""
-║ {texts[language]['first_year_rental']} 🏠: {format_decimal(total_rent * 1480)} IQD
-║ {texts[language]['final_profit']} 💰: {format_decimal(net_profit * 1480)} IQD"""
+                # إنشاء DataFrame للرسم البياني
 
 
 
