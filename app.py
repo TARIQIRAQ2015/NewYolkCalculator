@@ -1048,15 +1048,15 @@ if calculation_type == texts[language]["chicken_profits"]:
 
                 # إنشاء نص النتائج
                 results_text = f"""║ {texts[language]['summary']} ✨
-║ 
+
 ║ {texts[language]['calculation_time']} ⏰: {date_str} {time_str}
-║ 
+
 ║ {texts[language]['usd_results']} 💵"""
 
                 # عرض السنة الأولى دائماً (إذا كان هناك بيض)
                 if eggs_value > 0:
                     results_text += f"""
-║ 
+
 ║ {texts[language]['first_year_label']} ({texts[language]['max_320_eggs']}):
 ║ {texts[language]['eggs_input']}: {format_decimal(first_year_eggs)} 🥚
 ║ {texts[language]['egg_price']}: {format_decimal(first_year_egg_price)} 💵
@@ -1072,7 +1072,7 @@ if calculation_type == texts[language]["chicken_profits"]:
                 # عرض السنة الثانية فقط إذا كان عدد البيض أكبر من 320
                 if eggs_value > 320:
                     results_text += f"""
-║ 
+
 ║ {texts[language]['second_year_label']} ({texts[language]['max_260_eggs']}):
 ║ {texts[language]['eggs_input']}: {format_decimal(second_year_eggs)} 🥚
 ║ {texts[language]['egg_price']}: {format_decimal(second_year_egg_price)} 💵
@@ -1083,7 +1083,7 @@ if calculation_type == texts[language]["chicken_profits"]:
 
                 # عرض الربح النهائي
                 results_text += f"""
-║ 
+
 ║ {texts[language]['final_profit']}: {format_decimal(net_profit)} 💰"""
 
                 # استكمال النص بالدينار العراقي
@@ -1094,7 +1094,7 @@ if calculation_type == texts[language]["chicken_profits"]:
                 # عرض السنة الأولى بالدينار العراقي
                 if eggs_value > 0:
                     results_text += f"""
-║ 
+
 ║ {texts[language]['first_year_label']} ({texts[language]['max_320_eggs']}):
 ║ {texts[language]['eggs_input']}: {format_decimal(first_year_eggs)} 🥚
 ║ {texts[language]['egg_price']}: {format_decimal(first_year_egg_price * 1480)} 💵
@@ -1110,7 +1110,7 @@ if calculation_type == texts[language]["chicken_profits"]:
                 # عرض السنة الثانية بالدينار العراقي فقط إذا كان عدد البيض أكبر من 320
                 if eggs_value > 320:
                     results_text += f"""
-║ 
+
 ║ {texts[language]['second_year_label']} ({texts[language]['max_260_eggs']}):
 ║ {texts[language]['eggs_input']}: {format_decimal(second_year_eggs)} 🥚
 ║ {texts[language]['egg_price']}: {format_decimal(second_year_egg_price * 1480)} 💵
@@ -1121,7 +1121,7 @@ if calculation_type == texts[language]["chicken_profits"]:
 
                 # عرض الربح النهائي بالدينار العراقي
                 results_text += f"""
-║ 
+
 ║ {texts[language]['final_profit']}: {format_decimal(net_profit * 1480)} 💰"""
 
                 # تحويل العملة لعرض الجدول والرسم البياني
@@ -1230,12 +1230,12 @@ elif calculation_type == texts[language]["daily_rewards"]:
 
                 # إنشاء نص النتائج
                 results_text = f"""║ {texts[language]['calculation_time']}: {date_str} {time_str}
-║ 
+
 ║ {texts[language]['usd_results']}:
 ║ {texts[language]['summary_egg_price']}: {format_decimal(rewards_value * float(new_egg_price))} USD
 ║ {texts[language]['summary_feed_price']}: {format_decimal(food_value * float(new_feed_price))} USD
 ║ {texts[language]['daily_profit']}: {format_decimal(daily_profit)} USD
-║ 
+
 ║ {texts[language]['iqd_results']}:
 ║ {texts[language]['summary_egg_price']}: {format_decimal(rewards_value * float(new_egg_price) * 1480)} IQD
 ║ {texts[language]['summary_feed_price']}: {format_decimal(food_value * float(new_feed_price) * 1480)} IQD
@@ -1514,9 +1514,9 @@ elif calculation_type == texts[language]["group_calculation"]:
             
             # إنشاء نص النتائج
             results_text = f"""║                  {texts[language]['summary']}                    
-║ 
+
 ║ {texts[language]['calculation_time']}: {date_str} {time_str}
-║ 
+
 ║ {texts[language]['usd_results']}:
 ║ {texts[language]['total_eggs']}: {format_decimal(total_eggs)}
 ║ {texts[language]['total_income']}: {format_decimal(total_income)} USD
@@ -1525,7 +1525,7 @@ elif calculation_type == texts[language]["group_calculation"]:
 ║ {texts[language]['total_rent']}: {format_decimal(total_rent)} USD
 ║ {texts[language]['total_net_profit']}: {format_decimal(total_net_profit)} USD
 ║ {texts[language]['total_profit_with_sale']}: {format_decimal(total_profit_with_sale)} USD
-║ 
+
 ║ {texts[language]['iqd_results']}:
 ║ {texts[language]['total_eggs']}: {format_decimal(total_eggs)}
 ║ {texts[language]['total_income']}: {format_decimal(total_income * 1480)} IQD
