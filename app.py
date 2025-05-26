@@ -1017,8 +1017,15 @@ if calculation_type == texts[language]["chicken_profits"]:
                     second_year_eggs = 0
 
                 # حساب الأيام
-                first_year_days = min(days_value, 365)  # عدد الأيام في السنة الأولى
-                second_year_days = max(0, min(days_value - 365, 365))  # عدد الأيام في السنة الثانية
+                if days_value > 365:
+                    # أولاً: نملأ السنة الثانية (365 يوم)
+                    second_year_days = 365
+                    # ثانياً: ما تبقى يذهب للسنة الأولى
+                    first_year_days = days_value - 365
+                else:
+                    # إذا كان المجموع 365 أو أقل، كله للسنة الأولى
+                    first_year_days = days_value
+                    second_year_days = 0
 
                 # حساب الأسعار والتكاليف
                 first_year_egg_price = first_year_eggs * float(new_egg_price)  # سعر البيض في السنة الأولى
