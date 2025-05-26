@@ -1031,7 +1031,7 @@ if calculation_type == texts[language]["chicken_profits"]:
                 total_feed_cost = (days_value * 2) * float(new_feed_price)  # ضرب عدد الأيام في 2 ثم في سعر العلف الحالي
                 
                 # حساب الإيجار
-                total_rent = 6 if eggs_value >= 260 else 0  # 6 دولار فقط إذا كان عدد البيض 260 أو أكثر
+                total_rent = 6 if eggs_value >= 320 else 0  # 6 دولار فقط إذا كان عدد البيض 320 أو أكثر
                 
                 # حساب النتائج
                 net_profit_before_rent = total_egg_price - total_feed_cost
@@ -1039,9 +1039,9 @@ if calculation_type == texts[language]["chicken_profits"]:
                 second_year_profit = net_profit_before_rent - total_rent  # ربح السنة الثانية بعد خصم الإيجار
                 net_profit = net_profit_before_rent - total_rent  # صافي الربح الكلي
                 
-                # حساب الربح مع بيع الدجاجة - فقط للدجاج التي عدد بيضها 260 أو أكثر
+                # حساب الربح مع بيع الدجاجة - فقط للدجاج التي عدد بيضها 320 أو أكثر
                 profit_with_sale = 0
-                if eggs_value >= 260 and chicken_sale_price_value > 0:
+                if eggs_value >= 320 and chicken_sale_price_value > 0:
                     profit_with_sale = net_profit_before_rent + chicken_sale_price_value
 
                 # تحويل العملة
@@ -1066,55 +1066,51 @@ if calculation_type == texts[language]["chicken_profits"]:
 
                 # إنشاء نص النتائج مع إضافة الربح مع البيع
                 results_text = f"""
-╔══════════════════════════════════════════════════════════════════╗
-║                  {texts[language]['summary']}                    ║
-╠══════════════════════════════════════════════════════════════════╣
-║ {texts[language]['calculation_time']}: {date_str} {time_str}
-╟──────────────────────────────────────────────────────────────────╢
-║ {texts[language]['usd_results']}:
-║ {texts[language]['total_rewards']}: {format_decimal(total_egg_price)} USD
-║ {texts[language]['total_food_cost']}: {format_decimal(total_feed_cost)} USD
-║ {texts[language]['net_profit']}: {format_decimal(first_year_profit)} USD"""
+║ {texts[language]['summary']} ✨                 
+
+║ {texts[language]['calculation_time']} ⏰: {date_str} {time_str}
+║ {texts[language]['usd_results']} 💵:
+║ {texts[language]['total_rewards']} 🥚: {format_decimal(total_egg_price)} USD
+║ {texts[language]['total_food_cost']} 🌽: {format_decimal(total_feed_cost)} USD
+║ {texts[language]['first_year_profit']} 📈: {format_decimal(first_year_profit)} USD"""
 
                 # إضافة سعر البيع والربح مع البيع إذا كانت الدجاجة في السنة الأولى وتم إدخال سعر البيع
-                if eggs_value >= 260 and chicken_sale_price_value > 0:
+                if eggs_value >= 320 and chicken_sale_price_value > 0:
                     results_text += f"""
-║ {texts[language]['chicken_sale_price']}: {format_decimal(chicken_sale_price_value)} USD
-║ {texts[language]['profit_with_sale']}: {format_decimal(profit_with_sale)} USD"""
+║ {texts[language]['chicken_sale_price']} 💰: {format_decimal(chicken_sale_price_value)} USD
+║ 📊 {texts[language]['profit_with_sale']} 📊: {format_decimal(profit_with_sale)} USD"""
 
                 # إضافة الإيجار وربح السنة الثانية والربح الصافي
                 results_text += f"""
-║ {texts[language]['first_year_rental']}: 6 USD
-║ {texts[language]['second_year_profit']}: {format_decimal(net_profit_before_rent)} USD
-║ {texts[language]['second_year_profit_after_rent']}: {format_decimal(second_year_profit)} USD
-║ {texts[language]['final_profit']}: {format_decimal(net_profit)} USD"""
+║ {texts[language]['first_year_rental']} 🏠: 6 USD
+║ {texts[language]['second_year_profit']} 📈: {format_decimal(net_profit_before_rent)} USD
+║ {texts[language]['second_year_profit_after_rent']} 📈: {format_decimal(second_year_profit)} USD
+║ {texts[language]['final_profit']} 💰: {format_decimal(net_profit)} USD
+"""
 
                 # استكمال النص
                 results_text += f"""
-╟──────────────────────────────────────────────────────────────────╢
-║ {texts[language]['iqd_results']}:
-║ {texts[language]['total_rewards']}: {format_decimal(total_egg_price * 1480)} IQD
-║ {texts[language]['total_food_cost']}: {format_decimal(total_feed_cost * 1480)} IQD
-║ {texts[language]['net_profit']}: {format_decimal(first_year_profit * 1480)} IQD
-║ {texts[language]['first_year_rental']}: {format_decimal(6 * 1480)} IQD
-║ {texts[language]['second_year_profit']}: {format_decimal(net_profit_before_rent * 1480)} IQD
-║ {texts[language]['second_year_profit_after_rent']}: {format_decimal(second_year_profit * 1480)} IQD
-║ {texts[language]['final_profit']}: {format_decimal(net_profit * 1480)} IQD"""
+║ {texts[language]['iqd_results']} 💵:
+║ {texts[language]['total_rewards']} 🥚: {format_decimal(total_egg_price * 1480)} IQD
+║ {texts[language]['total_food_cost']} 🌽: {format_decimal(total_feed_cost * 1480)} IQD
+║ {texts[language]['first_year_profit']} 📈: {format_decimal(first_year_profit * 1480)} IQD
+║ {texts[language]['first_year_rental']} 🏠: {format_decimal(6 * 1480)} IQD
+║ {texts[language]['second_year_profit']} 📈: {format_decimal(net_profit_before_rent * 1480)} IQD
+║ {texts[language]['second_year_profit_after_rent']} 📈: {format_decimal(second_year_profit * 1480)} IQD
+║ {texts[language]['final_profit']} 💰: {format_decimal(net_profit * 1480)} IQD"""
 
                 # إضافة سعر البيع والربح مع البيع بالدينار العراقي
-                if eggs_value >= 260 and chicken_sale_price_value > 0:
+                if eggs_value >= 320 and chicken_sale_price_value > 0:
                     results_text += f"""
-║ {texts[language]['chicken_sale_price']}: {format_decimal(chicken_sale_price_value * 1480)} IQD
-║ {texts[language]['profit_with_sale']}: {format_decimal(profit_with_sale * 1480)} IQD"""
+║ {texts[language]['chicken_sale_price']} 💰: {format_decimal(chicken_sale_price_value * 1480)} IQD
+║ 📊 {texts[language]['profit_with_sale']} 📊: {format_decimal(profit_with_sale * 1480)} IQD"""
 
                 # إضافة الإيجار والربح الصافي بالدينار العراقي
                 results_text += f"""
-║ {texts[language]['first_year_rental']}: {format_decimal(total_rent * 1480)} IQD
-║ {texts[language]['final_profit']}: {format_decimal(net_profit * 1480)} IQD"""
+║ {texts[language]['first_year_rental']} 🏠: {format_decimal(total_rent * 1480)} IQD
+║ {texts[language]['final_profit']} 💰: {format_decimal(net_profit * 1480)} IQD"""
 
-                # إغلاق المربع
-                results_text += """
-╚══════════════════════════════════════════════════════════════════╝"""
+
 
                 # إنشاء DataFrame للرسم البياني
                 chart_categories = [
