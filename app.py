@@ -1000,18 +1000,38 @@ if calculation_type == texts[language]["chicken_profits"]:
             elif days_value > 730:
                 st.error(get_error_message("days_exceed", language))
             else:
-                # حساب الأرباح للسنة الأولى (320 بيضة كحد أقصى)
-                first_year_eggs = min(eggs_value, 320)  # عدد البيض في السنة الأولى
+                # تطبيق منطق التوزيع الصحيح للبيض في الحساب الجماعي:
+                # 1. السنة الثانية تأخذ أولوية (حد أقصى 260 بيضة)  
+                # 2. ما تبقى يذهب للسنة الأولى (حد أقصى 320 بيضة)
+                
+                # حساب النتائج للدجاجة الحالية - تطبيق منطق التوزيع الصحيح
+                # تطبيق منطق التوزيع الصحيح للبيض:
+                # 1. السنة الثانية تأخذ أولوية (حد أقصى 260 بيضة)
+                # 2. ما تبقى يذهب للسنة الأولى (حد أقصى 320 بيضة)
+                # هذا يضمن الاستفادة الكاملة من إنتاج الدجاجة
+                
+                # منطق توزيع البيض الصحيح: السنة الثانية أولاً، ثم ما تبقى للسنة الأولى
+                # منطق توزيع البيض الصحيح: السنة الثانية أولاً، ثم ما تبقى للسنة الأولى
+                if eggs_value > 320:
+                    # أولاً: حساب السنة الثانية (حد أقصى 260 بيضة)
+                    second_year_eggs = min(eggs_value - 320, 260)
+                    # ثانياً: حساب ما تبقى للسنة الأولى
+                    first_year_eggs = eggs_value - second_year_eggs
+                else:
+                    # إذا كان المجموع 320 أو أقل، كله للسنة الأولى
+                    first_year_eggs = eggs_value
+                    second_year_eggs = 0
+
+                # حساب الأيام
                 first_year_days = min(days_value, 365)  # عدد الأيام في السنة الأولى
+                second_year_days = max(0, min(days_value - 365, 365))  # عدد الأيام في السنة الثانية
+
+                # حساب الأسعار والتكاليف
                 first_year_egg_price = first_year_eggs * float(new_egg_price)  # سعر البيض في السنة الأولى
                 first_year_feed_cost = (first_year_days * 2) * float(new_feed_price)  # تكلفة العلف في السنة الأولى
                 first_year_profit = first_year_egg_price - first_year_feed_cost  # ربح السنة الأولى
 
-                # حساب الأرباح للسنة الثانية (البيض المتبقي)
-                second_year_eggs = max(0, min(eggs_value - 320, 260))  # عدد البيض في السنة الثانية (حد أقصى 260)
-                second_year_days = max(0, min(days_value - 365, 365))  # عدد الأيام في السنة الثانية
                 second_year_egg_price = second_year_eggs * float(new_egg_price)  # سعر البيض في السنة الثانية
-                # تصحيح حساب تكلفة العلف للسنة الثانية - يجب أن تكون بناءً على أيام السنة الثانية فقط
                 second_year_feed_cost = (second_year_days * 2) * float(new_feed_price)  # تكلفة العلف للسنة الثانية فقط
                 
                 # حساب الإيجار للسنة الثانية
@@ -1329,17 +1349,31 @@ elif calculation_type == texts[language]["group_calculation"]:
             elif active_days > 730:
                 st.error(get_error_message("days_exceed", language))
             else:
-                # حساب النتائج للدجاجة الحالية (مطابق لطريقة حساب أرباح الدجاج الاعتيادية)
-                eggs_count = egg_rate  # عدد البيض كما هو
-                egg_income = eggs_count * float(new_egg_price)  # ضرب عدد البيض في سعر البيض الحالي
-                feed_cost = active_days * 2 * float(new_feed_price)  # ضرب عدد الأيام في 2 ثم في سعر العلف الحالي
-                rent = 6 if eggs_count >= 320 else 0  # 6 دولارات فقط إذا وصلت الدجاجة للسنة الثانية (320+ بيضة)
+                # حساب النتائج للدجاجة الحالية - تطبيق منطق التوزيع الصحيح
+                # منطق توزيع البيض: السنة الثانية أولاً، ثم ما تبقى للسنة الأولى
+                total_eggs = egg_rate
+                total_days = active_days
+                
+                if total_eggs > 320:
+                    # أولاً: حساب السنة الثانية (حد أقصى 260 بيضة)
+                    second_year_eggs_count = min(total_eggs - 320, 260)
+                    # ثانياً: حساب ما تبقى للسنة الأولى
+                    first_year_eggs_count = total_eggs - second_year_eggs_count
+                else:
+                    # إذا كان المجموع 320 أو أقل، كله للسنة الأولى
+                    first_year_eggs_count = total_eggs
+                    second_year_eggs_count = 0
+
+                # حساب الدخل والتكاليف الإجمالية (بناءً على المجموع الكلي)
+                egg_income = total_eggs * float(new_egg_price)  # إجمالي دخل البيض
+                feed_cost = total_days * 2 * float(new_feed_price)  # إجمالي تكلفة العلف
+                rent = 6 if total_eggs >= 320 else 0  # 6 دولارات فقط إذا وصلت الدجاجة للسنة الثانية (320+ بيضة)
                 net_profit_before_rent = egg_income - feed_cost  # الربح قبل دفع الايجار
                 net_profit = egg_income - feed_cost - rent  # الربح الصافي بدون بيع
                 
                 # حساب الربح مع بيع الدجاجة - فقط للدجاج التي عدد بيضها 320 أو أكثر
                 # الربح مع بيع الدجاجة = الربح قبل دفع الايجار + سعر بيع الدجاجة
-                if eggs_count >= 320 and chicken_sale_price_value > 0:  # فقط إذا وصلت الدجاجة للسنة الثانية (عدد البيض 320 أو أكثر)
+                if total_eggs >= 320 and chicken_sale_price_value > 0:  # فقط إذا وصلت الدجاجة للسنة الثانية (عدد البيض 320 أو أكثر)
                     profit_with_sale = net_profit_before_rent + chicken_sale_price_value  # الربح مع بيع الدجاجة = الربح قبل دفع الايجار + سعر بيع الدجاجة
                 else:
                     profit_with_sale = 0  # لا يتم احتساب الربح مع البيع للدجاج التي لم تصل للسنة الثانية
@@ -1349,8 +1383,8 @@ elif calculation_type == texts[language]["group_calculation"]:
                 chicken_id = len(st.session_state.chicken_data) + 1
                 st.session_state.chicken_data.append({
                     "id": chicken_id,
-                    "eggs": eggs_count,
-                    "days": active_days,
+                    "eggs": total_eggs,
+                    "days": total_days,
                     "income": egg_income,
                     "feed_cost": feed_cost,
                     "rent": rent,
