@@ -1033,7 +1033,9 @@ if calculation_type == texts[language]["chicken_profits"]:
                 
                 # حساب النتائج
                 net_profit_before_rent = total_egg_price - total_feed_cost
-                net_profit = net_profit_before_rent - total_rent
+                first_year_profit = net_profit_before_rent  # ربح السنة الأولى قبل خصم الإيجار
+                second_year_profit = net_profit_before_rent - total_rent  # ربح السنة الثانية بعد خصم الإيجار
+                net_profit = net_profit_before_rent - total_rent  # صافي الربح الكلي
                 
                 # حساب الربح مع بيع الدجاجة - فقط للدجاج التي عدد بيضها 260 أو أكثر
                 profit_with_sale = 0
