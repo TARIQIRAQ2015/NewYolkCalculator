@@ -1066,6 +1066,7 @@ if calculation_type == texts[language]["chicken_profits"]:
 
 ║ {texts[language]['first_year_label']} ({texts[language]['max_320_eggs']}):
 ║ {texts[language]['eggs_input']}: {format_decimal(first_year_eggs)} 🥚
+║ عدد الأيام المتبقية حتى إكمال السنتين 📅: {730 - days_value} يوم
 ║ {texts[language]['egg_price']}: {format_decimal(first_year_egg_price)} 💵
 ║ {texts[language]['feed_price']}: {format_decimal(first_year_feed_cost)} 🌽
 ║ {texts[language]['first_year_profit']}: {format_decimal(first_year_profit)} 📈"""
