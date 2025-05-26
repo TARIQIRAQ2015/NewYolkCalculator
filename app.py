@@ -1118,6 +1118,7 @@ if calculation_type == texts[language]["chicken_profits"]:
 
                 # استكمال النص بالدينار العراقي
                 results_text += f"""
+
 {texts[language]['iqd_results']} 💵:"""
 
                 # عرض معلومات السنة الأولى بالدينار العراقي
