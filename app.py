@@ -1212,19 +1212,19 @@ elif calculation_type == texts[language]["daily_rewards"]:
 
                 # إنشاء نص النتائج
                 results_text = f"""
-╔═════════════════════════════════════════════════════════════╗
+
 ║ {texts[language]['calculation_time']}: {date_str} {time_str}
-╟┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┑
+
 ║ {texts[language]['usd_results']}:
 ║ {texts[language]['summary_egg_price']}: {format_decimal(rewards_value * float(new_egg_price))} USD
 ║ {texts[language]['summary_feed_price']}: {format_decimal(food_value * float(new_feed_price))} USD
 ║ {texts[language]['daily_profit']}: {format_decimal(daily_profit)} USD
-╟┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┑
+
 ║ {texts[language]['iqd_results']}:
 ║ {texts[language]['summary_egg_price']}: {format_decimal(rewards_value * float(new_egg_price) * 1480)} IQD
 ║ {texts[language]['summary_feed_price']}: {format_decimal(food_value * float(new_feed_price) * 1480)} IQD
 ║ {texts[language]['daily_profit']}: {format_decimal(daily_profit * 1480)} IQD
-╚═════════════════════════════════════════════════════════════╝"""
+"""
 
                 # إنشاء DataFrame للرسم البياني
                 df = pd.DataFrame({
@@ -1485,11 +1485,13 @@ elif calculation_type == texts[language]["group_calculation"]:
             
             # إنشاء نص النتائج
             results_text = f"""
-╔══════════════════════════════════════════════════════════════╗
-║                  {texts[language]['summary']}                    ║
-╠══════════════════════════════════════════════════════════════╣
+
+║                  {texts[language]['summary']}                    
+
+
 ║ {texts[language]['calculation_time']}: {date_str} {time_str}
-╠──────────────────────────────────────────────────────────────╤
+
+
 ║ {texts[language]['usd_results']}:
 ║ {texts[language]['total_eggs']}: {format_decimal(total_eggs)}
 ║ {texts[language]['total_income']}: {format_decimal(total_income)} USD
@@ -1498,7 +1500,7 @@ elif calculation_type == texts[language]["group_calculation"]:
 ║ {texts[language]['total_rent']}: {format_decimal(total_rent)} USD
 ║ {texts[language]['total_net_profit']}: {format_decimal(total_net_profit)} USD
 ║ {texts[language]['total_profit_with_sale']}: {format_decimal(total_profit_with_sale)} USD
-╠──────────────────────────────────────────────────────────────╤
+
 ║ {texts[language]['iqd_results']}:
 ║ {texts[language]['total_eggs']}: {format_decimal(total_eggs)}
 ║ {texts[language]['total_income']}: {format_decimal(total_income * 1480)} IQD
@@ -1507,7 +1509,7 @@ elif calculation_type == texts[language]["group_calculation"]:
 ║ {texts[language]['total_rent']}: {format_decimal(total_rent * 1480)} IQD
 ║ {texts[language]['total_net_profit']}: {format_decimal(total_net_profit * 1480)} IQD
 ║ {texts[language]['total_profit_with_sale']}: {format_decimal(total_profit_with_sale * 1480)} IQD
-╚══════════════════════════════════════════════════════════════╝"""
+"""
             
             st.markdown(f"### ✨ {texts[language]['summary']}")
             st.code(results_text)
