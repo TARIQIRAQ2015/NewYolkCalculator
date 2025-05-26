@@ -611,6 +611,8 @@ texts = {
         "total_rewards": "مجموع سعر عدد البيض 🥚",
         "total_food_cost": "مجموع عدد الطعام المطلوب 🌽",
         "first_year_rental": "الإيجار للسنة الثانية 🏠",
+        "second_year_profit": "ربح السنة الثانية 📈",
+        "second_year_profit_after_rent": "ربح السنة الثانية مع خصم الإيجار 📈",
         "final_profit": "الربح الصافي خلال السنتين بدون بيع 💰",
         "calculation_time": "وقت الحساب ⏰",
         "summary": "ملخص النتائج ✨",
@@ -1070,9 +1072,9 @@ if calculation_type == texts[language]["chicken_profits"]:
 ║ {texts[language]['calculation_time']}: {date_str} {time_str}
 ╟──────────────────────────────────────────────────────────────────╢
 ║ {texts[language]['usd_results']}:
-║ {texts[language]['summary_egg_price']}: {format_decimal(total_egg_price)} USD
-║ {texts[language]['summary_feed_price']}: {format_decimal(total_feed_cost)} USD
-║ {texts[language]['net_profit']}: {format_decimal(net_profit_before_rent)} USD"""
+║ {texts[language]['total_rewards']}: {format_decimal(total_egg_price)} USD
+║ {texts[language]['total_food_cost']}: {format_decimal(total_feed_cost)} USD
+║ {texts[language]['net_profit']}: {format_decimal(first_year_profit)} USD"""
 
                 # إضافة سعر البيع والربح مع البيع إذا كانت الدجاجة في السنة الأولى وتم إدخال سعر البيع
                 if eggs_value >= 260 and chicken_sale_price_value > 0:
@@ -1080,18 +1082,24 @@ if calculation_type == texts[language]["chicken_profits"]:
 ║ {texts[language]['chicken_sale_price']}: {format_decimal(chicken_sale_price_value)} USD
 ║ {texts[language]['profit_with_sale']}: {format_decimal(profit_with_sale)} USD"""
 
-                # إضافة الإيجار والربح الصافي
+                # إضافة الإيجار وربح السنة الثانية والربح الصافي
                 results_text += f"""
-║ {texts[language]['first_year_rental']}: {format_decimal(total_rent)} USD
+║ {texts[language]['first_year_rental']}: 6 USD
+║ {texts[language]['second_year_profit']}: {format_decimal(net_profit_before_rent)} USD
+║ {texts[language]['second_year_profit_after_rent']}: {format_decimal(second_year_profit)} USD
 ║ {texts[language]['final_profit']}: {format_decimal(net_profit)} USD"""
 
                 # استكمال النص
                 results_text += f"""
 ╟──────────────────────────────────────────────────────────────────╢
 ║ {texts[language]['iqd_results']}:
-║ {texts[language]['summary_egg_price']}: {format_decimal(total_egg_price * 1480)} IQD
-║ {texts[language]['summary_feed_price']}: {format_decimal(total_feed_cost * 1480)} IQD
-║ {texts[language]['net_profit']}: {format_decimal(net_profit_before_rent * 1480)} IQD"""
+║ {texts[language]['total_rewards']}: {format_decimal(total_egg_price * 1480)} IQD
+║ {texts[language]['total_food_cost']}: {format_decimal(total_feed_cost * 1480)} IQD
+║ {texts[language]['net_profit']}: {format_decimal(first_year_profit * 1480)} IQD
+║ {texts[language]['first_year_rental']}: {format_decimal(6 * 1480)} IQD
+║ {texts[language]['second_year_profit']}: {format_decimal(net_profit_before_rent * 1480)} IQD
+║ {texts[language]['second_year_profit_after_rent']}: {format_decimal(second_year_profit * 1480)} IQD
+║ {texts[language]['final_profit']}: {format_decimal(net_profit * 1480)} IQD"""
 
                 # إضافة سعر البيع والربح مع البيع بالدينار العراقي
                 if eggs_value >= 260 and chicken_sale_price_value > 0:
