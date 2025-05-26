@@ -13,6 +13,11 @@ st.set_page_config(
     layout="wide"
 )
 
+# إضافة Font Awesome للأيقونات
+st.markdown("""
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+""", unsafe_allow_html=True)
+
 # إخفاء أزرار التحكم بالمظهر
 st.markdown("""
     <style>
@@ -578,6 +583,58 @@ st.markdown("""
             50% { transform: translateY(-10px); }
             100% { transform: translateY(0px); }
         }
+        
+        /* زر العودة للأعلى */
+        .scroll-top-btn {
+            position: fixed;
+            bottom: 30px;
+            right: 30px;
+            width: 50px;
+            height: 50px;
+            background: linear-gradient(135deg, rgba(255,255,255,0.1), rgba(255,255,255,0.05));
+            border: 1px solid rgba(255,255,255,0.2);
+            border-radius: 50%;
+            color: #ffffff;
+            font-size: 18px;
+            cursor: pointer;
+            opacity: 0;
+            visibility: hidden;
+            transform: translateY(20px);
+            transition: all 0.3s ease;
+            z-index: 1000;
+            backdrop-filter: blur(10px);
+            box-shadow: 0 4px 12px rgba(0,0,0,0.3);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        
+        .scroll-top-btn.active {
+            opacity: 1;
+            visibility: visible;
+            transform: translateY(0);
+        }
+        
+        .scroll-top-btn:hover {
+            background: linear-gradient(135deg, rgba(255,255,255,0.2), rgba(255,255,255,0.1));
+            border-color: rgba(255,255,255,0.4);
+            transform: translateY(-3px);
+            box-shadow: 0 6px 20px rgba(0,0,0,0.4);
+        }
+        
+        .scroll-top-btn:active {
+            transform: translateY(-1px);
+            box-shadow: 0 2px 8px rgba(0,0,0,0.2);
+        }
+        
+        .scroll-top-btn i {
+            animation: bounce 2s infinite;
+        }
+        
+        @keyframes bounce {
+            0%, 100% { transform: translateY(0); }
+            50% { transform: translateY(-3px); }
+        }
     </style>
 """, unsafe_allow_html=True)
 
@@ -673,6 +730,8 @@ texts = {
         "total_rewards": "Total Egg Price 🥚",
         "total_food_cost": "Total Required Feed Amount 🌽",
         "first_year_rental": "Second Year Rental 🏠",
+        "second_year_profit": "Second Year Profit 📈",
+        "second_year_profit_after_rent": "Second Year Profit After Rent 📈",
         "final_profit": "Two Years Net Profit Without Sale 💰",
         "calculation_time": "Calculation Time ⏰",
         "summary": "Results Summary ✨",
@@ -733,6 +792,8 @@ texts = {
         "total_rewards": "Preț Total Ouă 🥚",
         "total_food_cost": "Cantitate Totală De Furaje Necesară 🌽",
         "first_year_rental": "Chirie Pentru Al Doilea An 🏠",
+        "second_year_profit": "Profit În Al Doilea An 📈",
+        "second_year_profit_after_rent": "Profit Al Doilea An După Chirie 📈",
         "final_profit": "Profit Net În Cei Doi Ani Fără Vânzare 💰",
         "calculation_time": "Ora Calculului ⏰",
         "summary": "Rezumatul Rezultatelor ✨",
@@ -836,63 +897,7 @@ st.markdown(
             text-align: {'right' if language == 'العربية' else 'left'} !important;
         }}
     </style>
-    <div class="copyright">By Tariq Al-Yaseen &copy; 2025-2026</div>
-    """,
-    unsafe_allow_html=True
-)
-
-st.markdown("""
-    <style>
-        /* تحسين الإيموجي في العنوان */
-        .emoji-link {
-            text-decoration: none;
-            font-size: 24px !important;
-            display: inline-block;
-            transition: all 0.3s ease;
-            line-height: 1;
-            cursor: pointer;
-            margin-right: 8px;
-        }
-        
-        .emoji-link:hover {
-            transform: scale(1.2) rotate(10deg);
-        }
-        
-        .title {
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            margin-bottom: 12px;
-        }
-        
-        .title-text {
-            background: linear-gradient(120deg, #ffffff, #e2e2e2);
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-            text-shadow: 0 2px 4px rgba(0,0,0,0.1);
-            font-size: 32px;
-            font-weight: bold;
-        }
-    </style>
-""", unsafe_allow_html=True)
-
-st.markdown("""
-    <head>
-        <meta charset="UTF-8">
-        <meta name="viewport" content="width=device-width, initial-scale=1.0">
-        <link rel="icon" type="image/png" href="https://cdn-icons-png.flaticon.com/512/3059/3059997.png">
-        <title>New Yolk Calculator</title>
-    </head>
-""", unsafe_allow_html=True)
-
-# إضافة زر نسخ النتائج باستخدام JavaScript
-def add_copy_button(text, button_text):
-    st.markdown(f"""
-        <div style="position: relative;">
-            <textarea id="clipboard-text" style="position: absolute; left: -9999px;">{text}</textarea>
-            <button onclick="copyToClipboard('clipboard-text')">{button_text}</button>
-        </div>
-    """, unsafe_allow_html=True)main-title">
+    <div class="main-title">
         {texts[language]["title"]}
         <a href="https://newyolkcalculator.streamlit.app" target="_blank" class="chicken-emoji">🐔</a>
         <div class="subtitle">
@@ -1114,15 +1119,16 @@ if calculation_type == texts[language]["chicken_profits"]:
 
                 # إنشاء نص النتائج
                 results_text = f"""
-║ {texts[language]['summary']} ✨                 
+║ {texts[language]['summary']} ✨
 
 ║ {texts[language]['calculation_time']} ⏰: {date_str} {time_str}
+║ 
 ║ {texts[language]['usd_results']} 💵:
 """
 
                 # عرض معلومات السنة الأولى فقط إذا كان عدد البيض أكبر من 260
                 if eggs_value > 260:
-                    results_text += f"""
+                    results_text += f"""║ 
 ║ السنة الأولى (حد أقصى 320 بيضة):
 ║ عدد البيض: {format_decimal(first_year_eggs)} 🥚
 ║ سعر البيض: {format_decimal(first_year_egg_price)} 💵
@@ -1137,7 +1143,7 @@ if calculation_type == texts[language]["chicken_profits"]:
 
                 # عرض معلومات السنة الثانية
                 if eggs_value <= 260:
-                    results_text += f"""
+                    results_text += f"""║ 
 ║ السنة الثانية (حد أقصى 260 بيضة):
 ║ عدد البيض: {format_decimal(eggs_value)} 🥚
 ║ سعر البيض: {format_decimal(eggs_value * float(new_egg_price))} 💵
@@ -1145,8 +1151,7 @@ if calculation_type == texts[language]["chicken_profits"]:
 ║ {texts[language]['second_year_profit']}: {format_decimal((eggs_value * float(new_egg_price)) - ((days_value * 2) * float(new_feed_price)))} 📈
 ║ {texts[language]['final_profit']}: {format_decimal((eggs_value * float(new_egg_price)) - ((days_value * 2) * float(new_feed_price)))} 💰"""
                 else:
-                    results_text += f"""
-
+                    results_text += f"""║ 
 ║ السنة الثانية (حد أقصى 260 بيضة):
 ║ عدد البيض: {format_decimal(second_year_eggs)} 🥚
 ║ سعر البيض: {format_decimal(second_year_egg_price)} 💵
@@ -1154,7 +1159,7 @@ if calculation_type == texts[language]["chicken_profits"]:
 ║ {texts[language]['first_year_rental']}: {format_decimal(total_rent)} 🏠
 ║ {texts[language]['second_year_profit']}: {format_decimal(second_year_profit)} 📈
 ║ {texts[language]['second_year_profit_after_rent']}: {format_decimal(second_year_profit_after_rent)} 📈
-
+║ 
 ║ {texts[language]['final_profit']}: {format_decimal(net_profit)} 💰"""
 
                 # استكمال النص بالدينار العراقي
@@ -1164,7 +1169,7 @@ if calculation_type == texts[language]["chicken_profits"]:
 
                 # عرض معلومات السنة الأولى بالدينار العراقي
                 if eggs_value > 260:
-                    results_text += f"""
+                    results_text += f"""║ 
 ║ السنة الأولى (حد أقصى 320 بيضة):
 ║ عدد البيض: {format_decimal(first_year_eggs)} 🥚
 ║ سعر البيض: {format_decimal(first_year_egg_price * 1480)} 💵
@@ -1179,7 +1184,7 @@ if calculation_type == texts[language]["chicken_profits"]:
 
                 # عرض معلومات السنة الثانية بالدينار العراقي
                 if eggs_value <= 260:
-                    results_text += f"""
+                    results_text += f"""║ 
 ║ السنة الثانية (حد أقصى 260 بيضة):
 ║ عدد البيض: {format_decimal(eggs_value)} 🥚
 ║ سعر البيض: {format_decimal((eggs_value * float(new_egg_price)) * 1480)} 💵
@@ -1187,8 +1192,7 @@ if calculation_type == texts[language]["chicken_profits"]:
 ║ {texts[language]['second_year_profit']}: {format_decimal(((eggs_value * float(new_egg_price)) - ((days_value * 2) * float(new_feed_price))) * 1480)} 📈
 ║ {texts[language]['final_profit']}: {format_decimal(((eggs_value * float(new_egg_price)) - ((days_value * 2) * float(new_feed_price))) * 1480)} 💰"""
                 else:
-                    results_text += f"""
-
+                    results_text += f"""║ 
 ║ السنة الثانية (حد أقصى 260 بيضة):
 ║ عدد البيض: {format_decimal(second_year_eggs)} 🥚
 ║ سعر البيض: {format_decimal(second_year_egg_price * 1480)} 💵
@@ -1196,7 +1200,7 @@ if calculation_type == texts[language]["chicken_profits"]:
 ║ {texts[language]['first_year_rental']}: {format_decimal(total_rent * 1480)} 🏠
 ║ {texts[language]['second_year_profit']}: {format_decimal(second_year_profit * 1480)} 📈
 ║ {texts[language]['second_year_profit_after_rent']}: {format_decimal(second_year_profit_after_rent * 1480)} 📈
-
+║ 
 ║ {texts[language]['final_profit']}: {format_decimal(net_profit * 1480)} 💰"""
 
                 # تحويل العملة لعرض الجدول والرسم البياني
@@ -1216,9 +1220,9 @@ if calculation_type == texts[language]["chicken_profits"]:
 
                 # إنشاء DataFrame للرسم البياني
                 chart_categories = [
-                    f"🥇 ربح السنة الأولى",
-                    f"🥈 ربح السنة الثانية مع خصم الإيجار",
-                    f"💰 الربح الصافي خلال السنتين بدون بيع"
+                    f"🥇 ربح السنة الأولى: {format_decimal(first_year_profit)} {currency}",
+                    f"🥈 ربح السنة الثانية مع خصم الإيجار: {format_decimal(second_year_profit_after_rent)} {currency}",
+                    f"💰 الربح الصافي خلال السنتين بدون بيع: {format_decimal(net_profit)} {currency}"
                 ]
                 
                 chart_values = [
@@ -1229,7 +1233,7 @@ if calculation_type == texts[language]["chicken_profits"]:
                 
                 # إضافة سعر البيع إذا كان متاحاً
                 if eggs_value >= 320 and chicken_sale_price_value > 0:
-                    chart_categories.append(f"💰 ربح البيع")
+                    chart_categories.append(f"💰 ربح البيع: {format_decimal(chicken_sale_price_value)} {currency}")
                     chart_values.append(chicken_sale_price_value)
                 
                 df = pd.DataFrame({
@@ -1319,15 +1323,12 @@ elif calculation_type == texts[language]["daily_rewards"]:
 ║ {texts[language]['daily_profit']}: {format_decimal(daily_profit * 1480)} IQD
 ╚═════════════════════════════════════════════════════════════╝"""
 
-                # عرض النتائج
-                # st.code(results_text, language="text")
-
                 # إنشاء DataFrame للرسم البياني
                 df = pd.DataFrame({
                     texts[language]["category"]: [
-                        f"🥚 {texts[language]['total_rewards']}",
-                        f"🌽 {texts[language]['total_food_cost']}",
-                        f"💰 {texts[language]['daily_profit']}"
+                        f"🥚 {texts[language]['total_rewards']}: {format_decimal(rewards_value * float(new_egg_price))} {currency}",
+                        f"🌽 {texts[language]['total_food_cost']}: {format_decimal(food_value * float(new_feed_price))} {currency}",
+                        f"💰 {texts[language]['daily_profit']}: {format_decimal(daily_profit)} {currency}"
                     ],
                     texts[language]["value"]: [
                         rewards_value * float(new_egg_price),
@@ -1344,9 +1345,9 @@ elif calculation_type == texts[language]["daily_rewards"]:
                 # عرض الرسم البياني
                 chart_df = pd.DataFrame({
                     texts[language]["category"]: [
-                        f"🥚 {texts[language]['total_rewards']}",
-                        f"🌽 {texts[language]['total_food_cost']}",
-                        f"💰 {texts[language]['daily_profit']}"
+                        f"🥚 {texts[language]['total_rewards']}: {format_decimal(rewards_value * float(new_egg_price))} {currency}",
+                        f"🌽 {texts[language]['total_food_cost']}: {format_decimal(food_value * float(new_feed_price))} {currency}",
+                        f"💰 {texts[language]['daily_profit']}: {format_decimal(daily_profit)} {currency}"
                     ],
                     texts[language]["value"]: [
                         rewards_value * float(new_egg_price),
@@ -1380,18 +1381,15 @@ elif calculation_type == texts[language]["group_calculation"]:
         egg_rate = st.text_input(
             texts[language]["daily_egg_rate"],
             value=""
-            # تم تغييرها لتكون مثل حقل أيام النشاط بدون قيمة افتراضية
         )
         
     with col2:
         active_days = st.text_input(
             texts[language]["active_days"],
             value=""
-            # تم تغييرها لتكون بدون قيمة افتراضية وبدون أزرار الزيادة والنقصان
         )
         
     # حقل سعر بيع الدجاجة الاختياري - يظهر شرطياً إذا كان عدد البيض أكبر من 260
-    # التحقق من أن القيمة المدخلة رقم وأكبر من أو يساوي 260
     try:
         egg_rate_value = float(egg_rate) if egg_rate else 0
         is_first_year = egg_rate_value >= 260
@@ -1402,7 +1400,6 @@ elif calculation_type == texts[language]["group_calculation"]:
         chicken_sale_price = st.text_input(
             texts[language]["chicken_sale_price"],
             value=""
-            # تم تغييرها لتكون بدون قيمة افتراضية وبدون أزرار الزيادة والنقصان
         )
     else:
         st.info(texts[language]["not_first_year_chicken"] if "not_first_year_chicken" in texts[language] else "لا يمكن بيع الدجاجة لأنها ليست في السنة الأولى (عدد البيض أقل من 260)")
@@ -1537,9 +1534,6 @@ elif calculation_type == texts[language]["group_calculation"]:
             st.subheader("📋 " + texts[language]["chicken_details"])
             st.table(detailed_df)
             
-            # قيمة افتراضية للمتغيرات قبل استخدامها
-            total_final_with_sale = total_profit_with_sale_display
-            
             # إنشاء بيانات ملخص للرسم البياني
             summary_data = [
                 {
@@ -1616,14 +1610,13 @@ elif calculation_type == texts[language]["group_calculation"]:
             st.code(results_text)
             
             # ثالثاً (اختياري): عرض الرسم البياني 
-            # إذا كان غير مطلوب يمكن إزالة هذا الجزء
             chart_df = pd.DataFrame({
                 texts[language]["category"]: [
-                    f"💰 {texts[language]['total_income']}",
-                    f"🌽 {texts[language]['total_feed']}",
-                    f"📈 {texts[language]['total_first_year_profit']}",
-                    f"🏠 {texts[language]['total_rent']}",
-                    f"💰 {texts[language]['total_net_profit']}"
+                    f"💰 {texts[language]['total_income']}: {format_decimal(total_income_display)} {display_currency}",
+                    f"🌽 {texts[language]['total_feed']}: {format_decimal(total_feed_cost_display)} {display_currency}",
+                    f"📈 {texts[language]['total_first_year_profit']}: {format_decimal(total_net_profit_before_rent_display)} {display_currency}",
+                    f"🏠 {texts[language]['total_rent']}: {format_decimal(total_rent_display)} {display_currency}",
+                    f"💰 {texts[language]['total_net_profit']}: {format_decimal(total_net_profit_display)} {display_currency}"
                 ],
                 texts[language]["value"]: [
                     total_income_display,
@@ -1730,4 +1723,90 @@ st.markdown("""
             letter-spacing: 0.5px;
         }
     </style>
-    <div class="
+    <div class="copyright">By Tariq Al-Yaseen &copy; 2025-2026</div>
+    """,
+    unsafe_allow_html=True
+)
+
+# إضافة زر العودة للأعلى
+st.markdown("""
+    <!-- زر العودة للأعلى -->
+    <button id="scroll-top" class="scroll-top-btn">
+        <i class="fas fa-chevron-up"></i>
+    </button>
+    
+    <script>
+        // زر التنقل للأعلى
+        const scrollTopBtn = document.getElementById('scroll-top');
+        
+        window.addEventListener('scroll', function() {
+            if (window.pageYOffset > 300) {
+                scrollTopBtn.classList.add('active');
+            } else {
+                scrollTopBtn.classList.remove('active');
+            }
+        });
+        
+        scrollTopBtn.addEventListener('click', function() {
+            window.scrollTo({
+                top: 0,
+                behavior: 'smooth'
+            });
+        });
+    </script>
+    """,
+    unsafe_allow_html=True
+)
+
+st.markdown("""
+    <style>
+        /* تحسين الإيموجي في العنوان */
+        .emoji-link {
+            text-decoration: none;
+            font-size: 24px !important;
+            display: inline-block;
+            transition: all 0.3s ease;
+            line-height: 1;
+            cursor: pointer;
+            margin-right: 8px;
+        }
+        
+        .emoji-link:hover {
+            transform: scale(1.2) rotate(10deg);
+        }
+        
+        .title {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin-bottom: 12px;
+        }
+        
+        .title-text {
+            background: linear-gradient(120deg, #ffffff, #e2e2e2);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            text-shadow: 0 2px 4px rgba(0,0,0,0.1);
+            font-size: 32px;
+            font-weight: bold;
+        }
+    </style>
+""", unsafe_allow_html=True)
+
+st.markdown("""
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <link rel="icon" type="image/png" href="https://cdn-icons-png.flaticon.com/512/3059/3059997.png">
+        <title>New Yolk Calculator</title>
+    </head>
+""", unsafe_allow_html=True)
+
+# إضافة زر نسخ النتائج باستخدام JavaScript
+def add_copy_button(text, button_text):
+    st.markdown(f"""
+        <div style="position: relative;">
+            <textarea id="clipboard-text" style="position: absolute; left: -9999px;">{text}</textarea>
+            <button onclick="copyToClipboard('clipboard-text')">{button_text}</button>
+        </div>
+    """, unsafe_allow_html=True)
