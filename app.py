@@ -1012,10 +1012,16 @@ if calculation_type == texts[language]["chicken_profits"]:
                 
                 # منطق توزيع البيض الصحيح: السنة الثانية أولاً، ثم ما تبقى للسنة الأولى
                 # منطق توزيع البيض الصحيح: السنة الثانية أولاً، ثم ما تبقى للسنة الأولى
+                # مثال: إذا أدخل المستخدم 580 بيضة:
+                # 1. السنة الثانية = min(260, 580-320) = min(260, 260) = 260 بيضة
+                # 2. السنة الأولى = 580 - 260 = 320 بيضة
+                # مثال آخر: إذا أدخل 500 بيضة:
+                # 1. السنة الثانية = min(260, 500-320) = min(260, 180) = 180 بيضة  
+                # 2. السنة الأولى = 500 - 180 = 320 بيضة
                 if eggs_value > 320:
-                    # أولاً: حساب السنة الثانية (حد أقصى 260 بيضة من الفائض عن 320)
+                    # أولاً: نملأ السنة الثانية (حد أقصى 260 بيضة)
                     second_year_eggs = min(260, eggs_value - 320)
-                    # ثانياً: حساب ما تبقى للسنة الأولى
+                    # ثانياً: ما تبقى يذهب للسنة الأولى  
                     first_year_eggs = eggs_value - second_year_eggs
                 else:
                     # إذا كان المجموع 320 أو أقل، كله للسنة الأولى
@@ -1053,17 +1059,16 @@ if calculation_type == texts[language]["chicken_profits"]:
                 time_str = current_time.strftime("%I:%M %p")
 
                 # إنشاء نص النتائج
-                results_text = f"""
-║ {texts[language]['summary']} ✨
+                results_text = f"""║ {texts[language]['summary']} ✨
 ║ 
 ║ {texts[language]['calculation_time']} ⏰: {date_str} {time_str}
 ║ 
-║ {texts[language]['usd_results']} 💵:
-"""
+║ {texts[language]['usd_results']} 💵"""
 
                 # عرض السنة الأولى دائماً (إذا كان هناك بيض)
                 if eggs_value > 0:
-                    results_text += f"""║ 
+                    results_text += f"""
+║ 
 ║ {texts[language]['first_year_label']} ({texts[language]['max_320_eggs']}):
 ║ {texts[language]['eggs_input']}: {format_decimal(first_year_eggs)} 🥚
 ║ {texts[language]['egg_price']}: {format_decimal(first_year_egg_price)} 💵
@@ -1078,7 +1083,8 @@ if calculation_type == texts[language]["chicken_profits"]:
 
                 # عرض السنة الثانية فقط إذا كان عدد البيض أكبر من 320
                 if eggs_value > 320:
-                    results_text += f"""║ 
+                    results_text += f"""
+║ 
 ║ {texts[language]['second_year_label']} ({texts[language]['max_260_eggs']}):
 ║ {texts[language]['eggs_input']}: {format_decimal(second_year_eggs)} 🥚
 ║ {texts[language]['egg_price']}: {format_decimal(second_year_egg_price)} 💵
@@ -1088,17 +1094,19 @@ if calculation_type == texts[language]["chicken_profits"]:
 ║ {texts[language]['second_year_profit_after_rent']}: {format_decimal(second_year_profit_after_rent)} 📈"""
 
                 # عرض الربح النهائي
-                results_text += f"""║ 
+                results_text += f"""
+║ 
 ║ {texts[language]['final_profit']}: {format_decimal(net_profit)} 💰"""
 
                 # استكمال النص بالدينار العراقي
                 results_text += f"""
 
-║ {texts[language]['iqd_results']} 💵:"""
+║ {texts[language]['iqd_results']} 💵"""
 
                 # عرض السنة الأولى بالدينار العراقي
                 if eggs_value > 0:
-                    results_text += f"""║ 
+                    results_text += f"""
+║ 
 ║ {texts[language]['first_year_label']} ({texts[language]['max_320_eggs']}):
 ║ {texts[language]['eggs_input']}: {format_decimal(first_year_eggs)} 🥚
 ║ {texts[language]['egg_price']}: {format_decimal(first_year_egg_price * 1480)} 💵
@@ -1113,7 +1121,8 @@ if calculation_type == texts[language]["chicken_profits"]:
 
                 # عرض السنة الثانية بالدينار العراقي فقط إذا كان عدد البيض أكبر من 320
                 if eggs_value > 320:
-                    results_text += f"""║ 
+                    results_text += f"""
+║ 
 ║ {texts[language]['second_year_label']} ({texts[language]['max_260_eggs']}):
 ║ {texts[language]['eggs_input']}: {format_decimal(second_year_eggs)} 🥚
 ║ {texts[language]['egg_price']}: {format_decimal(second_year_egg_price * 1480)} 💵
@@ -1123,7 +1132,8 @@ if calculation_type == texts[language]["chicken_profits"]:
 ║ {texts[language]['second_year_profit_after_rent']}: {format_decimal(second_year_profit_after_rent * 1480)} 📈"""
 
                 # عرض الربح النهائي بالدينار العراقي
-                results_text += f"""║ 
+                results_text += f"""
+║ 
 ║ {texts[language]['final_profit']}: {format_decimal(net_profit * 1480)} 💰"""
 
                 # تحويل العملة لعرض الجدول والرسم البياني
@@ -1231,20 +1241,17 @@ elif calculation_type == texts[language]["daily_rewards"]:
                 time_str = current_time.strftime("%I:%M %p")
 
                 # إنشاء نص النتائج
-                results_text = f"""
-╔═════════════════════════════════════════════════════════════╗
-║ {texts[language]['calculation_time']}: {date_str} {time_str}
-╟┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┑
+                results_text = f"""║ {texts[language]['calculation_time']}: {date_str} {time_str}
+║ 
 ║ {texts[language]['usd_results']}:
 ║ {texts[language]['summary_egg_price']}: {format_decimal(rewards_value * float(new_egg_price))} USD
 ║ {texts[language]['summary_feed_price']}: {format_decimal(food_value * float(new_feed_price))} USD
 ║ {texts[language]['daily_profit']}: {format_decimal(daily_profit)} USD
-╟┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┑
+║ 
 ║ {texts[language]['iqd_results']}:
 ║ {texts[language]['summary_egg_price']}: {format_decimal(rewards_value * float(new_egg_price) * 1480)} IQD
 ║ {texts[language]['summary_feed_price']}: {format_decimal(food_value * float(new_feed_price) * 1480)} IQD
-║ {texts[language]['daily_profit']}: {format_decimal(daily_profit * 1480)} IQD
-╚═════════════════════════════════════════════════════════════╝"""
+║ {texts[language]['daily_profit']}: {format_decimal(daily_profit * 1480)} IQD"""
 
                 # إنشاء DataFrame للرسم البياني
                 df = pd.DataFrame({
@@ -1355,9 +1362,9 @@ elif calculation_type == texts[language]["group_calculation"]:
                 total_days = active_days
                 
                 if total_eggs > 320:
-                    # أولاً: حساب السنة الثانية (حد أقصى 260 بيضة من الفائض عن 320)
+                    # أولاً: نملأ السنة الثانية (حد أقصى 260 بيضة)
                     second_year_eggs_count = min(260, total_eggs - 320)
-                    # ثانياً: حساب ما تبقى للسنة الأولى
+                    # ثانياً: ما تبقى يذهب للسنة الأولى
                     first_year_eggs_count = total_eggs - second_year_eggs_count
                 else:
                     # إذا كان المجموع 320 أو أقل، كله للسنة الأولى
@@ -1518,12 +1525,10 @@ elif calculation_type == texts[language]["group_calculation"]:
             time_str = current_time.strftime("%I:%M %p")
             
             # إنشاء نص النتائج
-            results_text = f"""
-╔══════════════════════════════════════════════════════════════╗
-║                  {texts[language]['summary']}                    ║
-╠══════════════════════════════════════════════════════════════╣
+            results_text = f"""║                  {texts[language]['summary']}                    
+║ 
 ║ {texts[language]['calculation_time']}: {date_str} {time_str}
-╠──────────────────────────────────────────────────────────────╤
+║ 
 ║ {texts[language]['usd_results']}:
 ║ {texts[language]['total_eggs']}: {format_decimal(total_eggs)}
 ║ {texts[language]['total_income']}: {format_decimal(total_income)} USD
@@ -1532,7 +1537,7 @@ elif calculation_type == texts[language]["group_calculation"]:
 ║ {texts[language]['total_rent']}: {format_decimal(total_rent)} USD
 ║ {texts[language]['total_net_profit']}: {format_decimal(total_net_profit)} USD
 ║ {texts[language]['total_profit_with_sale']}: {format_decimal(total_profit_with_sale)} USD
-╠──────────────────────────────────────────────────────────────╤
+║ 
 ║ {texts[language]['iqd_results']}:
 ║ {texts[language]['total_eggs']}: {format_decimal(total_eggs)}
 ║ {texts[language]['total_income']}: {format_decimal(total_income * 1480)} IQD
@@ -1540,8 +1545,7 @@ elif calculation_type == texts[language]["group_calculation"]:
 ║ {texts[language]['total_first_year_profit']}: {format_decimal(total_net_profit_before_rent * 1480)} IQD
 ║ {texts[language]['total_rent']}: {format_decimal(total_rent * 1480)} IQD
 ║ {texts[language]['total_net_profit']}: {format_decimal(total_net_profit * 1480)} IQD
-║ {texts[language]['total_profit_with_sale']}: {format_decimal(total_profit_with_sale * 1480)} IQD
-╚══════════════════════════════════════════════════════════════╝"""
+║ {texts[language]['total_profit_with_sale']}: {format_decimal(total_profit_with_sale * 1480)} IQD"""
             
             st.markdown(f"### ✨ {texts[language]['summary']}")
             st.code(results_text)
