@@ -1026,38 +1026,46 @@ if calculation_type == texts[language]["chicken_profits"]:
             elif days_value > 730:
                 st.error(get_error_message("days_exceed", language))
             else:
-                # حساب الأرباح
-                total_egg_price = eggs_value * float(new_egg_price)  # ضرب عدد البيض في سعر البيض الحالي
-                total_feed_cost = (days_value * 2) * float(new_feed_price)  # ضرب عدد الأيام في 2 ثم في سعر العلف الحالي
+                # حساب الأرباح للسنة الأولى (320 بيضة كحد أقصى)
+                first_year_eggs = min(eggs_value, 320)  # عدد البيض في السنة الأولى
+                first_year_days = min(days_value, 365)  # عدد الأيام في السنة الأولى
+                first_year_egg_price = first_year_eggs * float(new_egg_price)  # سعر البيض في السنة الأولى
+                first_year_feed_cost = (first_year_days * 2) * float(new_feed_price)  # تكلفة العلف في السنة الأولى
+                first_year_profit = first_year_egg_price - first_year_feed_cost  # ربح السنة الأولى
+
+                # حساب الأرباح للسنة الثانية (البيض المتبقي)
+                second_year_eggs = max(0, min(eggs_value - 320, 260))  # عدد البيض في السنة الثانية (حد أقصى 260)
+                second_year_days = max(0, min(days_value - 365, 365))  # عدد الأيام في السنة الثانية
+                second_year_egg_price = second_year_eggs * float(new_egg_price)  # سعر البيض في السنة الثانية
+                second_year_feed_cost = (second_year_days * 2) * float(new_feed_price)  # تكلفة العلف في السنة الثانية
                 
-                # حساب الإيجار
+                # حساب الإيجار للسنة الثانية
                 total_rent = 6 if eggs_value >= 320 else 0  # 6 دولار فقط إذا كان عدد البيض 320 أو أكثر
                 
-                # حساب النتائج
-                net_profit_before_rent = total_egg_price - total_feed_cost
-                first_year_profit = net_profit_before_rent  # ربح السنة الأولى قبل خصم الإيجار
-                second_year_profit = net_profit_before_rent - total_rent  # ربح السنة الثانية بعد خصم الإيجار
-                net_profit = net_profit_before_rent - total_rent  # صافي الربح الكلي
+                # حساب النتائج النهائية
+                second_year_profit = second_year_egg_price - second_year_feed_cost  # ربح السنة الثانية قبل الإيجار
+                second_year_profit_after_rent = second_year_profit - total_rent  # ربح السنة الثانية بعد الإيجار
+                net_profit = first_year_profit + second_year_profit_after_rent  # صافي الربح الكلي
                 
                 # حساب الربح مع بيع الدجاجة - فقط للدجاج التي عدد بيضها 320 أو أكثر
                 profit_with_sale = 0
                 if eggs_value >= 320 and chicken_sale_price_value > 0:
-                    profit_with_sale = net_profit_before_rent + chicken_sale_price_value
+                    profit_with_sale = first_year_profit + chicken_sale_price_value
 
                 # تحويل العملة
                 if currency == "IQD":
-                    total_egg_price = total_egg_price * 1480
-                    total_feed_cost = total_feed_cost * 1480
-                    net_profit_before_rent = net_profit_before_rent * 1480
+                    first_year_egg_price = first_year_egg_price * 1480
+                    first_year_feed_cost = first_year_feed_cost * 1480
+                    first_year_profit = first_year_profit * 1480
+                    second_year_egg_price = second_year_egg_price * 1480
+                    second_year_feed_cost = second_year_feed_cost * 1480
+                    second_year_profit = second_year_profit * 1480
                     total_rent = total_rent * 1480
+                    second_year_profit_after_rent = second_year_profit_after_rent * 1480
                     net_profit = net_profit * 1480
                     if profit_with_sale > 0:
                         profit_with_sale = profit_with_sale * 1480
                     chicken_sale_price_value = chicken_sale_price_value * 1480 if chicken_sale_price_value > 0 else 0
-                else:
-                    total_egg_price, total_feed_cost, net_profit_before_rent, total_rent, net_profit = (
-                        total_egg_price, total_feed_cost, net_profit_before_rent, total_rent, net_profit
-                    )
 
                 # تنسيق التاريخ والوقت حسب توقيت بغداد
                 current_time = datetime.now() + timedelta(hours=3)  # تحويل التوقيت إلى توقيت بغداد
@@ -1070,8 +1078,11 @@ if calculation_type == texts[language]["chicken_profits"]:
 
 ║ {texts[language]['calculation_time']} ⏰: {date_str} {time_str}
 ║ {texts[language]['usd_results']} 💵:
-║ {texts[language]['total_rewards']} 🥚: {format_decimal(total_egg_price)} USD
-║ {texts[language]['total_food_cost']} 🌽: {format_decimal(total_feed_cost)} USD
+
+║ السنة الأولى (حد أقصى 320 بيضة):
+║ عدد البيض 🥚: {format_decimal(first_year_eggs)} بيضة
+║ سعر البيض 💵: {format_decimal(first_year_egg_price)} USD
+║ تكلفة العلف 🌽: {format_decimal(first_year_feed_cost)} USD
 ║ {texts[language]['first_year_profit']} 📈: {format_decimal(first_year_profit)} USD"""
 
                 # إضافة سعر البيع والربح مع البيع إذا كانت الدجاجة في السنة الأولى وتم إدخال سعر البيع
@@ -1080,23 +1091,38 @@ if calculation_type == texts[language]["chicken_profits"]:
 ║ {texts[language]['chicken_sale_price']} 💰: {format_decimal(chicken_sale_price_value)} USD
 ║ 📊 {texts[language]['profit_with_sale']} 📊: {format_decimal(profit_with_sale)} USD"""
 
-                # إضافة الإيجار وربح السنة الثانية والربح الصافي
+                # إضافة معلومات السنة الثانية والربح الصافي
                 results_text += f"""
-║ {texts[language]['first_year_rental']} 🏠: 6 USD
-║ {texts[language]['second_year_profit']} 📈: {format_decimal(net_profit_before_rent)} USD
-║ {texts[language]['second_year_profit_after_rent']} 📈: {format_decimal(second_year_profit)} USD
+
+║ السنة الثانية (حد أقصى 260 بيضة):
+║ عدد البيض 🥚: {format_decimal(second_year_eggs)} بيضة
+║ سعر البيض 💵: {format_decimal(second_year_egg_price)} USD
+║ تكلفة العلف 🌽: {format_decimal(second_year_feed_cost)} USD
+║ {texts[language]['first_year_rental']} 🏠: {format_decimal(total_rent)} USD
+║ {texts[language]['second_year_profit']} 📈: {format_decimal(second_year_profit)} USD
+║ {texts[language]['second_year_profit_after_rent']} 📈: {format_decimal(second_year_profit_after_rent)} USD
+
 ║ {texts[language]['final_profit']} 💰: {format_decimal(net_profit)} USD
 """
 
-                # استكمال النص
+                # استكمال النص بالدينار العراقي
                 results_text += f"""
 ║ {texts[language]['iqd_results']} 💵:
-║ {texts[language]['total_rewards']} 🥚: {format_decimal(total_egg_price * 1480)} IQD
-║ {texts[language]['total_food_cost']} 🌽: {format_decimal(total_feed_cost * 1480)} IQD
+
+║ السنة الأولى (حد أقصى 320 بيضة):
+║ عدد البيض 🥚: {format_decimal(first_year_eggs)} بيضة
+║ سعر البيض 💵: {format_decimal(first_year_egg_price * 1480)} IQD
+║ تكلفة العلف 🌽: {format_decimal(first_year_feed_cost * 1480)} IQD
 ║ {texts[language]['first_year_profit']} 📈: {format_decimal(first_year_profit * 1480)} IQD
-║ {texts[language]['first_year_rental']} 🏠: {format_decimal(6 * 1480)} IQD
-║ {texts[language]['second_year_profit']} 📈: {format_decimal(net_profit_before_rent * 1480)} IQD
-║ {texts[language]['second_year_profit_after_rent']} 📈: {format_decimal(second_year_profit * 1480)} IQD
+
+║ السنة الثانية (حد أقصى 260 بيضة):
+║ عدد البيض 🥚: {format_decimal(second_year_eggs)} بيضة
+║ سعر البيض 💵: {format_decimal(second_year_egg_price * 1480)} IQD
+║ تكلفة العلف 🌽: {format_decimal(second_year_feed_cost * 1480)} IQD
+║ {texts[language]['first_year_rental']} 🏠: {format_decimal(total_rent * 1480)} IQD
+║ {texts[language]['second_year_profit']} 📈: {format_decimal(second_year_profit * 1480)} IQD
+║ {texts[language]['second_year_profit_after_rent']} 📈: {format_decimal(second_year_profit_after_rent * 1480)} IQD
+
 ║ {texts[language]['final_profit']} 💰: {format_decimal(net_profit * 1480)} IQD"""
 
                 # إضافة سعر البيع والربح مع البيع بالدينار العراقي
