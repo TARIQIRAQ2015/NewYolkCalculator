@@ -619,7 +619,7 @@ texts = {
         "second_year_label": "السنة الثانية",
         "max_320_eggs": "حد أقصى 320 بيضة",
         "max_260_eggs": "حد أقصى 260 بيضة",
-        "first_year_days": "عدد الأيام (السنة الأولى) 📅"
+        "first_year_days": "عدد الأيام المتبقي 📅"
     },
     "English": {
         "title": "Chicken Calculator - NewYolk",
@@ -687,7 +687,7 @@ texts = {
         "second_year_label": "Second Year",
         "max_320_eggs": "max 320 eggs",
         "max_260_eggs": "max 260 eggs",
-        "first_year_days": "Number of Days (First Year) 📅"
+        "first_year_days": "Remaining Days 📅"
     },
     "Română": {
         "title": "Calculator Găini - NewYolk",
@@ -755,7 +755,7 @@ texts = {
         "second_year_label": "Al Doilea An", 
         "max_320_eggs": "maxim 320 ouă",
         "max_260_eggs": "maxim 260 ouă",
-        "first_year_days": "Număr de Zile (Primul An) 📅"
+        "first_year_days": "Zile Rămase 📅"
     }
 }
 
