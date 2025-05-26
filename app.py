@@ -619,7 +619,8 @@ texts = {
         "second_year_label": "السنة الثانية",
         "max_320_eggs": "حد أقصى 320 بيضة",
         "max_260_eggs": "حد أقصى 260 بيضة",
-        "days_remaining": "عدد الأيام المتبقية حتى نهاية السنة الأولى 📅"
+        "days_remaining": "عدد الأيام المتبقية لإكمال السنة الأولى 📅",
+        "first_year_days": "عدد الأيام (السنة الأولى) 📅"
     },
     "English": {
         "title": "Chicken Calculator - NewYolk",
@@ -687,7 +688,8 @@ texts = {
         "second_year_label": "Second Year",
         "max_320_eggs": "max 320 eggs",
         "max_260_eggs": "max 260 eggs",
-        "days_remaining": "Days Remaining Until End of First Year 📅"
+        "days_remaining": "Days Remaining to Complete First Year 📅",
+        "first_year_days": "Number of Days (First Year) 📅"
     },
     "Română": {
         "title": "Calculator Găini - NewYolk",
@@ -755,7 +757,8 @@ texts = {
         "second_year_label": "Al Doilea An", 
         "max_320_eggs": "maxim 320 ouă",
         "max_260_eggs": "maxim 260 ouă",
-        "days_remaining": "Zile Rămase Până La Sfârșitul Primului An 📅"
+        "days_remaining": "Zile Rămase Pentru Finalizarea Primului An 📅",
+        "first_year_days": "Număr de Zile (Primul An) 📅"
     }
 }
 
@@ -1069,7 +1072,8 @@ if calculation_type == texts[language]["chicken_profits"]:
 
 ║ {texts[language]['first_year_label']} ({texts[language]['max_320_eggs']}):
 ║ {texts[language]['eggs_input']}: {format_decimal(first_year_eggs)} 🥚
-║ {texts[language]['days_remaining']}: {365 - first_year_days} {texts[language]['days_input'].split()[0]}
+║ {texts[language]['first_year_days']}: {format_decimal(first_year_days)} {texts[language]['days_input'].split()[0]}
+║ {texts[language]['days_remaining']}: {format_decimal(max(0, 365 - first_year_days))} {texts[language]['days_input'].split()[0]}
 ║ {texts[language]['egg_price']}: {format_decimal(first_year_egg_price)} 💵
 ║ {texts[language]['feed_price']}: {format_decimal(first_year_feed_cost)} 🌽
 ║ {texts[language]['first_year_profit']}: {format_decimal(first_year_profit)} 📈"""
