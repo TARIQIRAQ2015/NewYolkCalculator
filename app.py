@@ -836,7 +836,63 @@ st.markdown(
             text-align: {'right' if language == 'العربية' else 'left'} !important;
         }}
     </style>
-    <div class="main-title">
+    <div class="copyright">By Tariq Al-Yaseen &copy; 2025-2026</div>
+    """,
+    unsafe_allow_html=True
+)
+
+st.markdown("""
+    <style>
+        /* تحسين الإيموجي في العنوان */
+        .emoji-link {
+            text-decoration: none;
+            font-size: 24px !important;
+            display: inline-block;
+            transition: all 0.3s ease;
+            line-height: 1;
+            cursor: pointer;
+            margin-right: 8px;
+        }
+        
+        .emoji-link:hover {
+            transform: scale(1.2) rotate(10deg);
+        }
+        
+        .title {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin-bottom: 12px;
+        }
+        
+        .title-text {
+            background: linear-gradient(120deg, #ffffff, #e2e2e2);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            text-shadow: 0 2px 4px rgba(0,0,0,0.1);
+            font-size: 32px;
+            font-weight: bold;
+        }
+    </style>
+""", unsafe_allow_html=True)
+
+st.markdown("""
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <link rel="icon" type="image/png" href="https://cdn-icons-png.flaticon.com/512/3059/3059997.png">
+        <title>New Yolk Calculator</title>
+    </head>
+""", unsafe_allow_html=True)
+
+# إضافة زر نسخ النتائج باستخدام JavaScript
+def add_copy_button(text, button_text):
+    st.markdown(f"""
+        <div style="position: relative;">
+            <textarea id="clipboard-text" style="position: absolute; left: -9999px;">{text}</textarea>
+            <button onclick="copyToClipboard('clipboard-text')">{button_text}</button>
+        </div>
+    """, unsafe_allow_html=True)main-title">
         {texts[language]["title"]}
         <a href="https://newyolkcalculator.streamlit.app" target="_blank" class="chicken-emoji">🐔</a>
         <div class="subtitle">
@@ -1035,7 +1091,8 @@ if calculation_type == texts[language]["chicken_profits"]:
                 second_year_eggs = max(0, min(eggs_value - 320, 260))  # عدد البيض في السنة الثانية (حد أقصى 260)
                 second_year_days = max(0, min(days_value - 365, 365))  # عدد الأيام في السنة الثانية
                 second_year_egg_price = second_year_eggs * float(new_egg_price)  # سعر البيض في السنة الثانية
-                second_year_feed_cost = (days_value * 2) * float(new_feed_price)  # تكلفة العلف بناءً على الأيام المحددة
+                # تصحيح حساب تكلفة العلف للسنة الثانية - يجب أن تكون بناءً على أيام السنة الثانية فقط
+                second_year_feed_cost = (second_year_days * 2) * float(new_feed_price)  # تكلفة العلف للسنة الثانية فقط
                 
                 # حساب الإيجار للسنة الثانية
                 total_rent = 6 if eggs_value >= 320 else 0  # 6 دولار فقط إذا كان عدد البيض 320 أو أكثر
@@ -1049,21 +1106,6 @@ if calculation_type == texts[language]["chicken_profits"]:
                 profit_with_sale = 0
                 if eggs_value >= 320 and chicken_sale_price_value > 0:
                     profit_with_sale = first_year_profit + chicken_sale_price_value
-
-                # تحويل العملة
-                if currency == "IQD":
-                    first_year_egg_price = first_year_egg_price * 1480
-                    first_year_feed_cost = first_year_feed_cost * 1480
-                    first_year_profit = first_year_profit * 1480
-                    second_year_egg_price = second_year_egg_price * 1480
-                    second_year_feed_cost = second_year_feed_cost * 1480
-                    second_year_profit = second_year_profit * 1480
-                    total_rent = total_rent * 1480
-                    second_year_profit_after_rent = second_year_profit_after_rent * 1480
-                    net_profit = net_profit * 1480
-                    if profit_with_sale > 0:
-                        profit_with_sale = profit_with_sale * 1480
-                    chicken_sale_price_value = chicken_sale_price_value * 1480 if chicken_sale_price_value > 0 else 0
 
                 # تنسيق التاريخ والوقت حسب توقيت بغداد
                 current_time = datetime.now() + timedelta(hours=3)  # تحويل التوقيت إلى توقيت بغداد
@@ -1098,10 +1140,10 @@ if calculation_type == texts[language]["chicken_profits"]:
                     results_text += f"""
 ║ السنة الثانية (حد أقصى 260 بيضة):
 ║ عدد البيض: {format_decimal(eggs_value)} 🥚
-║ سعر البيض: {format_decimal(second_year_egg_price)} 💵
-║ تكلفة العلف: {format_decimal(second_year_feed_cost)} 🌽
-║ {texts[language]['second_year_profit']}: {format_decimal(second_year_profit)} 📈
-║ {texts[language]['final_profit']}: {format_decimal(net_profit)} 💰"""
+║ سعر البيض: {format_decimal(eggs_value * float(new_egg_price))} 💵
+║ تكلفة العلف: {format_decimal((days_value * 2) * float(new_feed_price))} 🌽
+║ {texts[language]['second_year_profit']}: {format_decimal((eggs_value * float(new_egg_price)) - ((days_value * 2) * float(new_feed_price)))} 📈
+║ {texts[language]['final_profit']}: {format_decimal((eggs_value * float(new_egg_price)) - ((days_value * 2) * float(new_feed_price)))} 💰"""
                 else:
                     results_text += f"""
 
@@ -1115,11 +1157,10 @@ if calculation_type == texts[language]["chicken_profits"]:
 
 ║ {texts[language]['final_profit']}: {format_decimal(net_profit)} 💰"""
 
-
                 # استكمال النص بالدينار العراقي
                 results_text += f"""
 
-{texts[language]['iqd_results']} 💵:"""
+║ {texts[language]['iqd_results']} 💵:"""
 
                 # عرض معلومات السنة الأولى بالدينار العراقي
                 if eggs_value > 260:
@@ -1141,10 +1182,10 @@ if calculation_type == texts[language]["chicken_profits"]:
                     results_text += f"""
 ║ السنة الثانية (حد أقصى 260 بيضة):
 ║ عدد البيض: {format_decimal(eggs_value)} 🥚
-║ سعر البيض: {format_decimal(second_year_egg_price * 1480)} 💵
-║ تكلفة العلف: {format_decimal(second_year_feed_cost * 1480)} 🌽
-║ {texts[language]['second_year_profit']}: {format_decimal(second_year_profit * 1480)} 📈
-║ {texts[language]['final_profit']}: {format_decimal(net_profit * 1480)} 💰"""
+║ سعر البيض: {format_decimal((eggs_value * float(new_egg_price)) * 1480)} 💵
+║ تكلفة العلف: {format_decimal(((days_value * 2) * float(new_feed_price)) * 1480)} 🌽
+║ {texts[language]['second_year_profit']}: {format_decimal(((eggs_value * float(new_egg_price)) - ((days_value * 2) * float(new_feed_price))) * 1480)} 📈
+║ {texts[language]['final_profit']}: {format_decimal(((eggs_value * float(new_egg_price)) - ((days_value * 2) * float(new_feed_price))) * 1480)} 💰"""
                 else:
                     results_text += f"""
 
@@ -1158,9 +1199,20 @@ if calculation_type == texts[language]["chicken_profits"]:
 
 ║ {texts[language]['final_profit']}: {format_decimal(net_profit * 1480)} 💰"""
 
-                # إنشاء DataFrame للرسم البياني
-
-
+                # تحويل العملة لعرض الجدول والرسم البياني
+                if currency == "IQD":
+                    first_year_egg_price = first_year_egg_price * 1480
+                    first_year_feed_cost = first_year_feed_cost * 1480
+                    first_year_profit = first_year_profit * 1480
+                    second_year_egg_price = second_year_egg_price * 1480
+                    second_year_feed_cost = second_year_feed_cost * 1480
+                    second_year_profit = second_year_profit * 1480
+                    total_rent = total_rent * 1480
+                    second_year_profit_after_rent = second_year_profit_after_rent * 1480
+                    net_profit = net_profit * 1480
+                    if profit_with_sale > 0:
+                        profit_with_sale = profit_with_sale * 1480
+                    chicken_sale_price_value = chicken_sale_price_value * 1480 if chicken_sale_price_value > 0 else 0
 
                 # إنشاء DataFrame للرسم البياني
                 chart_categories = [
@@ -1171,7 +1223,7 @@ if calculation_type == texts[language]["chicken_profits"]:
                 
                 chart_values = [
                     first_year_profit,
-                    second_year_profit,
+                    second_year_profit_after_rent,
                     net_profit
                 ]
                 
@@ -1678,60 +1730,4 @@ st.markdown("""
             letter-spacing: 0.5px;
         }
     </style>
-    <div class="copyright">By Tariq Al-Yaseen &copy; 2025-2026</div>
-    """,
-    unsafe_allow_html=True
-)
-
-st.markdown("""
-    <style>
-        /* تحسين الإيموجي في العنوان */
-        .emoji-link {
-            text-decoration: none;
-            font-size: 24px !important;
-            display: inline-block;
-            transition: all 0.3s ease;
-            line-height: 1;
-            cursor: pointer;
-            margin-right: 8px;
-        }
-        
-        .emoji-link:hover {
-            transform: scale(1.2) rotate(10deg);
-        }
-        
-        .title {
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            margin-bottom: 12px;
-        }
-        
-        .title-text {
-            background: linear-gradient(120deg, #ffffff, #e2e2e2);
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-            text-shadow: 0 2px 4px rgba(0,0,0,0.1);
-            font-size: 32px;
-            font-weight: bold;
-        }
-    </style>
-""", unsafe_allow_html=True)
-
-st.markdown("""
-    <head>
-        <meta charset="UTF-8">
-        <meta name="viewport" content="width=device-width, initial-scale=1.0">
-        <link rel="icon" type="image/png" href="https://cdn-icons-png.flaticon.com/512/3059/3059997.png">
-        <title>New Yolk Calculator</title>
-    </head>
-""", unsafe_allow_html=True)
-
-# إضافة زر نسخ النتائج باستخدام JavaScript
-def add_copy_button(text, button_text):
-    st.markdown(f"""
-        <div style="position: relative;">
-            <textarea id="clipboard-text" style="position: absolute; left: -9999px;">{text}</textarea>
-            <button onclick="copyToClipboard('clipboard-text')">{button_text}</button>
-        </div>
-    """, unsafe_allow_html=True)
+    <div class="
