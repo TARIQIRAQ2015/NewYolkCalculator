@@ -968,7 +968,7 @@ if calculation_type == texts[language]["chicken_profits"]:
     # إضافة حقل سعر بيع الدجاجة
     try:
         eggs_value = float(eggs) if eggs else 0
-        is_first_year = eggs_value >= 260
+        is_first_year = eggs_value >= 320  # يظهر سعر البيع فقط إذا وصلت للسنة الثانية (320+ بيضة)
     except ValueError:
         is_first_year = False  # إذا لم يكن رقماً صحيحاً
         
@@ -1041,8 +1041,8 @@ if calculation_type == texts[language]["chicken_profits"]:
 ║ {texts[language]['usd_results']} 💵:
 """
 
-                # عرض معلومات السنة الأولى فقط إذا كان عدد البيض أكبر من 260
-                if eggs_value > 260:
+                # عرض السنة الأولى دائماً (إذا كان هناك بيض)
+                if eggs_value > 0:
                     results_text += f"""║ 
 ║ {texts[language]['first_year_label']} ({texts[language]['max_320_eggs']}):
 ║ {texts[language]['eggs_input']}: {format_decimal(first_year_eggs)} 🥚
@@ -1056,16 +1056,8 @@ if calculation_type == texts[language]["chicken_profits"]:
 ║ {texts[language]['chicken_sale_price']}: {format_decimal(chicken_sale_price_value)} 💰
 ║ {texts[language]['profit_with_sale']}: {format_decimal(profit_with_sale)} 📈"""
 
-                # عرض معلومات السنة الثانية
-                if eggs_value <= 260:
-                    results_text += f"""║ 
-║ {texts[language]['second_year_label']} ({texts[language]['max_260_eggs']}):
-║ {texts[language]['eggs_input']}: {format_decimal(eggs_value)} 🥚
-║ {texts[language]['egg_price']}: {format_decimal(eggs_value * float(new_egg_price))} 💵
-║ {texts[language]['feed_price']}: {format_decimal((days_value * 2) * float(new_feed_price))} 🌽
-║ {texts[language]['second_year_profit']}: {format_decimal((eggs_value * float(new_egg_price)) - ((days_value * 2) * float(new_feed_price)))} 📈
-║ {texts[language]['final_profit']}: {format_decimal((eggs_value * float(new_egg_price)) - ((days_value * 2) * float(new_feed_price)))} 💰"""
-                else:
+                # عرض السنة الثانية فقط إذا كان عدد البيض أكبر من 320
+                if eggs_value > 320:
                     results_text += f"""║ 
 ║ {texts[language]['second_year_label']} ({texts[language]['max_260_eggs']}):
 ║ {texts[language]['eggs_input']}: {format_decimal(second_year_eggs)} 🥚
@@ -1073,8 +1065,10 @@ if calculation_type == texts[language]["chicken_profits"]:
 ║ {texts[language]['feed_price']}: {format_decimal(second_year_feed_cost)} 🌽
 ║ {texts[language]['first_year_rental']}: {format_decimal(total_rent)} 🏠
 ║ {texts[language]['second_year_profit']}: {format_decimal(second_year_profit)} 📈
-║ {texts[language]['second_year_profit_after_rent']}: {format_decimal(second_year_profit_after_rent)} 📈
-║ 
+║ {texts[language]['second_year_profit_after_rent']}: {format_decimal(second_year_profit_after_rent)} 📈"""
+
+                # عرض الربح النهائي
+                results_text += f"""║ 
 ║ {texts[language]['final_profit']}: {format_decimal(net_profit)} 💰"""
 
                 # استكمال النص بالدينار العراقي
@@ -1082,8 +1076,8 @@ if calculation_type == texts[language]["chicken_profits"]:
 
 ║ {texts[language]['iqd_results']} 💵:"""
 
-                # عرض معلومات السنة الأولى بالدينار العراقي
-                if eggs_value > 260:
+                # عرض السنة الأولى بالدينار العراقي
+                if eggs_value > 0:
                     results_text += f"""║ 
 ║ {texts[language]['first_year_label']} ({texts[language]['max_320_eggs']}):
 ║ {texts[language]['eggs_input']}: {format_decimal(first_year_eggs)} 🥚
@@ -1097,16 +1091,8 @@ if calculation_type == texts[language]["chicken_profits"]:
 ║ {texts[language]['chicken_sale_price']}: {format_decimal(chicken_sale_price_value * 1480)} 💰
 ║ {texts[language]['profit_with_sale']}: {format_decimal(profit_with_sale * 1480)} 📈"""
 
-                # عرض معلومات السنة الثانية بالدينار العراقي
-                if eggs_value <= 260:
-                    results_text += f"""║ 
-║ {texts[language]['second_year_label']} ({texts[language]['max_260_eggs']}):
-║ {texts[language]['eggs_input']}: {format_decimal(eggs_value)} 🥚
-║ {texts[language]['egg_price']}: {format_decimal((eggs_value * float(new_egg_price)) * 1480)} 💵
-║ {texts[language]['feed_price']}: {format_decimal(((days_value * 2) * float(new_feed_price)) * 1480)} 🌽
-║ {texts[language]['second_year_profit']}: {format_decimal(((eggs_value * float(new_egg_price)) - ((days_value * 2) * float(new_feed_price))) * 1480)} 📈
-║ {texts[language]['final_profit']}: {format_decimal(((eggs_value * float(new_egg_price)) - ((days_value * 2) * float(new_feed_price))) * 1480)} 💰"""
-                else:
+                # عرض السنة الثانية بالدينار العراقي فقط إذا كان عدد البيض أكبر من 320
+                if eggs_value > 320:
                     results_text += f"""║ 
 ║ {texts[language]['second_year_label']} ({texts[language]['max_260_eggs']}):
 ║ {texts[language]['eggs_input']}: {format_decimal(second_year_eggs)} 🥚
@@ -1114,8 +1100,10 @@ if calculation_type == texts[language]["chicken_profits"]:
 ║ {texts[language]['feed_price']}: {format_decimal(second_year_feed_cost * 1480)} 🌽
 ║ {texts[language]['first_year_rental']}: {format_decimal(total_rent * 1480)} 🏠
 ║ {texts[language]['second_year_profit']}: {format_decimal(second_year_profit * 1480)} 📈
-║ {texts[language]['second_year_profit_after_rent']}: {format_decimal(second_year_profit_after_rent * 1480)} 📈
-║ 
+║ {texts[language]['second_year_profit_after_rent']}: {format_decimal(second_year_profit_after_rent * 1480)} 📈"""
+
+                # عرض الربح النهائي بالدينار العراقي
+                results_text += f"""║ 
 ║ {texts[language]['final_profit']}: {format_decimal(net_profit * 1480)} 💰"""
 
                 # تحويل العملة لعرض الجدول والرسم البياني
@@ -1304,21 +1292,21 @@ elif calculation_type == texts[language]["group_calculation"]:
             value=""
         )
         
-    # حقل سعر بيع الدجاجة الاختياري - يظهر شرطياً إذا كان عدد البيض أكبر من 260
+    # حقل سعر بيع الدجاجة الاختياري - يظهر شرطياً إذا كان عدد البيض أكبر من أو يساوي 320
     try:
         egg_rate_value = float(egg_rate) if egg_rate else 0
-        is_first_year = egg_rate_value >= 260
+        is_first_year = egg_rate_value >= 320  # يظهر سعر البيع فقط إذا وصلت للسنة الثانية (320+ بيضة)
     except ValueError:
         is_first_year = False  # إذا لم يكن رقماً صحيحاً
         
-    if is_first_year:  # لا يظهر في حالة كان عدد البيض أقل من 260
+    if is_first_year:  # يظهر في حالة وصولها للسنة الثانية (320+ بيضة)
         chicken_sale_price = st.text_input(
             texts[language]["chicken_sale_price"],
             value=""
         )
     else:
-        st.info(texts[language]["not_first_year_chicken"] if "not_first_year_chicken" in texts[language] else "لا يمكن بيع الدجاجة لأنها ليست في السنة الأولى (عدد البيض أقل من 260)")
-        chicken_sale_price = 0.0  # لا يمكن بيع الدجاجة لأنها ليست في السنة الأولى
+        st.info("يمكن بيع الدجاجة فقط عند الوصول للسنة الثانية (عدد البيض 320 أو أكثر)")
+        chicken_sale_price = 0.0  # لا يمكن بيع الدجاجة قبل الوصول للسنة الثانية
         
     if st.button(texts[language]["add_chicken"], type="primary"):
         try:
@@ -1345,17 +1333,17 @@ elif calculation_type == texts[language]["group_calculation"]:
                 eggs_count = egg_rate  # عدد البيض كما هو
                 egg_income = eggs_count * float(new_egg_price)  # ضرب عدد البيض في سعر البيض الحالي
                 feed_cost = active_days * 2 * float(new_feed_price)  # ضرب عدد الأيام في 2 ثم في سعر العلف الحالي
-                rent = 6 if eggs_count >= 260 else 0  # 6 دولارات فقط إذا كان عدد البيض 260 أو أكثر
+                rent = 6 if eggs_count >= 320 else 0  # 6 دولارات فقط إذا وصلت الدجاجة للسنة الثانية (320+ بيضة)
                 net_profit_before_rent = egg_income - feed_cost  # الربح قبل دفع الايجار
                 net_profit = egg_income - feed_cost - rent  # الربح الصافي بدون بيع
                 
-                # حساب الربح مع بيع الدجاجة - فقط للدجاج التي عدد بيضها 260 أو أكثر
+                # حساب الربح مع بيع الدجاجة - فقط للدجاج التي عدد بيضها 320 أو أكثر
                 # الربح مع بيع الدجاجة = الربح قبل دفع الايجار + سعر بيع الدجاجة
-                if eggs_count >= 260 and chicken_sale_price_value > 0:  # فقط إذا كانت الدجاجة في السنة الأولى (عدد البيض أكبر من أو يساوي 260)
+                if eggs_count >= 320 and chicken_sale_price_value > 0:  # فقط إذا وصلت الدجاجة للسنة الثانية (عدد البيض 320 أو أكثر)
                     profit_with_sale = net_profit_before_rent + chicken_sale_price_value  # الربح مع بيع الدجاجة = الربح قبل دفع الايجار + سعر بيع الدجاجة
                 else:
-                    profit_with_sale = 0  # لا يتم احتساب الربح مع البيع للدجاج التي عدد بيضها أقل من 260
-                    chicken_sale_price_value = 0.0  # تأكيد على تصفير سعر بيع الدجاجة للدجاج التي ليست في السنة الأولى
+                    profit_with_sale = 0  # لا يتم احتساب الربح مع البيع للدجاج التي لم تصل للسنة الثانية
+                    chicken_sale_price_value = 0.0  # تأكيد على تصفير سعر بيع الدجاجة للدجاج التي لم تصل للسنة الثانية
                 
                 # إضافة البيانات إلى قائمة الدجاج
                 chicken_id = len(st.session_state.chicken_data) + 1
@@ -1402,7 +1390,7 @@ elif calculation_type == texts[language]["group_calculation"]:
                     texts[language]["income"]: format_decimal(chicken["income"]),
                     texts[language]["feed_cost"]: format_decimal(chicken["feed_cost"]),
                     texts[language]["net_profit"]: format_decimal(chicken["net_profit_before_rent"]),
-                    texts[language]["profit_with_sale"]: format_decimal(chicken["profit_with_sale"]) if chicken["eggs"] >= 260 and chicken["profit_with_sale"] > 0 else "",
+                    texts[language]["profit_with_sale"]: format_decimal(chicken["profit_with_sale"]) if chicken["eggs"] >= 320 and chicken["profit_with_sale"] > 0 else "",
                     texts[language]["rent"]: format_decimal(chicken["rent"]),
                     texts[language]["net_profit_per_chicken"]: format_decimal(chicken["net_profit"])
                 }
@@ -1417,14 +1405,14 @@ elif calculation_type == texts[language]["group_calculation"]:
             total_net_profit_before_rent = sum(chicken["net_profit_before_rent"] for chicken in st.session_state.chicken_data)
             total_net_profit = sum(chicken["net_profit"] for chicken in st.session_state.chicken_data)
             
-            # حساب إجمالي الربح مع البيع - فقط للدجاج التي عدد بيضها 260 أو أكثر
-            # حساب مجموع أسعار بيع الدجاج المؤهلة (عدد بيضها 260 أو أكثر)
-            total_chicken_sale_prices = sum(chicken["chicken_sale_price"] for chicken in st.session_state.chicken_data if chicken["eggs"] >= 260 and chicken["chicken_sale_price"] > 0)
+            # حساب إجمالي الربح مع البيع - فقط للدجاج التي عدد بيضها 320 أو أكثر
+            # حساب مجموع أسعار بيع الدجاج المؤهلة (عدد بيضها 320 أو أكثر)
+            total_chicken_sale_prices = sum(chicken["chicken_sale_price"] for chicken in st.session_state.chicken_data if chicken["eggs"] >= 320 and chicken["chicken_sale_price"] > 0)
             # الربح الكلي مع البيع = إجمالي الربح قبل الإيجار + مجموع أسعار بيع الدجاج
             total_profit_with_sale = total_net_profit_before_rent + total_chicken_sale_prices
             
-            # التحقق مما إذا كان هناك دجاج مؤهلة للحساب مع البيع (عدد بيضها 260 أو أكثر وتم تحديد سعر البيع)
-            has_sales_prices = any(chicken["eggs"] >= 260 and chicken["chicken_sale_price"] > 0 for chicken in st.session_state.chicken_data)
+            # التحقق مما إذا كان هناك دجاج مؤهلة للحساب مع البيع (عدد بيضها 320 أو أكثر وتم تحديد سعر البيع)
+            has_sales_prices = any(chicken["eggs"] >= 320 and chicken["chicken_sale_price"] > 0 for chicken in st.session_state.chicken_data)
             
             # تحويل العملة إذا لزم الأمر
             if currency == "IQD":
