@@ -18,7 +18,7 @@ st.markdown("""
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
 """, unsafe_allow_html=True)
 
-# إخفاء أزرار التحكم بالمظهر
+# إخفاء أزرار التحكم بالمظهر وإضافة الأنماط
 st.markdown("""
     <style>
         /* إخفاء العناصر غير الضرورية */
@@ -265,47 +265,6 @@ st.markdown("""
             margin-left: 8px;
         }
         
-        /* تحسين القوائم المنسدلة */
-        .stSelectbox > div > div {
-            background: linear-gradient(135deg, #1e212b 0%, #161b25 100%) !important;
-            border: 1px solid rgba(255, 255, 255, 0.2) !important;
-            border-radius: 8px !important;
-            color: #ffffff !important;
-            backdrop-filter: blur(10px);
-            transition: all 0.3s ease;
-            padding: 12px !important;
-            box-shadow: 0 2px 6px rgba(0,0,0,0.1);
-            height: auto !important;
-            min-height: 48px !important;
-            font-size: 16px !important;
-            line-height: 1.5 !important;
-        }
-        
-        /* تحسين قائمة الخيارات المنسدلة */
-        div[data-baseweb="select"] > div {
-            background: linear-gradient(135deg, #1e212b 0%, #161b25 100%) !important;
-            backdrop-filter: blur(10px) !important;
-            border-radius: 8px !important;
-            border: 1px solid rgba(255, 255, 255, 0.2) !important;
-            box-shadow: 0 4px 12px rgba(0,0,0,0.2);
-            padding: 8px !important;
-            min-width: 200px !important;
-        }
-        
-        div[data-baseweb="select"] ul {
-            background: linear-gradient(135deg, #1e212b 0%, #161b25 100%) !important;
-            padding: 4px !important;
-        }
-        
-        div[data-baseweb="select"] ul li {
-            color: #ffffff !important;
-            font-size: 16px !important;
-            padding: 12px !important;
-            margin: 4px 0 !important;
-            border-radius: 6px !important;
-            line-height: 1.5 !important;
-        }
-        
         /* تحسين النصوص في القوائم */
         .stSelectbox label {
             color: #ffffff !important;
@@ -357,7 +316,8 @@ st.markdown("""
         }
         
         /* تحسين حقول الإدخال */
-        .stNumberInput > div > div > input {
+        .stNumberInput > div > div > input,
+        .stTextInput > div > div > input {
             background: linear-gradient(135deg, #1e212b 0%, #161b25 100%) !important;
             border: 1px solid rgba(255, 255, 255, 0.15) !important;
             border-radius: 8px !important;
@@ -366,7 +326,8 @@ st.markdown("""
             transition: all 0.3s ease;
         }
         
-        .stNumberInput > div > div > input:focus {
+        .stNumberInput > div > div > input:focus,
+        .stTextInput > div > div > input:focus {
             border-color: rgba(255, 255, 255, 0.3) !important;
             box-shadow: 0 0 0 2px rgba(255,255,255,0.1) !important;
         }
@@ -379,58 +340,6 @@ st.markdown("""
             font-size: 14px;
             margin-top: 32px;
             border-top: 1px solid rgba(255,255,255,0.1);
-        }
-        
-        /* تحسين الشريط العلوي */
-        .stProgress > div > div {
-            background: rgba(30, 37, 48, 0.7) !important;
-            border: 1px solid rgba(255, 255, 255, 0.2) !important;
-            border-radius: 8px !important;
-            overflow: hidden;
-            position: relative;
-            height: 48px !important;
-            box-shadow: 0 2px 6px rgba(0,0,0,0.1);
-            backdrop-filter: blur(10px);
-        }
-        
-        .stProgress > div > div > div {
-            background: linear-gradient(90deg, 
-                rgba(255,255,255,0.1),
-                rgba(255,255,255,0.15),
-                rgba(255,255,255,0.1)
-            ) !important;
-            border-radius: 6px !important;
-            height: 100% !important;
-            transition: all 0.3s ease !important;
-            backdrop-filter: blur(5px);
-        }
-        
-        .stProgress > div > div::before {
-            content: '';
-            position: absolute;
-            top: 0;
-            left: -100%;
-            width: 100%;
-            height: 100%;
-            background: linear-gradient(
-                90deg,
-                transparent,
-                rgba(255, 255, 255, 0.05),
-                transparent
-            );
-            transition: all 0.5s ease;
-            z-index: 1;
-        }
-        
-        .stProgress > div > div:hover::before {
-            left: 100%;
-        }
-        
-        .stProgress > div > div:hover {
-            background: rgba(22, 27, 37, 0.8) !important;
-            border-color: rgba(255, 255, 255, 0.3) !important;
-            transform: translateY(-1px);
-            box-shadow: 0 4px 12px rgba(0,0,0,0.2);
         }
         
         /* تحديث شفافية القوائم المنسدلة */
@@ -704,7 +613,8 @@ texts = {
         "no_chicken_data": "لا توجد بيانات دجاج مدخلة حتى الآن!",
         "not_first_year_chicken": "لا يمكن بيع الدجاجة لأنها ليست في السنة الأولى (عدد البيض أقل من 260)",
         "summary_egg_price": "مجموع سعر البيض 🥚",
-        "summary_feed_price": "مجموع سعر العلف 🌽"
+        "summary_feed_price": "مجموع سعر العلف 🌽",
+        "net_profit": "الربح الصافي"
     },
     "English": {
         "title": "Chicken Calculator - NewYolk",
@@ -766,7 +676,8 @@ texts = {
         "no_chicken_data": "No chicken data entered yet!",
         "not_first_year_chicken": "Chicken cannot be sold as it's not in the first year (egg count less than 260)",
         "summary_egg_price": "Total Egg Price 🥚",
-        "summary_feed_price": "Total Feed Price 🌽"
+        "summary_feed_price": "Total Feed Price 🌽",
+        "net_profit": "Net Profit"
     },
     "Română": {
         "title": "Calculator Găini - NewYolk",
@@ -828,7 +739,8 @@ texts = {
         "no_chicken_data": "Nu există date despre găini introduse încă!",
         "not_first_year_chicken": "Găina nu poate fi vândută deoarece nu este în primul an (numărul de ouă mai mic de 260)",
         "summary_egg_price": "Preț Total Ouă 🥚",
-        "summary_feed_price": "Preț Total Furaje 🌽"
+        "summary_feed_price": "Preț Total Furaje 🌽",
+        "net_profit": "Profit Net"
     }
 }
 
@@ -989,15 +901,6 @@ if is_number(new_egg_price) and is_number(new_feed_price):
 
 # دالة إنشاء الرسم البياني
 def create_profit_chart(df, language):
-    # تخصيص الألوان
-    colors = {
-        texts[language]["total_eggs"]: '#4CAF50',
-        texts[language]["total_feed"]: '#FF9800',
-        texts[language]["total_first_year_profit"]: '#2196F3',
-        texts[language]["total_rent"]: '#F44336',
-        texts[language]["total_net_profit"]: '#9C27B0'
-    }
-    
     # إنشاء الرسم البياني
     fig = px.pie(
         df,
@@ -1801,12 +1704,3 @@ st.markdown("""
         <title>New Yolk Calculator</title>
     </head>
 """, unsafe_allow_html=True)
-
-# إضافة زر نسخ النتائج باستخدام JavaScript
-def add_copy_button(text, button_text):
-    st.markdown(f"""
-        <div style="position: relative;">
-            <textarea id="clipboard-text" style="position: absolute; left: -9999px;">{text}</textarea>
-            <button onclick="copyToClipboard('clipboard-text')">{button_text}</button>
-        </div>
-    """, unsafe_allow_html=True)
