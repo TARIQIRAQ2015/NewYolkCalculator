@@ -1020,32 +1020,33 @@ if calculation_type == texts[language]["chicken_profits"]:
                     second_year_eggs = 0
 
                 # حساب الأيام
-                if days_value > 365:
-                    # أولاً: نملأ السنة الثانية (365 يوم)
-                    second_year_days = 365
-                    # ثانياً: ما تبقى يذهب للسنة الأولى
-                    first_year_days = days_value - 365
-                else:
-                    # إذا كان المجموع 365 أو أقل، كله للسنة الأولى
+                if days_value <= 365:
                     first_year_days = days_value
                     second_year_days = 0
+                    first_year_eggs = eggs_value
+                    second_year_eggs = 0
+                    total_rent = 0  # لا يوجد إيجار في السنة الأولى
+                else:
+                    first_year_days = 365
+                    second_year_days = days_value - 365
+                    # توزيع البيض بين السنتين بناءً على نسبة الأيام
+                    eggs_per_day = eggs_value / days_value
+                    first_year_eggs = min(320, round(eggs_per_day * 365))
+                    second_year_eggs = min(260, eggs_value - first_year_eggs)
+                    total_rent = 6  # إيجار السنة الثانية
 
                 # حساب الأسعار والتكاليف
-                first_year_egg_price = first_year_eggs * float(new_egg_price)  # سعر البيض في السنة الأولى
-                first_year_feed_cost = (first_year_days * 2) * float(new_feed_price)  # تكلفة العلف في السنة الأولى
-                first_year_profit = first_year_egg_price - first_year_feed_cost  # ربح السنة الأولى
+                first_year_egg_price = first_year_eggs * float(new_egg_price)
+                first_year_feed_cost = (first_year_days * 2) * float(new_feed_price)
+                first_year_profit = first_year_egg_price - first_year_feed_cost
 
-                second_year_egg_price = second_year_eggs * float(new_egg_price)  # سعر البيض في السنة الثانية
-                second_year_feed_cost = (second_year_days * 2) * float(new_feed_price)  # تكلفة العلف للسنة الثانية فقط
-                
-                # حساب الإيجار للسنة الثانية
-                total_rent = 6 if eggs_value >= 320 else 0  # 6 دولار فقط إذا كان عدد البيض 320 أو أكثر
-                
-                # حساب النتائج النهائية
-                second_year_profit = second_year_egg_price - second_year_feed_cost  # ربح السنة الثانية قبل الإيجار
-                second_year_profit_after_rent = second_year_profit - total_rent  # ربح السنة الثانية بعد الإيجار
-                net_profit = first_year_profit + second_year_profit_after_rent  # صافي الربح الكلي
-                
+                second_year_egg_price = second_year_eggs * float(new_egg_price)
+                second_year_feed_cost = (second_year_days * 2) * float(new_feed_price)
+                second_year_profit = second_year_egg_price - second_year_feed_cost
+                second_year_profit_after_rent = second_year_profit - total_rent
+
+                net_profit = first_year_profit + second_year_profit_after_rent
+
                 # حساب الربح مع بيع الدجاجة - فقط للدجاج التي عدد بيضها 320 أو أكثر
                 profit_with_sale = 0
                 if eggs_value >= 320 and chicken_sale_price_value > 0:
