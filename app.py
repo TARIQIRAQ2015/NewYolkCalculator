@@ -1356,19 +1356,18 @@ elif calculation_type == texts[language]["group_calculation"]:
                 st.error(get_error_message("days_exceed", language))
             else:
                 # حساب النتائج للدجاجة الحالية - تطبيق منطق التوزيع الصحيح
-                # منطق توزيع البيض: السنة الثانية أولاً، ثم ما تبقى للسنة الأولى
-                total_eggs = egg_rate
-                total_days = active_days
-                
-                if total_eggs > 320:
-                    # أولاً: نملأ السنة الثانية (حد أقصى 260 بيضة)
-                    second_year_eggs_count = min(260, total_eggs - 320)
-                    # ثانياً: ما تبقى يذهب للسنة الأولى
-                    first_year_eggs_count = total_eggs - second_year_eggs_count
+                # منطق توزيع البيض الصحيح:
+                # 1. إذا كان عدد البيض 320 أو أقل، فكل البيض يُحسب للسنة الأولى
+                # 2. إذا كان عدد البيض أكبر من 320، فالـ 320 الأولى تُحسب للسنة الأولى، والباقي (حتى 260) يُحسب للسنة الثانية
+                if eggs_value <= 320:
+                    # كل البيض يُحسب للسنة الأولى
+                    first_year_eggs = eggs_value
+                    second_year_eggs = 0
                 else:
-                    # إذا كان المجموع 320 أو أقل، كله للسنة الأولى
-                    first_year_eggs_count = total_eggs
-                    second_year_eggs_count = 0
+                    # الـ 320 الأولى للسنة الأولى
+                    first_year_eggs = 320
+                    # الباقي (حتى 260) للسنة الثانية
+                    second_year_eggs = min(260, eggs_value - 320)
 
                 # حساب الدخل والتكاليف الإجمالية (بناءً على المجموع الكلي)
                 egg_income = total_eggs * float(new_egg_price)  # إجمالي دخل البيض
